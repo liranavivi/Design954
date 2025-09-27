@@ -79,6 +79,11 @@ public class ProcessorActivityResponse
     public Guid StepId { get; set; }
 
     /// <summary>
+    /// Unique publish ID generated for each command publication
+    /// </summary>
+    public Guid PublishId { get; set; }
+
+    /// <summary>
     /// Execution ID for this activity instance
     /// </summary>
     public Guid ExecutionId { get; set; }
@@ -109,44 +114,5 @@ public class ProcessorActivityResponse
     public TimeSpan Duration { get; set; }
 }
 
-/// <summary>
-/// Result returned from ExecuteActivityAsync containing all ProcessedActivityData info plus serialized data
-/// </summary>
-public class ActivityExecutionResult
-{
-    /// <summary>
-    /// Result message from processing
-    /// </summary>
-    public string Result { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Status of the processing
-    /// </summary>
-    public ActivityExecutionStatus Status { get; set; } = ActivityExecutionStatus.Processing;
-
-    /// <summary>
-    /// Duration of the processing
-    /// </summary>
-    public TimeSpan Duration { get; set; }
-
-    /// <summary>
-    /// Name of the processor that handled this activity
-    /// </summary>
-    public string ProcessorName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Version of the processor
-    /// </summary>
-    public string Version { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Execution ID
-    /// </summary>
-    public Guid ExecutionId { get; set; }
-
-    /// <summary>
-    /// JSON serialized string of the Data property only
-    /// </summary>
-    public string SerializedData { get; set; } = string.Empty;
-}
 

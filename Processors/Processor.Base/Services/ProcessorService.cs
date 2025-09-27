@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,9 +19,9 @@ namespace Processor.Base.Services;
 /// <summary>
 /// Core service for managing processor functionality and activity processing
 /// </summary>
-public class ProcessorService : IProcessorService
+public abstract class ProcessorService : IProcessorService
 {
-    private readonly IActivityExecutor _activityExecutor;
+
     private readonly ICacheService _cacheService;
     private readonly ISchemaValidator _schemaValidator;
     private readonly IBus _bus;
@@ -59,7 +60,6 @@ public class ProcessorService : IProcessorService
 
 
     public ProcessorService(
-        IActivityExecutor activityExecutor,
         ICacheService cacheService,
         ISchemaValidator schemaValidator,
         IBus bus,
@@ -72,7 +72,6 @@ public class ProcessorService : IProcessorService
         IOptions<ProcessorInitializationConfiguration>? initializationConfig = null,
         IOptions<ProcessorActivityDataCacheConfiguration>? activityCacheConfig = null)
     {
-        _activityExecutor = activityExecutor;
         _cacheService = cacheService;
         _schemaValidator = schemaValidator;
         _bus = bus;
@@ -90,6 +89,50 @@ public class ProcessorService : IProcessorService
 
 
         _startTime = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Abstract method that concrete processor services must implement for processor-specific logic
+    /// Replaces the IActivityExecutor.ExecuteActivityAsync call
+    /// </summary>
+    protected abstract Task<IEnumerable<ProcessedActivityData>> ProcessActivityDataAsync(
+        Guid orchestratedFlowId, Guid workflowId, Guid correlationId,
+        Guid stepId, Guid processorId, Guid publishId, Guid executionId,
+        List<AssignmentModel> entities, object? inputData,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Virtual method for input validation - can be overridden for processor-specific validation
+    /// Base implementation handles general processor input validation
+    /// </summary>
+    protected virtual async Task ValidateInputDataAsync(
+        List<AssignmentModel> entities,
+        string inputData,
+        HierarchicalLoggingContext context)
+    {
+        // Base implementation: general processor input validation
+        if (_config.InputSchemaId != Guid.Empty)
+        {
+            await ValidateInputDataAsync(inputData, _config.InputSchemaDefinition,
+                _validationConfig.EnableInputValidation, context);
+        }
+    }
+
+    /// <summary>
+    /// Virtual method for output validation - can be overridden for processor-specific validation
+    /// Base implementation handles general processor output validation
+    /// </summary>
+    protected virtual async Task ValidateOutputDataAsync(
+        List<AssignmentModel> entities,
+        string outputData,
+        HierarchicalLoggingContext context)
+    {
+        // Base implementation: general processor output validation
+        if (_config.OutputSchemaId != Guid.Empty)
+        {
+            await ValidateOutputDataAsync(outputData, _config.OutputSchemaDefinition,
+                _validationConfig.EnableOutputValidation, context);
+        }
     }
 
     public async Task InitializeAsync()
@@ -817,7 +860,7 @@ public class ProcessorService : IProcessorService
         return _activityCacheConfig.MapName;
     }
 
-    public async Task<string?> GetCachedDataAsync(Guid orchestratedFlowId, Guid correlationId, Guid executionId, Guid stepId, Guid publishId, Guid processorId)
+    public async Task<string> GetCachedDataAsync(Guid orchestratedFlowId, Guid correlationId, Guid executionId, Guid stepId, Guid publishId, Guid processorId)
     {
         // Create hierarchical context from available parameters
         var context = new HierarchicalLoggingContext
@@ -833,7 +876,7 @@ public class ProcessorService : IProcessorService
         return await GetCachedDataAsync(context);
     }
 
-    public async Task<string?> GetCachedDataAsync(HierarchicalLoggingContext context)
+    public async Task<string> GetCachedDataAsync(HierarchicalLoggingContext context)
     {
 
         var mapName = GetCacheMapName();
@@ -847,7 +890,7 @@ public class ProcessorService : IProcessorService
         _logger.LogDebugWithHierarchy(context, "Cache retrieval result. MapName: {MapName}, Found: {Found}, DataLength: {DataLength}",
             mapName, result != null, result?.Length ?? 0);
 
-        return result;
+        return result ?? string.Empty;
     }
 
     public async Task SaveCachedDataAsync(Guid orchestratedFlowId, Guid correlationId, Guid executionId, Guid stepId, Guid publishId, string? data, Guid processorId)
@@ -943,76 +986,6 @@ public class ProcessorService : IProcessorService
         return await _schemaValidator.ValidateAsync(data ?? string.Empty, schemaDefinition);
     }
 
-    /// <summary>
-    /// Validates input data with comprehensive error handling and logging
-    /// </summary>
-    private async Task ValidateInputWithErrorHandlingAsync(
-        string inputData,
-        string inputSchemaDefinition,
-        bool enableInputValidation,
-        bool hasPluginAssignment,
-        Guid? pluginEntityId,
-        ProcessorActivityMessage message,
-        HierarchicalLoggingContext context)
-    {
-        if (!await ValidateInputDataAsync(inputData, inputSchemaDefinition, enableInputValidation, context))
-        {
-            var errorMessage = hasPluginAssignment
-                ? $"Input data validation failed against PluginAssignmentModel schema for entity {pluginEntityId}"
-                : "Input data validation failed against InputSchema";
-
-            if (hasPluginAssignment)
-            {
-                _logger.LogErrorWithHierarchy(context,
-                    "{ErrorMessage}. PluginEntityId: {PluginEntityId}",
-                    errorMessage, pluginEntityId);
-            }
-            else
-            {
-                _logger.LogErrorWithHierarchy(context,
-                    "{ErrorMessage}",
-                    errorMessage);
-            }
-
-            throw new InvalidOperationException($"{errorMessage} for ExecutionId: {message.ExecutionId}");
-        }
-    }
-
-    /// <summary>
-    /// Validates output data with comprehensive error handling and logging
-    /// </summary>
-    private async Task ValidateOutputWithErrorHandlingAsync(
-        string? outputData,
-        string outputSchemaDefinition,
-        bool enableOutputValidation,
-        bool hasPluginAssignment,
-        Guid? pluginEntityId,
-        ProcessorActivityMessage message,
-        HierarchicalLoggingContext context)
-    {
-        if (!await ValidateOutputDataAsync(outputData, outputSchemaDefinition, enableOutputValidation, context))
-        {
-            var errorMessage = hasPluginAssignment
-                ? $"Output data validation failed against PluginAssignmentModel schema for entity {pluginEntityId}"
-                : "Output data validation failed against OutputSchema";
-
-            if (hasPluginAssignment)
-            {
-                _logger.LogErrorWithHierarchy(context,
-                    "{ErrorMessage}. PluginEntityId: {PluginEntityId}",
-                    errorMessage, pluginEntityId ?? Guid.Empty);
-            }
-            else
-            {
-                _logger.LogErrorWithHierarchy(context,
-                    "{ErrorMessage}",
-                    errorMessage);
-            }
-
-            throw new InvalidOperationException($"{errorMessage} for ExecutionId: {context.ExecutionId}");
-        }
-    }
-
     public async Task<IEnumerable<ProcessorActivityResponse>> ProcessActivityAsync(ProcessorActivityMessage message)
     {
         using var activity = _activitySource.StartActivityWithCorrelation("ProcessActivity");
@@ -1040,33 +1013,7 @@ public class ProcessorService : IProcessorService
             "Processing activity. EntitiesCount: {EntitiesCount}",
             message.Entities.Count);
 
-        // Early detection of PluginAssignmentModel and setup validation parameters
-        var pluginAssignment = message.Entities.OfType<PluginAssignmentModel>().FirstOrDefault();
-        
-        // Set validation parameters based on entity type
-        string inputSchemaDefinition;
-        bool enableInputValidation;
-        string outputSchemaDefinition;
-        bool enableOutputValidation;
-        Guid? pluginEntityId = null;
 
-        if (pluginAssignment != null)
-        {
-            // Use PluginAssignmentModel schema parameters
-            inputSchemaDefinition = pluginAssignment.InputSchemaDefinition;
-            enableInputValidation = pluginAssignment.EnableInputValidation;
-            outputSchemaDefinition = pluginAssignment.OutputSchemaDefinition;
-            enableOutputValidation = pluginAssignment.EnableOutputValidation;
-            pluginEntityId = pluginAssignment.EntityId;
-        }
-        else
-        {
-            // Use processor's own schema parameters
-            inputSchemaDefinition = _config.InputSchemaDefinition;
-            enableInputValidation = _validationConfig.EnableInputValidation;
-            outputSchemaDefinition = _config.OutputSchemaDefinition;
-            enableOutputValidation = _validationConfig.EnableOutputValidation;
-        }
 
         try
         {
@@ -1084,67 +1031,76 @@ public class ProcessorService : IProcessorService
             else
             {
                 // 1. Retrieve data from cache (normal case)
-                inputData = await GetCachedDataAsync(processorContext) ?? string.Empty;
+                inputData = await GetCachedDataAsync(processorContext);
 
-                // 2. Validate input data using determined schema parameters
-                await ValidateInputWithErrorHandlingAsync(
-                    inputData,
-                    inputSchemaDefinition,
-                    enableInputValidation,
-                    pluginAssignment != null,
-                    pluginEntityId,
-                    message,
-                    processorContext);
+                // 2. Virtual input validation (replaces ValidateInputWithErrorHandlingAsync)
+                await ValidateInputDataAsync(message.Entities, inputData, processorContext);
             }
 
-            // 3. Execute the activity
+            // 3. Deserialize input data (moved from BaseProcessorApplication)
+            object? deserializedInputData;
+            if (string.IsNullOrWhiteSpace(inputData))
+            {
+                deserializedInputData = null;
+            }
+            else
+            {
+                deserializedInputData = JsonSerializer.Deserialize<JsonElement>(inputData, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+            }
 
-            var resultDataCollection = await _activityExecutor.ExecuteActivityAsync(
-                message.OrchestratedFlowId,
-                message.WorkflowId, // ✅ Include WorkflowId from message
-                message.CorrelationId,
-                message.StepId,
-                message.ProcessorId,
-                message.PublishId,
-                message.ExecutionId,
-                message.Entities,
-                inputData);
+            // 4. Execute the activity (call abstract method)
+            var processedDataCollection = await ProcessActivityDataAsync(
+                message.OrchestratedFlowId, message.WorkflowId, message.CorrelationId,
+                message.StepId, message.ProcessorId, message.PublishId, message.ExecutionId,
+                message.Entities, deserializedInputData, CancellationToken.None);
 
             var responses = new List<ProcessorActivityResponse>();
 
-            // Process each result item
-            foreach (var resultData in resultDataCollection)
+            // Process each ProcessedActivityData item
+            foreach (var processedData in processedDataCollection)
             {
-                processorContext.ExecutionId = resultData.ExecutionId;
+                processorContext.ExecutionId = processedData.ExecutionId;
 
                 try
                 {
-
-                    // Handle effectively empty SerializedData from failed activity execution
-                    if (DataValidation.IsEffectivelyEmptyData(resultData.SerializedData))
+                    // Handle serialization with proper error handling
+                    string? serializedData = null;
+                    if (processedData.Data != null)
                     {
-                        _logger.LogWarningWithHierarchy(processorContext,
-                            "Activity execution produced effectively empty output data. Skipping validation and cache save. Data: '{Data}'",
-                            resultData.SerializedData ?? "null");
-
-                        // Continue to response creation (no validation, no cache save)
-                    }
-                    else
-                    {
-                        // 5. Validate output data using determined schema parameters
-                        await ValidateOutputWithErrorHandlingAsync(
-                            resultData.SerializedData,
-                            outputSchemaDefinition,
-                            enableOutputValidation,
-                            pluginAssignment != null,
-                            pluginEntityId,
-                            message,
-                            processorContext);
-
-                        // Validation passed - save to cache
-                        if (resultData.ExecutionId != Guid.Empty)
+                        try
                         {
-                            await SaveCachedDataAsync(processorContext, resultData.SerializedData);
+                            serializedData = JsonSerializer.Serialize(processedData.Data, new JsonSerializerOptions
+                            {
+                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                WriteIndented = true
+                            });
+                        }
+                        catch (Exception serializationEx)
+                        {
+                            _logger.LogErrorWithHierarchy(processorContext, serializationEx,
+                                "Failed to serialize processed data, treating as failed execution");
+                            processedData.Status = ActivityExecutionStatus.Failed;
+                            processedData.Result = $"Serialization failed: {serializationEx.Message}";
+                            serializedData = null;
+                        }
+                    }
+
+                    // 5. Virtual output validation (moved inside foreach, after serialization)
+                    if (!string.IsNullOrWhiteSpace(serializedData))
+                    {
+                        await ValidateOutputDataAsync(message.Entities, serializedData, processorContext);
+                    }
+
+                    // Save to cache if data is not empty (regardless of status)
+                    if (!string.IsNullOrWhiteSpace(serializedData))
+                    {
+                        if (processedData.ExecutionId != Guid.Empty)
+                        {
+                            await SaveCachedDataAsync(message.OrchestratedFlowId, message.CorrelationId,
+                                processedData.ExecutionId, message.StepId, message.PublishId, serializedData, message.ProcessorId);
                         }
                         else
                         {
@@ -1153,6 +1109,11 @@ public class ProcessorService : IProcessorService
                                 message.ExecutionId);
                         }
                     }
+                    else
+                    {
+                        _logger.LogInformationWithHierarchy(processorContext,
+                            "Skipping cache save - no data to serialize");
+                    }
 
                     // Create response for this item
                     var response = new ProcessorActivityResponse
@@ -1160,11 +1121,13 @@ public class ProcessorService : IProcessorService
                         ProcessorId = message.ProcessorId,
                         OrchestratedFlowId = message.OrchestratedFlowId,
                         StepId = message.StepId,
-                        ExecutionId = resultData.ExecutionId,
-                        Status = resultData.Status,
+                        PublishId = message.PublishId,
+                        ExecutionId = processedData.ExecutionId,
+                        Status = processedData.Status ?? ActivityExecutionStatus.Completed,
                         CorrelationId = message.CorrelationId,
-                        ErrorMessage = resultData.Status == ActivityExecutionStatus.Failed ? resultData.Result : null,
-                        Duration = stopwatch.Elapsed
+                        ErrorMessage = processedData.Status == ActivityExecutionStatus.Failed ? processedData.Result : null,
+                        Duration = stopwatch.Elapsed,
+                        CompletedAt = DateTime.UtcNow
                     };
 
                     responses.Add(response);
@@ -1183,16 +1146,17 @@ public class ProcessorService : IProcessorService
                         ProcessorId = message.ProcessorId,
                         OrchestratedFlowId = message.OrchestratedFlowId,
                         StepId = message.StepId,
-                        ExecutionId = resultData.ExecutionId,
+                        PublishId = message.PublishId,
+                        ExecutionId = processedData.ExecutionId,
                         Status = ActivityExecutionStatus.Failed,
                         CorrelationId = message.CorrelationId,
                         ErrorMessage = itemEx.Message,
-                        Duration = stopwatch.Elapsed
+                        Duration = stopwatch.Elapsed,
+                        CompletedAt = DateTime.UtcNow
                     };
 
                     responses.Add(failedResponse);
                 }
-                
             }
 
             stopwatch.Stop();
@@ -1235,6 +1199,7 @@ public class ProcessorService : IProcessorService
                     ProcessorId = processorId,
                     OrchestratedFlowId = message.OrchestratedFlowId,
                     StepId = message.StepId,
+                    PublishId = message.PublishId,
                     ExecutionId = message.ExecutionId,
                     Status = ActivityExecutionStatus.Failed,
                     CorrelationId = message.CorrelationId,

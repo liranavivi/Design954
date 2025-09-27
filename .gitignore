@@ -324,3 +324,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Plugin library build outputs
+Libraries/*/v*/Dependencies/
+Libraries/*/*.dll
+Libraries/*/*.xml
+Libraries/*/*.pdb

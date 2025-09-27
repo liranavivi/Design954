@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Processor.Base;
+using Processor.Base.Interfaces;
 using Processor.PluginLoader.Interfaces;
 using Processor.PluginLoader.Models;
 using Processor.PluginLoader.Services;
@@ -36,6 +37,14 @@ public class PluginLoaderProcessorApplication : BaseProcessorApplication
 
         // Register processor-specific services
         // Note: PluginLoaderProcessorMetricsService removed - metrics moved to individual plugins
+    }
+
+    /// <summary>
+    /// Override to register the concrete PluginLoaderProcessorService
+    /// </summary>
+    protected override void RegisterProcessorService(IServiceCollection services)
+    {
+        services.AddSingleton<IProcessorService, Services.PluginLoaderProcessorService>();
     }
 
     /// <summary>
@@ -80,7 +89,7 @@ public class PluginLoaderProcessorApplication : BaseProcessorApplication
     /// while recording metrics and performing any necessary adaptations
     /// Enhanced with hierarchical logging support - maintains consistent ID ordering
     /// </summary>
-    protected override async Task<IEnumerable<ProcessedActivityData>> ProcessActivityDataAsync(
+    public override async Task<IEnumerable<ProcessedActivityData>> ProcessActivityDataAsync(
         Guid orchestratedFlowId,
         Guid workflowId,
         Guid correlationId,

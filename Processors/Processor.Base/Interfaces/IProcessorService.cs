@@ -58,7 +58,7 @@ public interface IProcessorService
     /// <param name="publishId">Unique publish ID for this execution</param>
     /// <param name="processorId">Processor ID for hierarchical context</param>
     /// <returns>The cached data as a string</returns>
-    Task<string?> GetCachedDataAsync(Guid orchestratedFlowId, Guid correlationId, Guid executionId, Guid stepId, Guid publishId, Guid processorId);
+    Task<string> GetCachedDataAsync(Guid orchestratedFlowId, Guid correlationId, Guid executionId, Guid stepId, Guid publishId, Guid processorId);
 
 
     /// <summary>

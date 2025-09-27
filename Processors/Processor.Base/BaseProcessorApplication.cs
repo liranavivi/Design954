@@ -20,7 +20,7 @@ namespace Processor.Base;
 /// <summary>
 /// Abstract base class for processor applications
 /// </summary>
-public abstract class BaseProcessorApplication : IActivityExecutor
+public abstract class BaseProcessorApplication
 {
     private IHost? _host;
     private ILogger<BaseProcessorApplication>? _logger;
@@ -44,166 +44,7 @@ public abstract class BaseProcessorApplication : IActivityExecutor
         };
     }
 
-    /// <summary>
-    /// Main implementation of activity execution that handles common patterns
-    /// Enhanced with hierarchical logging support - maintains consistent ID ordering
-    /// </summary>
-    public virtual async Task<IEnumerable<ActivityExecutionResult>> ExecuteActivityAsync(
-        // ✅ Consistent order: OrchestratedFlowId -> WorkflowId -> CorrelationId -> StepId -> ProcessorId -> PublishId -> ExecutionId
-        Guid orchestratedFlowId,
-        Guid workflowId,
-        Guid correlationId,
-        Guid stepId,
-        Guid processorId,
-        Guid publishId,
-        Guid executionId,
 
-        // Supporting parameters
-        List<AssignmentModel> entities,
-        string inputData,
-        CancellationToken cancellationToken = default)
-    {
-        var logger = ServiceProvider.GetRequiredService<ILogger<BaseProcessorApplication>>();
-        var stopwatch = Stopwatch.StartNew();
-        var results = new List<ActivityExecutionResult>();
-
-        // Create Layer 5 hierarchical logging context
-        var context = new HierarchicalLoggingContext
-        {
-            OrchestratedFlowId = orchestratedFlowId,
-            WorkflowId = workflowId,
-            CorrelationId = correlationId,
-            StepId = stepId,
-            ProcessorId = processorId,
-            PublishId = publishId,
-            ExecutionId = executionId
-        };
-
-        logger.LogInformationWithHierarchy(context,
-            "Starting activity execution in base processor. EntityCount: {EntityCount}",
-            entities.Count);
-
-        try
-        {
-            // Deserialize input data - symmetric to serialization pattern
-            object? deserializedInputData;
-            if (string.IsNullOrWhiteSpace(inputData))
-            {
-                deserializedInputData = null;
-            }
-            else
-            {
-                // Deserialize the input data from JSON
-                deserializedInputData = JsonSerializer.Deserialize<JsonElement>(inputData, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    // Note: WriteIndented is not needed for deserialization
-                });
-            }
-
-            var processedDataCollection = await ProcessActivityDataAsync(
-                // ✅ Consistent order maintained
-                orchestratedFlowId,
-                workflowId,
-                correlationId,
-                stepId,
-                processorId,
-                publishId,
-                executionId,
-
-                // Supporting parameters
-                entities,
-                deserializedInputData, // Pass deserialized object instead of raw string
-                cancellationToken);
-
-            stopwatch.Stop();
-
-            // Process each ProcessedActivityData item
-            foreach (var processedData in processedDataCollection)
-            {
-                try
-                {
-                    // Serialize only the Data property to JSON for this item
-                    var serializedData = JsonSerializer.Serialize(processedData.Data, new JsonSerializerOptions
-                    {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        WriteIndented = true
-                    });
-
-                    // Create ActivityExecutionResult for this item
-                    var result = new ActivityExecutionResult
-                    {
-                        Result = processedData.Result ?? "Processing completed successfully",
-                        Status = processedData.Status ?? ActivityExecutionStatus.Completed,
-                        Duration = stopwatch.Elapsed,
-                        ProcessorName = processedData.ProcessorName ?? GetType().Name,
-                        Version = processedData.Version ?? "1.0",
-                        ExecutionId = processedData.ExecutionId ,
-                        SerializedData = serializedData
-                    };
-
-                    results.Add(result);
-                }
-                catch (Exception ex)
-                {
-                    // Temporarily enhance base context with specific item ExecutionId for error logging
-                    var originalExecutionId = context.ExecutionId;
-                    context.ExecutionId = processedData.ExecutionId;
-
-                    logger.LogErrorWithHierarchy(context, ex, "Failed to process individual item");
-
-                    // Restore original ExecutionId to base context
-                    context.ExecutionId = originalExecutionId;
-
-                    // Record exception metrics for this item
-                    var healthMetricsService = ServiceProvider?.GetService<IProcessorHealthMetricsService>();
-                    healthMetricsService?.RecordException(ex.GetType().Name, "error", Guid.Empty);
-
-                    // Add failed result for this item
-                    var failedResult = new ActivityExecutionResult
-                    {
-                        Result = $"Item processing failed: {ex.Message}",
-                        Status = ActivityExecutionStatus.Failed,
-                        Duration = stopwatch.Elapsed,
-                        ProcessorName = GetType().Name,
-                        Version = "1.0",
-                        ExecutionId = processedData.ExecutionId == Guid.Empty ? Guid.NewGuid() : processedData.ExecutionId,
-                        SerializedData = "{}" // Empty JSON object for failed processing
-                    };
-
-                    results.Add(failedResult);
-                }
-            }
-
-            return results;
-        }
-        catch (Exception ex)
-        {
-            stopwatch.Stop();
-
-            // Use base context directly for complete failure logging
-            logger.LogErrorWithHierarchy(context, ex, "Activity execution failed completely");
-
-            // Record exception metrics
-            var healthMetricsService = ServiceProvider?.GetService<IProcessorHealthMetricsService>();
-            healthMetricsService?.RecordException(ex.GetType().Name, "critical", Guid.Empty);
-
-            // Return single failed result when entire processing fails
-            return new[]
-            {
-                new ActivityExecutionResult
-                {
-                    Result = $"Processing failed: {ex.Message}",
-                    Status = ActivityExecutionStatus.Failed,
-                    Duration = stopwatch.Elapsed,
-                    ProcessorName = GetType().Name,
-                    Version = "1.0",
-                    ExecutionId = executionId,
-                    SerializedData = "{}" // Empty JSON object for failed processing
-                }
-            };
-        }
-    }
 
     /// <summary>
     /// Abstract method that concrete processor implementations must override
@@ -222,7 +63,7 @@ public abstract class BaseProcessorApplication : IActivityExecutor
     /// <param name="inputData">Deserialized input data object (null if input was empty, JsonElement if JSON data)</param>
     /// <param name="cancellationToken">Cancellation token for the operation</param>
     /// <returns>Collection of processed data, each with unique ExecutionId, that will be incorporated into the standard result structure</returns>
-    protected abstract Task<IEnumerable<ProcessedActivityData>> ProcessActivityDataAsync(
+    public abstract Task<IEnumerable<ProcessedActivityData>> ProcessActivityDataAsync(
         // ✅ Consistent order: OrchestratedFlowId -> WorkflowId -> CorrelationId -> StepId -> ProcessorId -> PublishId -> ExecutionId
         Guid orchestratedFlowId,
         Guid workflowId,
@@ -741,8 +582,8 @@ public abstract class BaseProcessorApplication : IActivityExecutor
                     context.Configuration.GetSection("ProcessorActivityDataCache"));
 
                 // Add core services
-                services.AddSingleton<IActivityExecutor>(this);
-                services.AddSingleton<IProcessorService, ProcessorService>();
+                RegisterProcessorService(services);
+                services.AddSingleton(this);
                 services.AddSingleton<ISchemaValidator, SchemaValidator>();
 
                 // Add health monitoring services
@@ -896,6 +737,19 @@ public abstract class BaseProcessorApplication : IActivityExecutor
         };
 
         await tcs.Task;
+    }
+
+    /// <summary>
+    /// Virtual method to register the processor service - can be overridden by derived classes
+    /// </summary>
+    protected virtual void RegisterProcessorService(IServiceCollection services)
+    {
+        // Default implementation - register the abstract ProcessorService
+        // This will fail at runtime since ProcessorService is abstract
+        // Derived classes must override this method to register their concrete implementation
+        throw new InvalidOperationException(
+            "ProcessorService is abstract and cannot be instantiated directly. " +
+            "Derived processor applications must override RegisterProcessorService to register their concrete ProcessorService implementation.");
     }
 }
 
