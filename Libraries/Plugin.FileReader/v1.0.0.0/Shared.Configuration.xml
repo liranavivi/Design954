@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Configuration</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Configuration.CorsConfiguration">
+            <summary>
+            Extension methods for configuring CORS in manager applications
+            </summary>
+        </member>
+        <member name="M:Shared.Configuration.CorsConfiguration.AddManagerCors(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds CORS services with development-friendly policy for Swagger UI
+            </summary>
+            <param name="services">The service collection</param>
+            <returns>The service collection for chaining</returns>
+        </member>
+        <member name="M:Shared.Configuration.CorsConfiguration.UseManagerCors(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Configures CORS middleware in the application pipeline
+            </summary>
+            <param name="app">The application builder</param>
+            <returns>The application builder for chaining</returns>
+        </member>
+        <member name="T:Shared.Configuration.HazelcastConfiguration">
+            <summary>
+            Extension methods for configuring Hazelcast client
+            </summary>
+        </member>
+        <member name="M:Shared.Configuration.HazelcastConfiguration.AddHazelcastClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Adds Hazelcast client and cache services
+            </summary>
+        </member>
+        <member name="T:Shared.Configuration.ServiceHazelcastConfiguration">
+            <summary>
+            Configuration model for Hazelcast settings
+            </summary>
+        </member>
+        <member name="T:Shared.Configuration.MassTransitConfiguration">
+            <summary>
+            Configuration extension methods for MassTransit setup with RabbitMQ and Kafka.
+            </summary>
+        </member>
+        <member name="T:Shared.Configuration.MongoDbConfiguration">
+            <summary>
+            Configuration extension methods for MongoDB setup and dependency injection.
+            </summary>
+        </member>
+        <member name="M:Shared.Configuration.MongoDbConfiguration.AddMongoDb``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.String)">
+            <summary>
+            Adds MongoDB services and repository registration to the service collection.
+            </summary>
+            <typeparam name="TInterface">The repository interface type.</typeparam>
+            <typeparam name="TImplementation">The repository implementation type.</typeparam>
+            <param name="services">The service collection to add services to.</param>
+            <param name="configuration">The configuration instance.</param>
+            <param name="databaseName">The default database name to use.</param>
+            <returns>The service collection for method chaining.</returns>
+        </member>
+        <member name="M:Shared.Configuration.MongoDbConfiguration.AddMongoDb(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.String)">
+            <summary>
+            Adds MongoDB services with a specific repository type.
+            </summary>
+            <param name="services">The service collection to add services to.</param>
+            <param name="configuration">The configuration instance.</param>
+            <param name="databaseName">The default database name to use.</param>
+            <returns>The service collection for method chaining.</returns>
+        </member>
+        <member name="T:Shared.Configuration.OpenTelemetryConfiguration">
+            <summary>
+            Configuration extension methods for OpenTelemetry observability setup.
+            </summary>
+        </member>
+        <member name="M:Shared.Configuration.OpenTelemetryConfiguration.AddOpenTelemetryObservability(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.String,System.String)">
+            <summary>
+            Adds OpenTelemetry observability services to the service collection.
+            Configures tracing, metrics, and logging with OTLP exporters and correlation ID enrichment.
+            For managers, uses ManagerConfiguration for unique meter naming pattern.
+            </summary>
+            <param name="services">The service collection to add services to.</param>
+            <param name="configuration">The configuration instance.</param>
+            <param name="serviceName">The service name for OpenTelemetry. If not provided, reads from configuration.</param>
+            <param name="serviceVersion">The service version for OpenTelemetry. If not provided, reads from configuration.</param>
+            <returns>The service collection for method chaining.</returns>
+        </member>
+    </members>
+</doc>

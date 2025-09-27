@@ -1,0 +1,1393 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Processor</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Processor.BaseProcessorApplication">
+            <summary>
+            Abstract base class for processor applications
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.BaseProcessorApplication.ServiceProvider">
+            <summary>
+            Protected property to access the service provider for derived classes
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.ExecuteActivityAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Main implementation of activity execution that handles common patterns
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.ProcessActivityDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Abstract method that concrete processor implementations must override
+            This is where the specific processor business logic should be implemented
+            Returns a collection of ProcessedActivityData, each with a unique ExecutionId
+            </summary>
+            <param name="processorId">ID of the processor executing the activity</param>
+            <param name="orchestratedFlowEntityId">ID of the orchestrated flow entity</param>
+            <param name="stepId">ID of the step being executed</param>
+            <param name="executionId">Original execution ID for this activity instance</param>
+            <param name="publishId">Original publish ID for this activity instance</param>
+            <param name="entities">Collection of base entities to process</param>
+            <param name="inputData">Parsed input data object</param>
+            <param name="correlationId">Optional correlation ID for tracking</param>
+            <param name="cancellationToken">Cancellation token for the operation</param>
+            <returns>Collection of processed data, each with unique ExecutionId, that will be incorporated into the standard result structure</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.RunAsync(System.String[])">
+            <summary>
+            Main entry point for the processor application
+            Sets up infrastructure and starts the application
+            </summary>
+            <param name="args">Command line arguments</param>
+            <returns>Exit code (0 for success, non-zero for failure)</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.InitializeConsoleAndDisplayStartupInfoAsync">
+            <summary>
+            Initializes console output and displays startup information
+            </summary>
+            <returns>Tuple containing processor name and version</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.LoadEarlyConfiguration">
+            <summary>
+            Loads early configuration before host is built
+            </summary>
+            <returns>Configuration instance</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.GetProcessorConfigurationSafely(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Safely gets ProcessorConfiguration from IConfiguration with error handling
+            </summary>
+            <param name="configuration">Configuration instance</param>
+            <returns>ProcessorConfiguration or null if not available/invalid</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.ValidateProcessorConfiguration(Shared.Processor.Models.ProcessorConfiguration)">
+            <summary>
+            Validates ProcessorConfiguration at runtime and throws if invalid
+            </summary>
+            <param name="config">Configuration to validate</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when configuration is invalid</exception>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.DisplayApplicationInformation(System.String,System.String)">
+            <summary>
+            Displays application information
+            </summary>
+            <param name="processorName">Name of the processor</param>
+            <param name="processorVersion">Version of the processor</param>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.DisplayCustomApplicationInfo">
+            <summary>
+            Virtual method that derived classes can override to display custom application information
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.ValidateEnvironmentAsync">
+            <summary>
+            Performs environment validation
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.PerformCustomEnvironmentValidationAsync(System.Collections.Generic.List{System.ValueTuple{System.String,System.Boolean,System.String}})">
+            <summary>
+            Virtual method that derived classes can override to add custom environment validations
+            </summary>
+            <param name="validationResults">List to add validation results to</param>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.DisplayConfigurationAsync">
+            <summary>
+            Displays configuration information
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.CreateHostBuilder(System.String[])">
+            <summary>
+            Creates and configures the host builder with all necessary services
+            </summary>
+            <param name="args">Command line arguments</param>
+            <returns>Configured host builder</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Virtual method that derived classes can override to add custom services
+            </summary>
+            <param name="services">Service collection</param>
+            <param name="configuration">Configuration</param>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.ConfigureLogging(Microsoft.Extensions.Logging.ILoggingBuilder)">
+            <summary>
+            Virtual method that derived classes can override to configure logging
+            This is called before OpenTelemetry logging is configured
+            </summary>
+            <param name="logging">Logging builder</param>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.InitializeCustomMetricsServicesAsync">
+            <summary>
+            Virtual method that derived classes can override to initialize custom metrics services
+            This is called after host.StartAsync() but before processor initialization
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.FindProjectDirectory(System.String)">
+            <summary>
+            Finds the project directory by looking for the .csproj file
+            </summary>
+            <param name="startDirectory">Directory to start searching from</param>
+            <returns>Project directory path</returns>
+        </member>
+        <member name="M:Shared.Processor.BaseProcessorApplication.WaitForShutdownAsync(System.Threading.CancellationToken)">
+            <summary>
+            Waits for shutdown signal
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Task representing the wait operation</returns>
+        </member>
+        <member name="T:Shared.Processor.Consumers.ExecuteActivityCommandConsumer">
+            <summary>
+            Consumer for ExecuteActivityCommand messages
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Consumers.ExecuteActivityCommandConsumer.ExtractCorrelationId(MassTransit.ConsumeContext{Shared.MassTransit.Commands.ExecuteActivityCommand})">
+            <summary>
+            Extract correlation ID from MassTransit context or message
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IActivityExecutor">
+            <summary>
+            Interface for the abstract activity execution logic that concrete processors must implement
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IActivityExecutor.ExecuteActivityAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Executes an activity with the provided parameters
+            This method must be implemented by concrete processor applications
+            </summary>
+            <param name="processorId">ID of the processor executing the activity</param>
+            <param name="orchestratedFlowEntityId">ID of the orchestrated flow entity</param>
+            <param name="stepId">ID of the step being executed</param>
+            <param name="executionId">Unique execution ID for this activity instance</param>
+            <param name="publishId">Unique publish ID for this activity instance</param>
+            <param name="entities">Collection of base entities to process</param>
+            <param name="inputData">Input data retrieved from cache (validated against InputSchema)</param>
+            <param name="correlationId">Correlation ID for tracking</param>
+            <param name="cancellationToken">Cancellation token for the operation</param>
+            <returns>Collection of result data that will be validated against OutputSchema and saved to cache</returns>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IActivityProcessingQueue">
+            <summary>
+            Interface for the activity processing queue
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IActivityProcessingQueue.EnqueueAsync(Shared.Processor.Models.ProcessingRequest,System.Threading.CancellationToken)">
+            <summary>
+            Enqueues a processing request for background processing
+            </summary>
+            <param name="request">The processing request to enqueue</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Task representing the enqueue operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IActivityProcessingQueue.GetQueueDepth">
+            <summary>
+            Gets the current queue depth (number of pending requests)
+            </summary>
+            <returns>Number of requests in the queue</returns>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IPerformanceMetricsService">
+            <summary>
+            Interface for collecting processor performance metrics
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPerformanceMetricsService.CollectMetricsAsync">
+            <summary>
+            Collects current performance metrics for the processor
+            </summary>
+            <returns>Current performance metrics</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPerformanceMetricsService.RecordActivity(System.Boolean,System.Double)">
+            <summary>
+            Records an activity execution for throughput calculation
+            </summary>
+            <param name="success">Whether the activity was successful</param>
+            <param name="executionTimeMs">Execution time in milliseconds</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPerformanceMetricsService.GetCurrentThroughput">
+            <summary>
+            Gets the current activity throughput (activities per minute)
+            </summary>
+            <returns>Activities per minute</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPerformanceMetricsService.GetSuccessRate">
+            <summary>
+            Gets the current success rate percentage
+            </summary>
+            <returns>Success rate percentage (0-100)</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPerformanceMetricsService.GetAverageExecutionTime">
+            <summary>
+            Gets the average execution time in milliseconds
+            </summary>
+            <returns>Average execution time in milliseconds</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPerformanceMetricsService.Reset">
+            <summary>
+            Resets all metrics counters
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IPlugin">
+            <summary>
+            Interface for plugin implementations that can be dynamically loaded and executed
+            by the PluginLoaderProcessor. Plugin must implement this interface to be compatible
+            with the plugin loading system.
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IPlugin.ProcessActivityDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Processes activity data with the same signature as BaseProcessorApplication.ProcessActivityDataAsync
+            This method will be called by the PluginLoaderProcessor to execute the plugin's business logic
+            </summary>
+            <param name="processorId">ID of the processor executing the activity</param>
+            <param name="orchestratedFlowEntityId">ID of the orchestrated flow entity</param>
+            <param name="stepId">ID of the step being executed</param>
+            <param name="executionId">Unique execution ID for this activity instance</param>
+            <param name="publishId">Unique publish ID for this activity instance</param>
+            <param name="entities">Collection of assignment entities to process</param>
+            <param name="inputData">Input data retrieved from cache (validated against InputSchema)</param>
+            <param name="correlationId">Correlation ID for tracking</param>
+            <param name="cancellationToken">Cancellation token for the operation</param>
+            <returns>Collection of processed activity data that will be validated against OutputSchema and saved to cache</returns>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IProcessorApplicationLogger">
+            <summary>
+            Marker interface for processor applications to enable generic logging.
+            This allows plugins to use ILogger&lt;IProcessorApplicationLogger&gt; for consistent logging context
+            while avoiding direct dependencies on specific processor application types.
+            
+            Processor applications should implement this interface to provide a shared logging context
+            that plugins can reference without creating circular dependencies.
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IProcessorFlowMetricsService">
+            <summary>
+            Service for recording processor flow metrics optimized for anomaly detection.
+            Follows the orchestrator pattern with focused metrics: consume counter, publish counter, and anomaly detection.
+            Reduces metric volume while focusing on important operational issues.
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorFlowMetricsService.RecordCommandConsumed(System.Boolean,System.String,System.String,System.Nullable{System.Guid})">
+            <summary>
+            Records ExecuteActivityCommand consumption metrics
+            </summary>
+            <param name="success">Whether the command was consumed successfully</param>
+            <param name="processorName">Processor name for labeling</param>
+            <param name="processorVersion">Processor version for labeling</param>
+            <param name="orchestratedFlowId">The orchestrated flow ID for filtering (optional)</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorFlowMetricsService.RecordEventPublished(System.Boolean,System.String,System.String,System.String,System.Nullable{System.Guid})">
+            <summary>
+            Records activity event publishing metrics (ActivityExecutedEvent or ActivityFailedEvent)
+            </summary>
+            <param name="success">Whether the event was published successfully</param>
+            <param name="eventType">Type of event published (e.g., "ActivityExecutedEvent", "ActivityFailedEvent")</param>
+            <param name="processorName">Processor name for labeling</param>
+            <param name="processorVersion">Processor version for labeling</param>
+            <param name="orchestratedFlowId">The orchestrated flow ID for filtering (optional)</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorFlowMetricsService.RecordFlowAnomaly(System.String,System.String,System.Int64,System.Int64,System.Nullable{System.Guid})">
+            <summary>
+            Records flow anomaly detection metrics
+            </summary>
+            <param name="processorName">Processor name for labeling</param>
+            <param name="processorVersion">Processor version for labeling</param>
+            <param name="consumedCount">Number of commands consumed</param>
+            <param name="publishedCount">Number of events published</param>
+            <param name="orchestratedFlowId">The orchestrated flow ID for filtering (optional)</param>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IProcessorHealthMetricsService">
+            <summary>
+            Service interface for exposing ProcessorHealthCacheEntry properties as OpenTelemetry metrics.
+            Provides comprehensive processor health and performance metrics for analysis and monitoring.
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordHealthCacheEntryMetrics(Shared.Models.ProcessorHealthCacheEntry)">
+            <summary>
+            Records all metrics from a ProcessorHealthCacheEntry.
+            This method extracts and publishes all relevant metrics from the health cache entry.
+            </summary>
+            <param name="healthEntry">The processor health cache entry containing metrics data</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordProcessorStatus(System.Guid,Shared.Models.HealthStatus,System.String,System.String)">
+            <summary>
+            Records processor status metrics.
+            </summary>
+            <param name="processorId">Unique processor identifier</param>
+            <param name="status">Current health status</param>
+            <param name="processorName">Name of the processor from configuration</param>
+            <param name="processorVersion">Version of the processor from configuration</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordProcessorUptime(System.Guid,System.TimeSpan,System.String,System.String)">
+            <summary>
+            Records processor uptime metrics.
+            </summary>
+            <param name="processorId">Unique processor identifier</param>
+            <param name="uptime">Current processor uptime</param>
+            <param name="processorName">Name of the processor from configuration</param>
+            <param name="processorVersion">Version of the processor from configuration</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordPerformanceMetrics(System.Guid,Shared.Models.ProcessorPerformanceMetrics,System.String,System.String)">
+            <summary>
+            Records processor performance metrics.
+            </summary>
+            <param name="processorId">Unique processor identifier</param>
+            <param name="performanceMetrics">Performance metrics data</param>
+            <param name="processorName">Name of the processor from configuration</param>
+            <param name="processorVersion">Version of the processor from configuration</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordProcessorMetadata(System.Guid,Shared.Models.ProcessorMetadata,System.String,System.String)">
+            <summary>
+            Records processor metadata metrics.
+            </summary>
+            <param name="processorId">Unique processor identifier</param>
+            <param name="metadata">Processor metadata</param>
+            <param name="processorName">Name of the processor from configuration</param>
+            <param name="processorVersion">Version of the processor from configuration</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordHealthCheckResults(System.Guid,System.Collections.Generic.Dictionary{System.String,Shared.Models.HealthCheckResult},System.String,System.String)">
+            <summary>
+            Records health check results metrics.
+            </summary>
+            <param name="processorId">Unique processor identifier</param>
+            <param name="healthChecks">Health check results</param>
+            <param name="processorName">Name of the processor from configuration</param>
+            <param name="processorVersion">Version of the processor from configuration</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordCacheMetrics(System.Guid,System.Double,System.Int64,System.String,System.String)">
+            <summary>
+            Records aggregated cache metrics.
+            </summary>
+            <param name="processorId">Unique processor identifier</param>
+            <param name="averageEntryAge">Average age of cache entries in seconds</param>
+            <param name="activeEntries">Number of active cache entries</param>
+            <param name="processorName">Name of the processor from configuration</param>
+            <param name="processorVersion">Version of the processor from configuration</param>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMetricsService.RecordException(System.String,System.String,System.Boolean)">
+            <summary>
+            Records exception metrics for processor monitoring.
+            </summary>
+            <param name="exceptionType">Type of exception (e.g., ValidationException, ProcessingException)</param>
+            <param name="severity">Severity level (warning, error, critical)</param>
+            <param name="isCritical">Whether this exception affects processor operation</param>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IProcessorHealthMonitor">
+            <summary>
+            Interface for the processor health monitoring service
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMonitor.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts the health monitoring background service
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Task representing the monitoring operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMonitor.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops the health monitoring background service
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Task representing the stop operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMonitor.PerformHealthCheckAsync">
+            <summary>
+            Performs a single health check and updates the cache
+            </summary>
+            <returns>Task representing the health check operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMonitor.GetHealthStatusFromCacheAsync(System.Guid)">
+            <summary>
+            Gets the current health status from cache
+            </summary>
+            <param name="processorId">ID of the processor to check</param>
+            <returns>Health cache entry or null if not found</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMonitor.GetAllHealthStatusFromCacheAsync">
+            <summary>
+            Gets health status for all processors from cache
+            </summary>
+            <returns>Dictionary of processor health entries</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorHealthMonitor.GetMonitoringStatistics">
+            <summary>
+            Gets statistics about the health monitoring system itself
+            </summary>
+            <returns>Health monitoring statistics for this pod</returns>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IProcessorMetricsLabelService">
+            <summary>
+            Service for generating consistent processor metrics labels across all metric types.
+            Ensures all metrics use the same processor_composite_key and labeling standards.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Interfaces.IProcessorMetricsLabelService.ProcessorCompositeKey">
+            <summary>
+            The standardized processor composite key (e.g., "1.1.1_FileProcessor")
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Interfaces.IProcessorMetricsLabelService.ProcessorInstanceId">
+            <summary>
+            The processor instance ID (unique per processor instance)
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorMetricsLabelService.GetStandardLabels">
+            <summary>
+            Gets the standard base labels that should be included in all processor metrics
+            </summary>
+            <returns>KeyValuePair array with processor_composite_key, processor_name, processor_version, processor_id, environment</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorMetricsLabelService.GetActivityLabels(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Gets labels for activity processing metrics (workflow-related)
+            </summary>
+            <param name="correlationId">Correlation ID for the activity</param>
+            <param name="executionId">Execution ID for the activity</param>
+            <param name="stepId">Step ID for the activity</param>
+            <param name="orchestratedFlowId">Orchestrated flow ID (optional)</param>
+            <param name="status">Activity status (e.g., "success", "failed")</param>
+            <returns>KeyValuePair array with standard labels plus activity-specific labels</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorMetricsLabelService.GetFileLabels(System.String,System.String)">
+            <summary>
+            Gets labels for file processing metrics
+            </summary>
+            <param name="correlationId">Correlation ID for the file processing</param>
+            <param name="fileType">Type of file being processed (e.g., "assignment_data")</param>
+            <returns>KeyValuePair array with standard labels plus file-specific labels</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorMetricsLabelService.GetHealthLabels(System.String,System.String)">
+            <summary>
+            Gets labels for health check metrics
+            </summary>
+            <param name="healthCheckName">Name of the health check (e.g., "cache", "initialization")</param>
+            <param name="healthCheckStatus">Status of the health check (e.g., "Healthy", "Unhealthy")</param>
+            <returns>KeyValuePair array with standard labels plus health-specific labels</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorMetricsLabelService.GetSystemLabels">
+            <summary>
+            Gets labels for system/performance metrics
+            </summary>
+            <returns>KeyValuePair array with standard labels for system metrics</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorMetricsLabelService.GetCacheLabels">
+            <summary>
+            Gets labels for cache metrics
+            </summary>
+            <returns>KeyValuePair array with standard labels for cache metrics</returns>
+        </member>
+        <member name="T:Shared.Processor.Interfaces.IProcessorService">
+            <summary>
+            Interface for the core processor service functionality
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.GetProcessorIdAsync">
+            <summary>
+            Gets the ID of this processor instance
+            </summary>
+            <returns>The processor ID</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.ProcessActivityAsync(Shared.Processor.Models.ProcessorActivityMessage)">
+            <summary>
+            Processes an activity message and returns the collection of responses
+            </summary>
+            <param name="message">The activity message to process</param>
+            <returns>Collection of activity responses</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.GetHealthStatusAsync">
+            <summary>
+            Gets the current health status of the processor
+            </summary>
+            <returns>The health check response</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.GetStatisticsAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Gets statistics for the processor within the specified time period
+            </summary>
+            <param name="startTime">Start time for statistics period (null for all time)</param>
+            <param name="endTime">End time for statistics period (null for current time)</param>
+            <returns>The statistics response</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.InitializeAsync">
+            <summary>
+            Initializes the processor service (retrieves or creates processor entity)
+            </summary>
+            <returns>Task representing the initialization operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.InitializeAsync(System.Threading.CancellationToken)">
+            <summary>
+            Initializes the processor service with cancellation support (retrieves or creates processor entity)
+            </summary>
+            <param name="cancellationToken">Cancellation token to stop initialization</param>
+            <returns>Task representing the initialization operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.GetCachedDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid)">
+            <summary>
+            Retrieves data from Hazelcast cache using the processor's map and key pattern
+            </summary>
+            <param name="orchestratedFlowEntityId">ID of the orchestrated flow entity</param>
+            <param name="stepId">ID of the step</param>
+            <param name="executionId">Execution ID</param>
+            <param name="correlationId">Correlation ID for cache key isolation (defaults to Empty)</param>
+            <param name="publishId">Unique publish ID for this execution</param>
+            <returns>The cached data as a string</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.SaveCachedDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.String)">
+            <summary>
+            Saves data to Hazelcast cache using the processor's map and key pattern
+            </summary>
+            <param name="orchestratedFlowEntityId">ID of the orchestrated flow entity</param>
+            <param name="stepId">ID of the step</param>
+            <param name="executionId">Execution ID</param>
+            <param name="data">Data to save</param>
+            <param name="correlationId">Correlation ID for cache key isolation (defaults to Empty)</param>
+            <param name="publishId">Unique publish ID for this execution</param>
+            <returns>Task representing the save operation</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.ValidateInputDataAsync(System.String)">
+            <summary>
+            Validates data against the input schema
+            </summary>
+            <param name="data">Data to validate</param>
+            <returns>True if valid, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.ValidateOutputDataAsync(System.String)">
+            <summary>
+            Validates data against the output schema
+            </summary>
+            <param name="data">Data to validate</param>
+            <returns>True if valid, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Interfaces.IProcessorService.GetSchemaHealthStatus">
+            <summary>
+            Gets the current schema health status including schema ID validation
+            </summary>
+            <returns>A tuple indicating if schemas are healthy and valid, along with error messages</returns>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessorActivityMessage">
+            <summary>
+            Message for executing an activity in the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.ProcessorId">
+            <summary>
+            ID of the processor that should handle this activity
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.OrchestratedFlowEntityId">
+            <summary>
+            ID of the orchestrated flow entity
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.StepId">
+            <summary>
+            ID of the step being executed
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.ExecutionId">
+            <summary>
+            Unique execution ID for this activity instance
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.Entities">
+            <summary>
+            Collection of assignment models to process
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.CorrelationId">
+            <summary>
+            Correlation ID for tracking (defaults to Guid.Empty)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.PublishId">
+            <summary>
+            Unique publish ID generated for each command publication (Guid.Empty for entry points)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityMessage.CreatedAt">
+            <summary>
+            Timestamp when the message was created
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessorActivityResponse">
+            <summary>
+            Response message after processing an activity
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.ProcessorId">
+            <summary>
+            ID of the processor that handled this activity
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.OrchestratedFlowEntityId">
+            <summary>
+            ID of the orchestrated flow entity
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.StepId">
+            <summary>
+            ID of the step that was executed
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.ExecutionId">
+            <summary>
+            Execution ID for this activity instance
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.Status">
+            <summary>
+            Status of the activity execution
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.CorrelationId">
+            <summary>
+            Correlation ID for tracking (defaults to Guid.Empty)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.ErrorMessage">
+            <summary>
+            Optional error message if execution failed
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.CompletedAt">
+            <summary>
+            Timestamp when the activity was completed
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityResponse.Duration">
+            <summary>
+            Duration of the activity execution
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ActivityExecutionResult">
+            <summary>
+            Result returned from ExecuteActivityAsync containing all ProcessedActivityData info plus serialized data
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.Result">
+            <summary>
+            Result message from processing
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.Status">
+            <summary>
+            Status of the processing
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.Duration">
+            <summary>
+            Duration of the processing
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.ProcessorName">
+            <summary>
+            Name of the processor that handled this activity
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.Version">
+            <summary>
+            Version of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.ExecutionId">
+            <summary>
+            Execution ID
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ActivityExecutionResult.SerializedData">
+            <summary>
+            JSON serialized string of the Data property only
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessingRequest">
+            <summary>
+            Request model for queue-based processing handoff
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessingRequest.OriginalCommand">
+            <summary>
+            The original ExecuteActivityCommand received from RabbitMQ
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessingRequest.ActivityMessage">
+            <summary>
+            The converted ProcessorActivityMessage for processing
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessingRequest.CorrelationId">
+            <summary>
+            Correlation ID for tracking
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessingRequest.ReceivedAt">
+            <summary>
+            When the message was received by the consumer
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessingRequest.RetryCount">
+            <summary>
+            Number of retry attempts for this request
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessingRequest.MaxRetries">
+            <summary>
+            Maximum number of retries allowed
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration">
+            <summary>
+            Configuration for processor activity data cache operations
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.MapName">
+            <summary>
+            Name of the Hazelcast map for processor activity data cache
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.MaxRetries">
+            <summary>
+            Maximum number of retry attempts for cache operations
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.RetryDelay">
+            <summary>
+            Delay between retry attempts
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.UseExponentialBackoff">
+            <summary>
+            Whether to use exponential backoff for retries
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.ContinueOnCacheFailure">
+            <summary>
+            Whether to continue processing if cache operations fail
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.LogCacheOperations">
+            <summary>
+            Whether to log cache operations for debugging
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorActivityDataCacheConfiguration.LogLevel">
+            <summary>
+            Log level for cache operations (Information, Debug, Warning, etc.)
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessorConfiguration">
+            <summary>
+            Configuration model for processor application settings
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.Version">
+            <summary>
+            Version of the processor (used in composite key)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.Name">
+            <summary>
+            Name of the processor (used in composite key)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.Description">
+            <summary>
+            Description of the processor functionality
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.InputSchemaId">
+            <summary>
+            Schema ID for validating input data
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.OutputSchemaId">
+            <summary>
+            Schema ID for validating output data
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.InputSchemaDefinition">
+            <summary>
+            Input schema definition (retrieved at runtime)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.OutputSchemaDefinition">
+            <summary>
+            Output schema definition (retrieved at runtime)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.Environment">
+            <summary>
+            Environment name for the processor (defaults to Development)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorConfiguration.BackgroundWorkerCount">
+            <summary>
+            Number of background worker threads for processing activities.
+            Default: System.Environment.ProcessorCount (CPU cores)
+            Recommended: 4-8 for I/O intensive processors, 2-4 for CPU intensive
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Models.ProcessorConfiguration.GetCompositeKey">
+            <summary>
+            Gets the composite key for this processor
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.RabbitMQConfiguration">
+            <summary>
+            Configuration model for RabbitMQ settings
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessorInitializationConfiguration">
+            <summary>
+            Configuration for processor initialization retry behavior
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorInitializationConfiguration.RetryEndlessly">
+            <summary>
+            Whether to retry initialization endlessly until successful.
+            When true, processor will never terminate due to initialization failures.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorInitializationConfiguration.RetryDelay">
+            <summary>
+            Base delay between initialization retry attempts (default: 5 seconds).
+            This is the initial delay that may be increased with exponential backoff.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorInitializationConfiguration.RetryDelayMs">
+            <summary>
+            Maximum delay between retry attempts in milliseconds (default: 60000ms = 60 seconds).
+            Prevents exponential backoff from growing too large.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorInitializationConfiguration.UseExponentialBackoff">
+            <summary>
+            Whether to use exponential backoff for retry delays.
+            When true, delay increases exponentially up to MaxRetryDelay.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorInitializationConfiguration.InitializationTimeout">
+            <summary>
+            Timeout for individual initialization attempts (default: 30 seconds).
+            Each retry attempt will timeout after this duration.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorInitializationConfiguration.LogRetryAttempts">
+            <summary>
+            Whether to log each retry attempt.
+            Useful for monitoring but can generate significant log volume.
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.SchemaValidationConfiguration">
+            <summary>
+            Configuration for schema validation
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.SchemaValidationConfiguration.EnableInputValidation">
+            <summary>
+            Enable input schema validation for main processor input data
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.SchemaValidationConfiguration.EnableOutputValidation">
+            <summary>
+            Enable output schema validation
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.SchemaValidationConfiguration.EnableAssignmentEntityValidation">
+            <summary>
+            Enable assignment entity payload validation against their individual schemas
+            NOTE: This is now performed at orchestration level, not in processors
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.SchemaValidationConfiguration.LogValidationWarnings">
+            <summary>
+            Log validation warnings
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.SchemaValidationConfiguration.LogValidationErrors">
+            <summary>
+            Log validation errors
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.SchemaValidationConfiguration.IncludeValidationTelemetry">
+            <summary>
+            Include validation telemetry
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.ProcessorHealthMonitorConfiguration">
+            <summary>
+            Configuration for the distributed processor health monitoring system.
+            Designed for processor-centric health monitoring with last-writer-wins strategy.
+            </summary>
+        </member>
+        <member name="F:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.SectionName">
+            <summary>
+            Configuration section name
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.Enabled">
+            <summary>
+            Whether health monitoring is enabled
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.HealthCheckInterval">
+            <summary>
+            Interval between health checks (default: 30 seconds).
+            Longer intervals reduce cache load in distributed environments.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.MapName">
+            <summary>
+            Name of the Hazelcast map for processor health cache
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.ActivityDataCacheMapName">
+            <summary>
+            Name of the Hazelcast map for processor activity data cache
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.IncludePerformanceMetrics">
+            <summary>
+            Whether to include performance metrics in health reports
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.IncludeDetailedHealthChecks">
+            <summary>
+            Whether to include detailed health check results.
+            Detailed checks provide more information but increase cache payload size.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.MaxRetries">
+            <summary>
+            Maximum number of retries for health cache operations.
+            Higher values improve reliability but may increase latency.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.RetryDelayMs">
+            <summary>
+            Delay between retry attempts in milliseconds.
+            Exponential backoff is applied automatically.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.LogHealthChecks">
+            <summary>
+            Whether to log health check results.
+            Useful for debugging but can generate significant log volume.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.LogLevel">
+            <summary>
+            Log level for health check logging (Information, Warning, Error).
+            Controls verbosity of health monitoring logs.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.ContinueOnCacheFailure">
+            <summary>
+            Whether to continue health monitoring if cache operations fail.
+            When true, processor continues running even if health reporting fails.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.PodId">
+            <summary>
+            Unique identifier for this pod instance.
+            Used for debugging and tracing health reports.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.UseExponentialBackoff">
+            <summary>
+            Whether to use exponential backoff for retry delays.
+            Helps reduce cache load during outages.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.ProcessorHealthMonitorConfiguration.PerformanceMetrics">
+            <summary>
+            Performance metrics collection configuration
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.PerformanceMetricsConfiguration">
+            <summary>
+            Configuration for performance metrics collection
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.PerformanceMetricsConfiguration.CollectCpuMetrics">
+            <summary>
+            Whether to collect CPU usage metrics
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.PerformanceMetricsConfiguration.CollectMemoryMetrics">
+            <summary>
+            Whether to collect memory usage metrics
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.PerformanceMetricsConfiguration.CollectThroughputMetrics">
+            <summary>
+            Whether to collect activity throughput metrics
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.PerformanceMetricsConfiguration.ThroughputWindow">
+            <summary>
+            Window size for calculating throughput metrics (default: 5 minutes)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.PerformanceMetricsConfiguration.CollectGcMetrics">
+            <summary>
+            Whether to collect garbage collection metrics
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.PerformanceMetricsConfiguration.CollectThreadPoolMetrics">
+            <summary>
+            Whether to collect thread pool metrics
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Models.HealthMonitoringStatistics">
+            <summary>
+            Statistics about the health monitoring system itself.
+            Used to monitor the health of the health monitoring with initialization-aware metrics.
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.PodId">
+            <summary>
+            Identifier of the pod reporting these statistics
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.TotalHealthChecks">
+            <summary>
+            Total number of health checks attempted by this pod
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.SuccessfulHealthChecks">
+            <summary>
+            Number of successful health checks by this pod
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.FailedHealthChecks">
+            <summary>
+            Number of failed health checks by this pod
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.HealthChecksSkippedDueToInitialization">
+            <summary>
+            Number of health checks skipped due to ProcessorId not being available
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.HealthChecksStoredInCache">
+            <summary>
+            Number of health checks that were successfully stored in cache
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.SuccessRate">
+            <summary>
+            Success rate percentage (0-100)
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.CacheStorageRate">
+            <summary>
+            Cache storage rate percentage (0-100) - how many checks resulted in cache storage
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.LastSuccessfulHealthCheck">
+            <summary>
+            Timestamp of the last successful health check
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.FirstProcessorIdAvailableAt">
+            <summary>
+            Timestamp when ProcessorId first became available
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.IsHealthy">
+            <summary>
+            Whether the health monitoring system itself is healthy
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Models.HealthMonitoringStatistics.IsProcessorInitialized">
+            <summary>
+            Whether the processor has been initialized (ProcessorId is available)
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.ActivityProcessingQueue">
+            <summary>
+            In-memory queue implementation for activity processing
+            </summary>
+        </member>
+        <member name="P:Shared.Processor.Services.ActivityProcessingQueue.Reader">
+            <summary>
+            Gets the channel reader for the background service
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Services.ActivityProcessingQueue.DecrementQueueDepth">
+            <summary>
+            Internal method to decrement queue depth when items are processed
+            Called by the background service
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.ActivityProcessingService">
+            <summary>
+            Background service that processes activities from the queue and publishes events
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.PerformanceMetricsService">
+            <summary>
+            Service for collecting processor performance metrics
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.ProcessorFlowMetricsService">
+            <summary>
+            Service for recording processor flow metrics optimized for anomaly detection.
+            Follows the orchestrator pattern with focused metrics: consume counter, publish counter, and anomaly detection.
+            Reduces metric volume while focusing on important operational issues.
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.ProcessorHealthMetricsService">
+            <summary>
+            Service for exposing ProcessorHealthCacheEntry properties as OpenTelemetry metrics.
+            Provides comprehensive processor health and performance metrics for analysis and monitoring.
+            Uses consistent labeling from appsettings configuration (Name and Version).
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorHealthMetricsService.RecordException(System.String,System.String,System.Boolean)">
+            <summary>
+            Records exception metrics for processor monitoring.
+            </summary>
+            <param name="exceptionType">Type of exception (e.g., ValidationException, ProcessingException)</param>
+            <param name="severity">Severity level (warning, error, critical)</param>
+            <param name="isCritical">Whether this exception affects processor operation</param>
+        </member>
+        <member name="T:Shared.Processor.Services.ProcessorHealthMonitor">
+            <summary>
+            Distributed background service that monitors processor health and updates the shared cache.
+            Implements processor-centric health monitoring with last-writer-wins strategy.
+            Multiple pods can run this service for the same processor without coordination.
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorHealthMonitor.GetMonitoringStatistics">
+            <summary>
+            Gets health monitoring statistics for this pod.
+            Useful for monitoring the health monitoring system itself.
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.ProcessorMetricsLabelService">
+            <summary>
+            Centralized service for generating consistent processor metrics labels.
+            Reads configuration from ProcessorConfiguration and ensures all metrics use the same labeling standards.
+            </summary>
+        </member>
+        <member name="T:Shared.Processor.Services.ProcessorService">
+            <summary>
+            Core service for managing processor functionality and activity processing
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.ValidateSchemaIds(Shared.Entities.ProcessorEntity)">
+            <summary>
+            Validates that the processor entity's schema IDs match the configured schema IDs
+            Respects EnableInputValidation and EnableOutputValidation configuration flags
+            </summary>
+            <param name="processorEntity">The processor entity retrieved from the query</param>
+            <returns>True if schema IDs match configuration, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.GetSchemaHealthStatus">
+            <summary>
+            Gets the current schema health status including schema ID validation
+            </summary>
+            <returns>A tuple indicating if schemas are healthy and valid</returns>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.GetProcessorCacheKey(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid)">
+            <summary>
+            Generates a processor-specific cache key that includes the processor ID
+            Pattern: {processorId}:{orchestratedFlowEntityId}:{correlationId}:{executionId}:{stepId}:{publishId}
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.ValidateInputDataAsync(System.String)">
+            <summary>
+            Validates the main input data against the processor's InputSchema
+            This is controlled by EnableInputValidation configuration flag
+            </summary>
+            <param name="data">The input data to validate</param>
+            <returns>True if validation passes or is disabled, false if validation fails</returns>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.ValidateOutputDataAsync(System.String)">
+            <summary>
+            Validates the output data against the processor's OutputSchema
+            This is controlled by EnableOutputValidation configuration flag
+            </summary>
+            <param name="data">The output data to validate</param>
+            <returns>True if validation passes or is disabled, false if validation fails</returns>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.GetImplementationHash">
+            <summary>
+            Gets the implementation hash for the current processor using reflection
+            </summary>
+            <returns>The SHA-256 hash of the processor implementation</returns>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.ValidateImplementationHash(Shared.Entities.ProcessorEntity)">
+            <summary>
+            Validates that the processor entity's implementation hash matches the current implementation
+            </summary>
+            <param name="processorEntity">The processor entity retrieved from the query</param>
+            <returns>True if implementation hashes match, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Services.ProcessorService.GetHealthCheckIntervalFromConfig">
+            <summary>
+            Gets the health check interval from configuration in seconds
+            </summary>
+            <returns>Health check interval in seconds, defaults to 30 if not configured</returns>
+        </member>
+        <member name="T:Shared.Processor.Utilities.DataValidation">
+            <summary>
+            Shared utilities for data validation operations across all processors
+            Provides standardized data validation patterns and checks
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Utilities.DataValidation.IsEffectivelyEmptyData(System.String)">
+            <summary>
+            Determines if the data represents effectively empty content that should skip validation
+            This method follows the exact same logic as ProcessorService.IsEffectivelyEmptyData
+            </summary>
+            <param name="data">The serialized data to check</param>
+            <returns>True if the data is effectively empty</returns>
+        </member>
+        <member name="T:Shared.Processor.Utilities.JsonConfigurationExtractor">
+            <summary>
+            Utility class for extracting configuration values from JSON payloads in processor entities
+            Provides safe JSON parsing with default values and nested property access
+            </summary>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetStringValue(System.Text.Json.JsonElement,System.String,System.String)">
+            <summary>
+            Extracts a string value from JSON using dot notation path (e.g., "fileFilters.excludeExtensions")
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>String value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetIntValue(System.Text.Json.JsonElement,System.String,System.Int32)">
+            <summary>
+            Extracts an integer value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Integer value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetLongValue(System.Text.Json.JsonElement,System.String,System.Int64)">
+            <summary>
+            Extracts a long value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Long value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetBoolValue(System.Text.Json.JsonElement,System.String,System.Boolean)">
+            <summary>
+            Extracts a boolean value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Boolean value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetDoubleValue(System.Text.Json.JsonElement,System.String,System.Double)">
+            <summary>
+            Extracts a double value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Double value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetEnumValue``1(System.Text.Json.JsonElement,System.String,``0,System.Boolean)">
+            <summary>
+            Extracts an enum value from JSON using dot notation path
+            </summary>
+            <typeparam name="T">Enum type</typeparam>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <param name="ignoreCase">Whether to ignore case when parsing enum</param>
+            <returns>Enum value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetStringArrayValue(System.Text.Json.JsonElement,System.String)">
+            <summary>
+            Extracts a string array from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <returns>String array or empty array if not found</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetIntArrayValue(System.Text.Json.JsonElement,System.String)">
+            <summary>
+            Extracts an integer array from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <returns>Integer array or empty array if not found</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetDateTimeValue(System.Text.Json.JsonElement,System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Extracts a DateTime value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>DateTime value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetTimeSpanValue(System.Text.Json.JsonElement,System.String,System.TimeSpan)">
+            <summary>
+            Extracts a TimeSpan value from JSON using dot notation path
+            Supports formats like "00:05:00" or total seconds as number
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>TimeSpan value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.GetGuidValue(System.Text.Json.JsonElement,System.String,System.Guid)">
+            <summary>
+            Extracts a Guid value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Guid value or default</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.HasProperty(System.Text.Json.JsonElement,System.String)">
+            <summary>
+            Checks if a property exists at the specified path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <returns>True if property exists, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.TryGetElement(System.Text.Json.JsonElement,System.String,System.Text.Json.JsonElement@)">
+            <summary>
+            Gets the raw JsonElement at the specified path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="element">Output element if found</param>
+            <returns>True if property found, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.TryParseJson(System.String,System.Text.Json.JsonElement@)">
+            <summary>
+            Safely parses a JSON string and returns the root element
+            </summary>
+            <param name="jsonString">JSON string to parse</param>
+            <param name="root">Output root element if parsing succeeds</param>
+            <returns>True if parsing succeeds, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Processor.Utilities.JsonConfigurationExtractor.TryGetNestedProperty(System.Text.Json.JsonElement,System.String,System.Text.Json.JsonElement@)">
+            <summary>
+            Internal method to navigate nested JSON properties using dot notation
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path (e.g., "parent.child.property")</param>
+            <param name="element">Output element if found</param>
+            <returns>True if property found, false otherwise</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-kafka-ui
+  namespace: design91-infrastructure
+  labels:
+    app: design91-kafka-ui
+    component: management
+    project: design91
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: design91-kafka-ui
+  template:
+    metadata:
+      labels:
+        app: design91-kafka-ui
+        component: management
+        project: design91
+    spec:
+      containers:
+      - name: kafka-ui
+        image: provectuslabs/kafka-ui:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: KAFKA_CLUSTERS_0_NAME
+          value: "design91-cluster"
+        - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+          value: "design91-kafka:29092"
+        - name: KAFKA_CLUSTERS_0_ZOOKEEPER
+          value: "design91-zookeeper:2181"
+        - name: DYNAMIC_CONFIG_ENABLED
+          value: "true"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-kafka-ui
+  namespace: design91-infrastructure
+  labels:
+    app: design91-kafka-ui
+    component: management
+    project: design91
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "8082:8080"
+    port-forward.design91.io/description: "Kafka UI management interface"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  selector:
+    app: design91-kafka-ui

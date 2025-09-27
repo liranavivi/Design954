@@ -1,0 +1,144 @@
+[{
+  "_id": "b82d0b08-7c5a-40cf-b314-a2915439a9c7",
+  "version": "1.0.1",
+  "name": "FileReaderPlugin",
+  "createdAt": {
+    "$date": "2025-08-19T07:21:21.837Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-19T07:21:21.837Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "FileReaderPlugin",
+  "inputSchemaId": "550e8400-e29b-41d4-a716-446655440006",
+  "outputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "enableInputValidation": true,
+  "enableOutputValidation": true,
+  "assemblyBasePath": "/app/plugins/Plugin.FileReader",
+  "assemblyName": "Plugin.FileReader",
+  "assemblyVersion": "1.0.0.0",
+  "typeName": "Plugin.FileReader.FileReaderPlugin",
+  "executionTimeoutMs": 30000,
+  "isStateless": true
+},
+{
+  "_id": "fd44fdf2-411a-49be-997d-a0c3a7c98413",
+  "version": "1.0.1",
+  "name": "FileWriterPlugin",
+  "createdAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "FileWriterPlugin",
+  "inputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "outputSchemaId": "00000000-0000-0000-0000-000000000000",
+  "enableInputValidation": true,
+  "enableOutputValidation": false,
+  "assemblyBasePath": "/app/plugins/Plugin.FileWriter",
+  "assemblyName": "Plugin.FileWriter",
+  "assemblyVersion": "1.0.0.0",
+  "typeName": "Plugin.FileWriter.FileWriterPlugin",
+  "executionTimeoutMs": 30000,
+  "isStateless": true
+},
+{
+  "_id": "fd44fdf2-411a-49be-997d-a0c3a7c98414",
+  "version": "1.0.1",
+  "name": "StandardizerPlugin",
+  "createdAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "StandardizerPlugin",
+  "inputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "outputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "enableInputValidation": true,
+  "enableOutputValidation": true,
+  "assemblyBasePath": "/app/plugins/Plugin.Standardizer",
+  "assemblyName": "Plugin.Standardizer",
+  "assemblyVersion": "1.0.0.0",
+  "typeName": "Plugin.Standardizer.StandardizerPlugin",
+  "executionTimeoutMs": 30000,
+  "isStateless": true
+},
+{
+  "_id": "fd44fdf2-411a-49be-997d-a0c3a7c98416",
+  "version": "1.0.1",
+  "name": "EnricherPlugin",
+  "createdAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "EnricherPlugin",
+  "inputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "outputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "enableInputValidation": true,
+  "enableOutputValidation": true,
+  "assemblyBasePath": "/app/plugins/Plugin.Enricher",
+  "assemblyName": "Plugin.Enricher",
+  "assemblyVersion": "1.0.0.0",
+  "typeName": "Plugin.Enricher.EnricherPlugin",
+  "executionTimeoutMs": 30000,
+  "isStateless": true
+},
+{
+  "_id": "fd44fdf2-411a-49be-997d-a0c3a7c98417",
+  "version": "1.0.1",
+  "name": "AudioConverterPlugin",
+  "createdAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-19T07:22:43.706Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "AudioConverterPlugin",
+  "inputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "outputSchemaId": "550e8400-e29b-41d4-a716-446655440005",
+  "enableInputValidation": true,
+  "enableOutputValidation": true,
+  "assemblyBasePath": "/app/plugins/Plugin.AudioConverter",
+  "assemblyName": "Plugin.AudioConverter",
+  "assemblyVersion": "1.0.0.0",
+  "typeName": "Plugin.AudioConverter.AudioConverterPlugin",
+  "executionTimeoutMs": 30000,
+  "isStateless": true
+},
+{
+  "_id": "b82d0b08-7c5a-40cf-b314-a2915439a9c8",
+  "version": "1.0.0",
+  "name": "PreFileReaderPlugin",
+  "createdAt": {
+    "$date": "2025-08-19T07:21:21.837Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-19T07:21:21.837Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "PreFileReaderPlugin",
+  "inputSchemaId": "00000000-0000-0000-0000-000000000000",
+  "outputSchemaId": "550e8400-e29b-41d4-a716-446655440006",
+  "enableInputValidation": false,
+  "enableOutputValidation": true,
+  "assemblyBasePath": "/app/plugins/Plugin.PreFileReader",
+  "assemblyName": "Plugin.PreFileReader",
+  "assemblyVersion": "1.0.0.0",
+  "typeName": "Plugin.PreFileReader.PreFileReaderPlugin",
+  "executionTimeoutMs": 30000,
+  "isStateless": true
+}]

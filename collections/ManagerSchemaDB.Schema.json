@@ -1,0 +1,105 @@
+[{
+  "_id": "550e8400-e29b-41d4-a716-446655440001",
+  "version": "1.0.1",
+  "name": "PreFileReaderConfiguration",
+  "createdAt": {
+    "$date": "2025-07-27T05:30:26.729Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T05:30:26.729Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Schema for PreFileReader plugin configuration",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"searchPattern\":{\"type\":\"string\"},\"maxFilesToProcess\":{\"type\":\"integer\",\"minimum\":1}},\"required\":[\"searchPattern\",\"maxFilesToProcess\"],\"additionalProperties\":false}"
+},
+{
+  "_id": "550e8400-e29b-41d4-a716-446655440004",
+  "version": "1.0.1",
+  "name": "FileWriterConfiguration",
+  "createdAt": {
+    "$date": "2025-08-07T07:14:20.420Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-07T07:14:20.420Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Schema for FileWriter processor configuration",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"searchPattern\":{\"type\":\"string\"},\"processingMode\":{\"type\":\"string\",\"enum\":[\"LeaveUnchanged\",\"MarkAsProcessed\",\"Delete\",\"MoveToBackup\",\"CopyToBackup\",\"BackupAndMarkProcessed\",\"BackupAndDelete\"]},\"processedExtension\":{\"type\":\"string\"},\"backupFolder\":{\"type\":\"string\"},\"minExtractedContentSize\":{\"type\":\"integer\",\"minimum\":0},\"maxExtractedContentSize\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"searchPattern\",\"processingMode\",\"processedExtension\",\"backupFolder\",\"minExtractedContentSize\",\"maxExtractedContentSize\"],\"additionalProperties\":false}"
+},
+{
+  "_id": "550e8400-e29b-41d4-a716-446655440005",
+  "version": "1.0.1",
+  "name": "FileCacheData",
+  "createdAt": {
+    "$date": "2025-07-27T05:32:35.833Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T05:32:35.833Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Schema for File cache data structure",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"title\":\"CompressedFileReaderCacheData\",\"properties\":{\"fileCacheDataObject\":{\"type\":\"object\",\"properties\":{\"fileMetadata\":{\"type\":\"object\",\"properties\":{\"fileName\":{\"type\":\"string\"},\"filePath\":{\"type\":\"string\"},\"fileSize\":{\"type\":\"integer\"},\"createdDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"modifiedDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"fileExtension\":{\"type\":\"string\"},\"detectedMimeType\":{\"type\":\"string\"},\"fileType\":{\"type\":\"string\"},\"contentHash\":{\"type\":\"string\"}},\"required\":[\"fileName\",\"filePath\",\"fileSize\",\"createdDate\",\"modifiedDate\",\"fileExtension\",\"detectedMimeType\",\"fileType\",\"contentHash\"],\"additionalProperties\":false},\"fileContent\":{\"type\":\"object\",\"properties\":{\"binaryData\":{\"type\":\"string\"},\"encoding\":{\"type\":\"string\",\"enum\":[\"base64\"]}},\"required\":[\"binaryData\",\"encoding\"],\"additionalProperties\":false}},\"required\":[\"fileMetadata\",\"fileContent\"],\"additionalProperties\":false},\"extractedFileCacheDataObject\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"fileCacheDataObject\":{\"type\":\"object\",\"properties\":{\"fileMetadata\":{\"type\":\"object\",\"properties\":{\"fileName\":{\"type\":\"string\"},\"filePath\":{\"type\":\"string\"},\"fileSize\":{\"type\":\"integer\"},\"createdDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"modifiedDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"fileExtension\":{\"type\":\"string\"},\"detectedMimeType\":{\"type\":\"string\"},\"fileType\":{\"type\":\"string\"},\"contentHash\":{\"type\":\"string\"}},\"required\":[\"fileName\",\"filePath\",\"fileSize\",\"createdDate\",\"modifiedDate\",\"fileExtension\",\"detectedMimeType\",\"fileType\",\"contentHash\"],\"additionalProperties\":false},\"fileContent\":{\"type\":\"object\",\"properties\":{\"binaryData\":{\"type\":\"string\"},\"encoding\":{\"type\":\"string\",\"enum\":[\"base64\"]}},\"required\":[\"binaryData\",\"encoding\"],\"additionalProperties\":false}},\"required\":[\"fileMetadata\",\"fileContent\"],\"additionalProperties\":false}},\"required\":[\"fileCacheDataObject\"],\"additionalProperties\":false}}},\"required\":[\"fileCacheDataObject\",\"extractedFileCacheDataObject\"],\"additionalProperties\":false}}"
+},
+{
+  "_id": "550e8400-e29b-41d4-a716-446655440014",
+  "version": "1.0.0",
+  "name": "ImplementationMethodConfiguration",
+  "createdAt": {
+    "$date": "2025-07-31T08:29:18.219Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T08:29:18.219Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Implementation Method configuration",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"title\":\"StandardizationConfiguration\",\"properties\":{\"metadataImplementationType\":{\"type\":\"string\"}},\"additionalProperties\":false}"
+},
+{
+  "_id": "550e8400-e29b-41d4-a716-446655440015",
+  "version": "1.0.0",
+  "name": "AudioConverterPluginConfiguration",
+  "createdAt": {
+    "$date": "2025-07-31T08:29:18.219Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T08:29:18.219Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Schema for AudioConverter plugin configuration",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"title\":\"AudioConverterConfiguration\",\"properties\":{\"ffmpegConversionArguments\":{\"type\":\"string\"},\"ffmpegPath\":{\"type\":\"string\"},\"metadataImplementationType\":{\"type\":\"string\"}},\"required\":[\"ffmpegConversionArguments\"],\"additionalProperties\":false}"
+},
+{
+  "_id": "550e8400-e29b-41d4-a716-446655440002",
+  "version": "1.0.1",
+  "name": "FileReaderConfiguration",
+  "createdAt": {
+    "$date": "2025-07-27T05:30:26.729Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T05:30:26.729Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Schema for FileReader plugin configuration",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"title\":\"FileReaderConfiguration\",\"type\":\"object\",\"properties\":{\"processingMode\":{\"type\":\"string\",\"enum\":[\"LeaveUnchanged\",\"MarkAsProcessed\",\"Delete\",\"MoveToBackup\",\"CopyToBackup\",\"BackupAndMarkProcessed\",\"BackupAndDelete\"]},\"processedExtension\":{\"type\":\"string\"},\"backupFolder\":{\"type\":\"string\"},\"minFileSize\":{\"type\":\"integer\",\"minimum\":0},\"maxFileSize\":{\"type\":\"integer\",\"minimum\":0},\"minExtractedSize\":{\"type\":\"integer\",\"minimum\":0},\"maxExtractedSize\":{\"type\":\"integer\",\"minimum\":0},\"minEntriesToList\":{\"type\":\"integer\",\"minimum\":0},\"maxEntriesToList\":{\"type\":\"integer\",\"minimum\":1}},\"additionalProperties\":false,\"required\":[]}"
+},
+{
+  "_id": "550e8400-e29b-41d4-a716-446655440006",
+  "version": "1.0.0",
+  "name": "FilePathCacheData",
+  "createdAt": {
+    "$date": "2025-07-27T05:32:35.833Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T05:32:35.833Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Schema for FilePath cache data structure",
+  "definition": "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"string\",\"minLength\":1}"
+}]

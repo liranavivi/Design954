@@ -1,0 +1,389 @@
+# =============================================================================
+# Design16 - Unified Docker Compose Configuration
+# =============================================================================
+# This file provides a complete infrastructure setup for the Design16 system
+# including all required services for both EntitiesManager and Processors
+# =============================================================================
+
+services:
+  # =============================================================================
+  # DATABASE SERVICES
+  # =============================================================================
+
+  mongodb:
+    image: mongo:7.0
+    container_name: design16-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: EntitiesManagerDb
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # =============================================================================
+  # MESSAGE BROKER SERVICES
+  # =============================================================================
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: design16-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: design16-zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"   # Zookeeper client port
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: design16-kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"   # Kafka broker port
+      - "9093:9093"   # Kafka external port
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - design16-network
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: design16-kafka-ui
+    restart: unless-stopped
+    ports:
+      - "8082:8080"   # Kafka UI web interface
+    environment:
+      KAFKA_CLUSTERS_0_NAME: design16-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    networks:
+      - design16-network
+    depends_on:
+      - kafka
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================================================
+  # DISTRIBUTED CACHE SERVICES
+  # =============================================================================
+
+  hazelcast:
+    image: hazelcast/hazelcast:5.3.6
+    container_name: design16-hazelcast
+    restart: unless-stopped
+    ports:
+      - "5701:5701"   # Hazelcast member port
+      - "8080:8080"   # Management Center (if enabled)
+    environment:
+      # JVM Options - Use custom config file
+      JAVA_OPTS: >-
+        -Dhazelcast.config=/opt/hazelcast/config/hazelcast.xml
+        -Dhazelcast.shutdownhook.policy=GRACEFUL
+        -Dhazelcast.shutdownhook.enabled=true
+        -Xms512m
+        -Xmx1g
+    volumes:
+      - ./hazelcast/hazelcast.xml:/opt/hazelcast/config/hazelcast.xml:ro
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5701"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================================================
+  # OBSERVABILITY SERVICES
+  # =============================================================================
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: design16-elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"   # Elasticsearch HTTP API
+      - "9300:9300"   # Elasticsearch transport
+    environment:
+      # Single-node cluster configuration
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - cluster.name=design16-cluster
+      - node.name=design16-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-credentials=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: design16-kibana
+    restart: unless-stopped
+    ports:
+      - "5601:5601"   # Kibana web interface
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_NAME=design16-kibana
+      - SERVER_HOST=0.0.0.0
+      - XPACK_SECURITY_ENABLED=false
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=a7a6311933d3503b89bc2dbc36572c33a6c10925682e591bffcab6911c06786d
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      - elasticsearch
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.88.0
+    container_name: design16-otel-collector
+    restart: unless-stopped
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "8888:8888"   # Prometheus metrics endpoint
+      - "8889:8889"   # Prometheus exporter metrics
+      - "8081:8080"   # Health check endpoint
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    networks:
+      - design16-network
+    depends_on:
+      - hazelcast
+      - elasticsearch
+
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: design16-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"   # Prometheus web interface
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: design16-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"   # Grafana web interface
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - design16-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+# =============================================================================
+# VOLUME DEFINITIONS
+# =============================================================================
+
+volumes:
+  mongodb_data:
+    driver: local
+    name: design16_mongodb_data
+  mongodb_config:
+    driver: local
+    name: design16_mongodb_config
+  rabbitmq_data:
+    driver: local
+    name: design16_rabbitmq_data
+  zookeeper_data:
+    driver: local
+    name: design16_zookeeper_data
+  zookeeper_logs:
+    driver: local
+    name: design16_zookeeper_logs
+  kafka_data:
+    driver: local
+    name: design16_kafka_data
+  elasticsearch_data:
+    driver: local
+    name: design16_elasticsearch_data
+  prometheus_data:
+    driver: local
+    name: design16_prometheus_data
+  grafana_data:
+    driver: local
+    name: design16_grafana_data
+
+# =============================================================================
+# NETWORK DEFINITIONS
+# =============================================================================
+
+networks:
+  design16-network:
+    driver: bridge
+    name: design16_network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# =============================================================================
+# USAGE INSTRUCTIONS
+# =============================================================================
+#
+# To start all services:
+#   docker-compose up -d
+#
+# To start specific services:
+#   docker-compose up -d mongodb rabbitmq hazelcast
+#
+# To view logs:
+#   docker-compose logs -f [service-name]
+#
+# To stop all services:
+#   docker-compose down
+#
+# To stop and remove volumes:
+#   docker-compose down -v
+#
+# Service URLs:
+#   - MongoDB: mongodb://localhost:27017 (no authentication required)
+#   - RabbitMQ Management: http://localhost:15672 (guest/guest)
+#   - Kafka Broker: localhost:9092 (PLAINTEXT protocol)
+#   - Kafka UI: http://localhost:8082 (web-based Kafka management)
+#   - Zookeeper: localhost:2181 (Kafka coordination service)
+#   - Hazelcast Management: http://localhost:8080
+#   - OpenTelemetry Collector: http://localhost:4317 (gRPC), http://localhost:4318 (HTTP)
+#   - Prometheus: http://localhost:9090 (metrics database)
+#   - Grafana: http://localhost:3000 (admin/admin123)
+#   - Elasticsearch: http://localhost:9200 (no authentication required)
+#   - Kibana: http://localhost:5601 (logs and traces visualization)
+#
+# EntitiesManager API (runs locally):
+#   dotnet run --project src/Presentation/FlowOrchestrator.EntitiesManagers.Api/
+#   Available at: http://localhost:5130 (dev) or http://localhost:5000 (prod)
+#
+# Processors (run locally):
+#   dotnet run --project Processors/Processor.File.v3.2.1/
+#   dotnet run --project Processors/Processor.File/
+#
+# =============================================================================

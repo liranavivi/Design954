@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-hazelcast
+  namespace: design91-infrastructure
+  labels:
+    app: design91-hazelcast
+    component: cache
+    project: design91
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: design91-hazelcast
+  template:
+    metadata:
+      labels:
+        app: design91-hazelcast
+        component: cache
+        project: design91
+    spec:
+      containers:
+      - name: hazelcast
+        image: hazelcast/hazelcast:5.3.6
+        ports:
+        - containerPort: 5701
+          name: hazelcast
+        - containerPort: 8080
+          name: management
+        env:
+        - name: JAVA_OPTS
+          value: "-Dhazelcast.config=/opt/hazelcast/config/hazelcast.xml -Dhazelcast.shutdownhook.policy=GRACEFUL -Dhazelcast.shutdownhook.enabled=true -Xms512m -Xmx1g"
+        volumeMounts:
+        - name: hazelcast-config
+          mountPath: /opt/hazelcast/config/hazelcast.xml
+          subPath: hazelcast.xml
+        livenessProbe:
+          tcpSocket:
+            port: 5701
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          tcpSocket:
+            port: 5701
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      volumes:
+      - name: hazelcast-config
+        configMap:
+          name: design91-hazelcast-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-hazelcast
+  namespace: design91-infrastructure
+  labels:
+    app: design91-hazelcast
+    component: cache
+    project: design91
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "5701,8080"
+    port-forward.design91.io/description: "Hazelcast cache and management"
+spec:
+  type: ClusterIP
+  ports:
+  - name: hazelcast
+    port: 5701
+    targetPort: 5701
+    protocol: TCP
+  - name: management
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: design91-hazelcast

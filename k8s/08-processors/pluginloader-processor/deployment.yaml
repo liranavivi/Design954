@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-pluginloader-processor
+  namespace: design91-infrastructure
+  labels:
+    app: design91-pluginloader-processor
+    component: processor
+    project: design91
+    processor-type: pluginloader
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: design91-pluginloader-processor
+  template:
+    metadata:
+      labels:
+        app: design91-pluginloader-processor
+        component: processor
+        project: design91
+        processor-type: pluginloader
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: pluginloader-processor
+        image: design91/pluginloader-processor:latest
+        imagePullPolicy: Never
+        
+        # Resource Management
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        # Health Checks - Processors don't expose HTTP endpoints
+        # They communicate via message queues and store health in Hazelcast
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "pidof dotnet"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "pidof dotnet"
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        # Environment Configuration - Layered ConfigMaps
+        # Precedence: Infrastructure → Service-Specific
+        envFrom:
+        - configMapRef:
+            name: design91-infrastructure-config
+        - configMapRef:
+            name: design91-pluginloader-processor-config
+
+        # Volume Mounts for Direct Host Access
+        volumeMounts:
+        - name: plugins-storage
+          mountPath: /app/plugins
+          # Direct access to host plugin libraries
+        - name: input-storage
+          mountPath: /app/input
+          # Host puts files here for processing (C:\temp\input → /app/input)
+        - name: output-storage
+          mountPath: /app/output
+          # Processor puts processed files here for host (/app/output → C:\temp\output)
+
+        # Security Context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+
+
+
+
+      # Direct hostPath Volumes for File Access
+      volumes:
+      - name: plugins-storage
+        hostPath:
+          path: /run/desktop/mnt/host/c/Users/UserL/source/repos/Design95/Libraries
+          type: Directory
+      - name: input-storage
+        hostPath:
+          path: /run/desktop/mnt/host/c/temp/input
+          type: DirectoryOrCreate
+      - name: output-storage
+        hostPath:
+          path: /run/desktop/mnt/host/c/temp/output
+          type: DirectoryOrCreate
+
+      # Pod Scheduling
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - design91-pluginloader-processor
+              topologyKey: kubernetes.io/hostname
+
+      # Restart Policy
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Correlation</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Correlation.CorrelationIdContext">
+            <summary>
+            Thread-safe implementation of correlation ID context using AsyncLocal storage.
+            Integrates with OpenTelemetry Activity for automatic trace correlation.
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.CorrelationIdContext.Current">
+            <summary>
+            Gets the current correlation ID for the executing context.
+            First checks AsyncLocal storage, then falls back to current Activity baggage.
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.CorrelationIdContext.CurrentAsString">
+            <summary>
+            Gets the current correlation ID as a string.
+            Returns empty string if no correlation ID is set.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdContext.Set(System.Guid)">
+            <summary>
+            Sets the correlation ID for the current executing context.
+            Updates both AsyncLocal storage and current Activity baggage.
+            </summary>
+            <param name="correlationId">The correlation ID to set.</param>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdContext.Generate">
+            <summary>
+            Generates a new correlation ID and sets it as the current context.
+            </summary>
+            <returns>The newly generated correlation ID.</returns>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdContext.Clear">
+            <summary>
+            Clears the current correlation ID context.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdContext.GetCurrentCorrelationIdStatic">
+            <summary>
+            Static method to get current correlation ID for use by static extension methods.
+            Uses the same logic as the Current property.
+            </summary>
+            <returns>The current correlation ID or Guid.Empty if none is set.</returns>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdContext.SetCorrelationIdStatic(System.Guid)">
+            <summary>
+            Static method to set correlation ID for use by background services.
+            </summary>
+            <param name="correlationId">The correlation ID to set.</param>
+        </member>
+        <member name="T:Shared.Correlation.CorrelationIdDelegatingHandler">
+            <summary>
+            HTTP client delegating handler that automatically adds correlation ID headers
+            to outgoing HTTP requests for cross-service correlation.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.CorrelationIdLoggerProvider">
+            <summary>
+            Logger provider that enriches log entries with correlation IDs.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.CorrelationIdLogger">
+            <summary>
+            Logger that automatically enriches log entries with correlation IDs.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.CorrelationIdMiddleware">
+            <summary>
+            Middleware that extracts or generates correlation IDs from HTTP requests
+            and ensures they are available throughout the request pipeline.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.CorrelationIdOptions">
+            <summary>
+            Configuration options for correlation ID middleware.
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.CorrelationIdOptions.HeaderName">
+            <summary>
+            The header name to use for correlation ID. Default is "X-Correlation-ID".
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.CorrelationIdOptions.IncludeInResponse">
+            <summary>
+            Whether to include the correlation ID in response headers. Default is true.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.CorrelationIdServiceCollectionExtensions">
+            <summary>
+            Extension methods for configuring correlation ID services.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdServiceCollectionExtensions.AddCorrelationId(Microsoft.Extensions.DependencyInjection.IServiceCollection,Shared.Correlation.CorrelationIdOptions)">
+            <summary>
+            Adds correlation ID services to the service collection.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="options">Optional correlation ID configuration.</param>
+            <returns>The service collection for method chaining.</returns>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdServiceCollectionExtensions.UseCorrelationId(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds correlation ID middleware to the application pipeline.
+            </summary>
+            <param name="app">The application builder.</param>
+            <returns>The application builder for method chaining.</returns>
+        </member>
+        <member name="M:Shared.Correlation.CorrelationIdServiceCollectionExtensions.AddCorrelationIdWithHttpClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{System.Net.Http.HttpClient})">
+            <summary>
+            Adds correlation ID services with HTTP client integration.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="configureHttpClient">Optional HTTP client configuration.</param>
+            <returns>The service collection for method chaining.</returns>
+        </member>
+        <member name="T:Shared.Correlation.HierarchicalLoggerExtensions">
+            <summary>
+            Extension methods for ILogger that provide hierarchical logging with consistent 6-layer structure.
+            Maintains consistent ordering: OrchestratedFlowId -> WorkflowId -> CorrelationId -> StepId -> ProcessorId -> PublishId -> ExecutionId
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogDebugWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.String,System.Object[])">
+            <summary>
+            Logs a debug message with hierarchical context
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogDebugWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a debug message with hierarchical context and exception
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogInformationWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.String,System.Object[])">
+            <summary>
+            Logs an information message with hierarchical context
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogInformationWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs an information message with hierarchical context and exception
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogWarningWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.String,System.Object[])">
+            <summary>
+            Logs a warning message with hierarchical context
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogWarningWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a warning message with hierarchical context and exception
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogErrorWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.String,System.Object[])">
+            <summary>
+            Logs an error message with hierarchical context
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogErrorWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs an error message with hierarchical context and exception
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogCriticalWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.String,System.Object[])">
+            <summary>
+            Logs a critical message with hierarchical context
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogCriticalWithHierarchy(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a critical message with hierarchical context and exception
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.BeginHierarchicalScope(Microsoft.Extensions.Logging.ILogger,Shared.Correlation.HierarchicalLoggingContext)">
+            <summary>
+            Creates a logging scope with hierarchical context for automatic inclusion in all log statements within the scope
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.LogWithHierarchy(Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel,Shared.Correlation.HierarchicalLoggingContext,System.Exception,System.String,System.Object[])">
+            <summary>
+            Core logging method that handles hierarchical context integration
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggerExtensions.BuildHierarchyAttributes(Shared.Correlation.HierarchicalLoggingContext)">
+            <summary>
+            Builds structured attributes for OpenTelemetry/Elasticsearch with consistent ordering
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.TemplateInfo">
+            <summary>
+            Template information cached for performance optimization
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.TemplateInfo.FormatMessage(System.Object[])">
+            <summary>
+            Formats the message template with provided arguments
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.TemplateInfo.GetParameterName(System.Int32)">
+            <summary>
+            Extracts parameter name from placeholder by removing curly braces
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.HierarchicalLogState">
+            <summary>
+            Optimized custom log state with template caching that preserves hierarchical attributes alongside message template parameters
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLogState.ParseTemplate(System.String)">
+            <summary>
+            Parses message template to extract placeholders for caching
+            </summary>
+        </member>
+        <member name="F:Shared.Correlation.HierarchicalLogState.Formatter">
+            <summary>
+            Optimized formatter that returns pre-computed formatted message
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.HierarchicalLoggingContext">
+            <summary>
+            Hierarchical logging context that maintains the 6-layer ID hierarchy for structured logging.
+            Provides consistent ordering: OrchestratedFlowId -> WorkflowId -> CorrelationId -> StepId -> ProcessorId -> PublishId -> ExecutionId
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.OrchestratedFlowId">
+            <summary>
+            Layer 1: Orchestrated flow identifier (always present)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.WorkflowId">
+            <summary>
+            Layer 2: Workflow identifier (present from orchestration level)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.CorrelationId">
+            <summary>
+            Layer 3: Correlation identifier (always present for tracing)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.StepId">
+            <summary>
+            Layer 4: Step identifier (present from step execution level)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.ProcessorId">
+            <summary>
+            Layer 5: Processor identifier (present from processor execution level)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.PublishId">
+            <summary>
+            Layer 6: Publish identifier (present from message publishing level)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.ExecutionId">
+            <summary>
+            Layer 6: Execution identifier (present from individual execution level)
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.HierarchicalLoggingContext.Layer">
+            <summary>
+            Gets the current hierarchy layer based on available IDs
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.HierarchicalLoggingContext.CalculateLayer">
+            <summary>
+            Calculates the current layer based on which IDs are present
+            Optimized with ternary operators for best performance with early exit
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.ICorrelationIdContext">
+            <summary>
+            Provides access to the current correlation ID context.
+            Manages correlation ID storage and retrieval in a thread-safe manner.
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.ICorrelationIdContext.Current">
+            <summary>
+            Gets the current correlation ID for the executing context.
+            Returns Guid.Empty if no correlation ID is set.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.ICorrelationIdContext.Set(System.Guid)">
+            <summary>
+            Sets the correlation ID for the current executing context.
+            </summary>
+            <param name="correlationId">The correlation ID to set.</param>
+        </member>
+        <member name="M:Shared.Correlation.ICorrelationIdContext.Generate">
+            <summary>
+            Generates a new correlation ID and sets it as the current context.
+            </summary>
+            <returns>The newly generated correlation ID.</returns>
+        </member>
+        <member name="M:Shared.Correlation.ICorrelationIdContext.Clear">
+            <summary>
+            Clears the current correlation ID context.
+            </summary>
+        </member>
+        <member name="P:Shared.Correlation.ICorrelationIdContext.CurrentAsString">
+            <summary>
+            Gets the current correlation ID as a string.
+            Returns empty string if no correlation ID is set.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.LoggerExtensions">
+            <summary>
+            Extension methods for ILogger that automatically include correlation IDs in log statements.
+            Provides structured logging with consistent correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogDebugWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.String,System.Object[])">
+            <summary>
+            Logs a debug message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogDebugWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.Exception,System.Object[])">
+            <summary>
+            Logs a debug message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogInformationWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.String,System.Object[])">
+            <summary>
+            Logs an information message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogWarningWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.String,System.Object[])">
+            <summary>
+            Logs a warning message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogWarningWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.Exception,System.Object[])">
+            <summary>
+            Logs a warning message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogErrorWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.String,System.Object[])">
+            <summary>
+            Logs an error message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogErrorWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs an error message with exception and automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogCriticalWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.String,System.Object[])">
+            <summary>
+            Logs a critical message with automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.LogCriticalWithCorrelation(Microsoft.Extensions.Logging.ILogger,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs a critical message with exception and automatic correlation ID inclusion.
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.LoggerExtensions.BeginCorrelationScope(Microsoft.Extensions.Logging.ILogger,System.Nullable{System.Guid})">
+            <summary>
+            Creates a logging scope with correlation ID for automatic inclusion in all log statements within the scope.
+            </summary>
+        </member>
+        <member name="T:Shared.Correlation.TemplatePerformanceTest">
+            <summary>
+            Simple test class to verify the optimized template caching implementation
+            </summary>
+        </member>
+        <member name="M:Shared.Correlation.TemplatePerformanceTest.RunTest(Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Tests the template caching performance and correctness
+            </summary>
+        </member>
+    </members>
+</doc>

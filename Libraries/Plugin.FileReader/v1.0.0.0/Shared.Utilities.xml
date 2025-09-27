@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Utilities</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Utilities.DataValidationUtilities">
+            <summary>
+            Shared utilities for data validation operations across all processors
+            Provides standardized data validation patterns and checks
+            </summary>
+        </member>
+        <member name="M:Shared.Utilities.DataValidationUtilities.IsEffectivelyEmptyData(System.String)">
+            <summary>
+            Determines if the data represents effectively empty content that should skip validation
+            This method follows the exact same logic as ProcessorService.IsEffectivelyEmptyData
+            </summary>
+            <param name="data">The serialized data to check</param>
+            <returns>True if the data is effectively empty</returns>
+        </member>
+        <member name="T:Shared.Utilities.FilePostProcessingUtilities">
+            <summary>
+            Shared utilities for file post-processing operations across all file processors
+            Provides standardized collision handling, logging, and file operations
+            </summary>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.PostProcessFileAsync``1(System.String,``0,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Post-process a file based on configuration using standardized approach
+            </summary>
+            <typeparam name="TConfig">Configuration type that implements IFileProcessingConfiguration</typeparam>
+            <param name="filePath">Path to the file to post-process</param>
+            <param name="config">Configuration containing processing mode and settings</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+            <returns>Task representing the operation</returns>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.GenerateProcessedPath(System.String,System.String)">
+            <summary>
+            Generates a processed file path with collision handling using standardized naming pattern
+            Uses pattern: {originalPath}{processedExtension} with counter for collisions
+            </summary>
+            <param name="filePath">Original file path</param>
+            <param name="processedExtension">Extension to add (e.g., ".processed")</param>
+            <returns>Processed file path with collision handling applied</returns>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.MarkFileAsProcessed(System.String,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Mark file as processed by adding extension using standardized approach with collision handling
+            </summary>
+            <param name="filePath">Path to the file to mark as processed</param>
+            <param name="processedExtension">Extension to add (e.g., ".processed")</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.GenerateBackupPath(System.String,System.String,Shared.Processor.Interfaces.IFileProcessingConfiguration)">
+            <summary>
+            Generates a backup file path with collision handling using standardized naming pattern
+            Uses FileWriter naming pattern: {nameWithoutExt}_{timestamp}{extension}
+            </summary>
+            <param name="filePath">Original file path</param>
+            <param name="timestamp">Timestamp string to use in the backup filename</param>
+            <param name="config">Configuration containing backup folder</param>
+            <returns>Backup file path with collision handling applied</returns>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.CopyToBackupWithCollisionHandling(System.String,Shared.Processor.Interfaces.IFileProcessingConfiguration,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Copy file to backup folder with collision handling and standardized naming
+            Uses FileWriter naming pattern: {nameWithoutExt}_{timestamp}{extension}
+            </summary>
+            <param name="filePath">Path to the file to copy</param>
+            <param name="config">Configuration containing backup folder and timestamp format</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.GenerateOutputPath(System.String,System.String,System.String)">
+            <summary>
+            Generates an output file path with collision handling using counter-based naming pattern
+            Uses pattern: {nameWithoutExt}_{counter:D3}{extension} with timestamp fallback
+            </summary>
+            <param name="fileName">Original filename</param>
+            <param name="outputDirectory">Output directory path</param>
+            <param name="timestampFormat">Timestamp format for fallback naming</param>
+            <returns>Output file path with collision handling applied</returns>
+        </member>
+        <member name="M:Shared.Utilities.FilePostProcessingUtilities.MoveToBackupWithCollisionHandling(System.String,Shared.Processor.Interfaces.IFileProcessingConfiguration,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Move file to backup folder with collision handling and standardized naming
+            Uses FileWriter naming pattern: {nameWithoutExt}_{timestamp}{extension}
+            </summary>
+            <param name="filePath">Path to the file to move</param>
+            <param name="config">Configuration containing backup folder and timestamp format</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="T:Shared.Utilities.JsonConfigurationExtractor">
+            <summary>
+            Utility class for extracting configuration values from JSON payloads in processor entities
+            Provides safe JSON parsing with default values and nested property access
+            </summary>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetStringValue(System.Text.Json.JsonElement,System.String,System.String)">
+            <summary>
+            Extracts a string value from JSON using dot notation path (e.g., "fileFilters.excludeExtensions")
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>String value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetIntValue(System.Text.Json.JsonElement,System.String,System.Int32)">
+            <summary>
+            Extracts an integer value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Integer value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetLongValue(System.Text.Json.JsonElement,System.String,System.Int64)">
+            <summary>
+            Extracts a long value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Long value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetBoolValue(System.Text.Json.JsonElement,System.String,System.Boolean)">
+            <summary>
+            Extracts a boolean value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Boolean value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetDoubleValue(System.Text.Json.JsonElement,System.String,System.Double)">
+            <summary>
+            Extracts a double value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Double value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetEnumValue``1(System.Text.Json.JsonElement,System.String,``0,System.Boolean)">
+            <summary>
+            Extracts an enum value from JSON using dot notation path
+            </summary>
+            <typeparam name="T">Enum type</typeparam>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <param name="ignoreCase">Whether to ignore case when parsing enum</param>
+            <returns>Enum value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetStringArrayValue(System.Text.Json.JsonElement,System.String)">
+            <summary>
+            Extracts a string array from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <returns>String array or empty array if not found</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetIntArrayValue(System.Text.Json.JsonElement,System.String)">
+            <summary>
+            Extracts an integer array from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <returns>Integer array or empty array if not found</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetDateTimeValue(System.Text.Json.JsonElement,System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Extracts a DateTime value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>DateTime value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetTimeSpanValue(System.Text.Json.JsonElement,System.String,System.TimeSpan)">
+            <summary>
+            Extracts a TimeSpan value from JSON using dot notation path
+            Supports formats like "00:05:00" or total seconds as number
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>TimeSpan value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.GetGuidValue(System.Text.Json.JsonElement,System.String,System.Guid)">
+            <summary>
+            Extracts a Guid value from JSON using dot notation path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="defaultValue">Default value if property not found or invalid</param>
+            <returns>Guid value or default</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.HasProperty(System.Text.Json.JsonElement,System.String)">
+            <summary>
+            Checks if a property exists at the specified path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <returns>True if property exists, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.TryGetElement(System.Text.Json.JsonElement,System.String,System.Text.Json.JsonElement@)">
+            <summary>
+            Gets the raw JsonElement at the specified path
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path to the property</param>
+            <param name="element">Output element if found</param>
+            <returns>True if property found, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.TryParseJson(System.String,System.Text.Json.JsonElement@)">
+            <summary>
+            Safely parses a JSON string and returns the root element
+            </summary>
+            <param name="jsonString">JSON string to parse</param>
+            <param name="root">Output root element if parsing succeeds</param>
+            <returns>True if parsing succeeds, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Utilities.JsonConfigurationExtractor.TryGetNestedProperty(System.Text.Json.JsonElement,System.String,System.Text.Json.JsonElement@)">
+            <summary>
+            Internal method to navigate nested JSON properties using dot notation
+            </summary>
+            <param name="root">Root JSON element</param>
+            <param name="path">Dot-separated path (e.g., "parent.child.property")</param>
+            <param name="element">Output element if found</param>
+            <returns>True if property found, false otherwise</returns>
+        </member>
+    </members>
+</doc>

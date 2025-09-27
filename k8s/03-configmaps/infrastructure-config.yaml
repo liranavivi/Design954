@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: design91-infrastructure-config
+  namespace: design91-infrastructure
+  labels:
+    project: design91
+    component: infrastructure
+    layer: infrastructure
+data:
+  # Database Configuration (Internal cluster addresses)
+  ConnectionStrings__MongoDB: "mongodb://design91-mongodb:27017"
+  MongoDB__DatabaseName: "design91db"
+
+  # Message Broker Configuration (Internal cluster addresses)
+  MassTransit__Provider: "RabbitMQ"
+  RabbitMQ__Host: "design91-rabbitmq"
+  RabbitMQ__Port: "5672"
+  RabbitMQ__Username: "guest"
+  RabbitMQ__Password: "guest"
+  RabbitMQ__VirtualHost: "/"
+  RabbitMQ__RetryLimit: "3"
+  RabbitMQ__RetryInterval: "00:00:30"
+  RabbitMQ__PrefetchCount: "16"
+  RabbitMQ__ConcurrencyLimit: "10"
+
+  # Kafka Configuration (Internal cluster addresses)
+  Kafka__BootstrapServers: "design91-kafka:29092"
+
+  # OpenTelemetry Configuration (Internal cluster addresses)
+  OpenTelemetry__Endpoint: "http://design91-otel-collector:4317"
+  OpenTelemetry__HealthEndpoint: "http://design91-otel-collector:8081"
+
+  # Distributed Cache Configuration (Internal cluster addresses)
+  Hazelcast__ClusterName: "EntitiesManager"
+  Hazelcast__NetworkConfig__Addresses__0: "design91-hazelcast:5701"
+
+  # Cache Map Names (using __ pattern for consistency)
+  ProcessorHealthMonitor__MapName: "processor-health"
+  ProcessorActivityDataCache__MapName: "processor-activity"
+  OrchestrationCache__MapName: "orchestration-data"
+
+  # Manager URLs Configuration
+  ManagerUrls__Orchestrator: "http://design91-orchestrator-manager:5100"
+  ManagerUrls__Processor: "http://design91-processor-manager:5110"
+  ManagerUrls__Address: "http://design91-address-manager:5120"
+  ManagerUrls__Assignment: "http://design91-assignment-manager:5130"
+  ManagerUrls__OrchestratedFlow: "http://design91-orchestratedflow-manager:5140"
+  ManagerUrls__Delivery: "http://design91-delivery-manager:5150"
+  ManagerUrls__Schema: "http://design91-schema-manager:5160"
+  ManagerUrls__Step: "http://design91-step-manager:5170"
+  ManagerUrls__Workflow: "http://design91-workflow-manager:5180"
+  ManagerUrls__Plugin: "http://design91-plugin-manager:5190"

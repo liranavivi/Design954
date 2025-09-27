@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-otel-collector
+  namespace: design91-infrastructure
+  labels:
+    app: design91-otel-collector
+    component: telemetry
+    project: design91
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: design91-otel-collector
+  template:
+    metadata:
+      labels:
+        app: design91-otel-collector
+        component: telemetry
+        project: design91
+    spec:
+      containers:
+      - name: otel-collector
+        image: otel/opentelemetry-collector-contrib:0.88.0
+        ports:
+        - containerPort: 4317
+          name: grpc
+        - containerPort: 4318
+          name: http
+        - containerPort: 8888
+          name: metrics
+        - containerPort: 8081
+          name: health
+        - containerPort: 8889
+          name: prometheus
+        args: ["--config=/etc/otel-collector-config.yaml"]
+        volumeMounts:
+        - name: otel-config
+          mountPath: /etc/otel-collector-config.yaml
+          subPath: otel-collector-config.yaml
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+      volumes:
+      - name: otel-config
+        configMap:
+          name: design91-otel-collector-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-otel-collector
+  namespace: design91-infrastructure
+  labels:
+    app: design91-otel-collector
+    component: telemetry
+    project: design91
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "4317,4318"
+    port-forward.design91.io/description: "OpenTelemetry collector gRPC and HTTP"
+spec:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: 4317
+    targetPort: 4317
+    protocol: TCP
+  - name: http
+    port: 4318
+    targetPort: 4318
+    protocol: TCP
+  - name: metrics
+    port: 8888
+    targetPort: 8888
+    protocol: TCP
+  - name: health
+    port: 8081
+    targetPort: 8081
+    protocol: TCP
+  - name: prometheus
+    port: 8889
+    targetPort: 8889
+    protocol: TCP
+  selector:
+    app: design91-otel-collector

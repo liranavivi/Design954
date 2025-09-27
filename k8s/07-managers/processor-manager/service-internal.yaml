@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-processor-manager
+  namespace: design91-infrastructure
+  labels:
+    app: design91-processor-manager
+    component: manager
+    project: design91
+    manager-type: processor
+    service-type: internal
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "5110"
+    port-forward.design91.io/description: "Processor Manager API access"
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5110
+    targetPort: 5110
+    protocol: TCP
+    name: http
+  selector:
+    app: design91-processor-manager
+  sessionAffinity: None
+  
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: design91-processor-manager
+  namespace: design91-infrastructure
+  labels:
+    app: design91-processor-manager
+    component: manager
+    project: design91
+# Endpoints will be automatically populated by Kubernetes based on pod readiness

@@ -1,0 +1,205 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: design91-processor-manager-netpol
+  namespace: design91-infrastructure
+  labels:
+    app: design91-processor-manager
+    component: security
+    project: design91
+    manager-type: processor
+spec:
+  podSelector:
+    matchLabels:
+      app: design91-processor-manager
+  
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # Ingress Rules - What can connect TO Processor Manager
+  ingress:
+  # Allow traffic from LoadBalancer/External sources
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 5110
+    - protocol: TCP
+      port: 5111
+  
+  # Allow traffic from other managers in the same namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          component: manager
+    ports:
+    - protocol: TCP
+      port: 5110
+    - protocol: TCP
+      port: 5111
+  
+  # Allow traffic from monitoring/observability pods
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          component: observability
+    ports:
+    - protocol: TCP
+      port: 5110
+  
+  # Allow traffic from ingress controllers
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 5110
+    - protocol: TCP
+      port: 5111
+  
+  # Egress Rules - What Processor Manager can connect TO
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  
+  # Allow connection to MongoDB
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          app: design91-mongodb
+    ports:
+    - protocol: TCP
+      port: 27017
+  
+  # Allow connection to RabbitMQ
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          app: design91-rabbitmq
+    ports:
+    - protocol: TCP
+      port: 5672
+    - protocol: TCP
+      port: 15672
+  
+  # Allow connection to OpenTelemetry Collector
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          app: design91-otel-collector
+    ports:
+    - protocol: TCP
+      port: 4317
+    - protocol: TCP
+      port: 8081
+  
+  # Allow connection to Hazelcast
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          app: design91-hazelcast
+    ports:
+    - protocol: TCP
+      port: 5701
+  
+  # Allow connection to other managers
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: design91-infrastructure
+      podSelector:
+        matchLabels:
+          component: manager
+    ports:
+    - protocol: TCP
+      port: 5100  # Orchestrator
+    - protocol: TCP
+      port: 5120  # Address
+    - protocol: TCP
+      port: 5130  # Assignment
+    - protocol: TCP
+      port: 5140  # OrchestratedFlow
+    - protocol: TCP
+      port: 5150  # Delivery
+    - protocol: TCP
+      port: 5160  # Schema
+    - protocol: TCP
+      port: 5170  # Step
+    - protocol: TCP
+      port: 5180  # Workflow
+    - protocol: TCP
+      port: 5190  # Plugin
+  
+  # Allow HTTPS traffic to external services (if needed)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  
+  # Allow HTTP traffic to external services (if needed)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 80
+
+---
+# Additional Network Policy for Infrastructure Communication
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: design91-processor-manager-infrastructure-netpol
+  namespace: design91-infrastructure
+  labels:
+    app: design91-processor-manager
+    component: security
+    project: design91
+    policy-type: infrastructure
+spec:
+  podSelector:
+    matchLabels:
+      app: design91-processor-manager
+  
+  policyTypes:
+  - Egress
+  
+  egress:
+  # Allow connection to Kubernetes API server
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+  
+  # Allow connection to cluster services
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53

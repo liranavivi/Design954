@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-step-manager
+  namespace: design91-infrastructure
+  labels:
+    app: design91-step-manager
+    component: manager
+    project: design91
+    manager-type: step
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: design91-step-manager
+  template:
+    metadata:
+      labels:
+        app: design91-step-manager
+        component: manager
+        project: design91
+        manager-type: step
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5170"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: step-manager
+        image: design91/step-manager:latest
+        imagePullPolicy: Never
+
+        ports:
+        - containerPort: 5170
+          name: http
+          protocol: TCP
+        
+        # Health Probes
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5170
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+          successThreshold: 1
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5170
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5170
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        
+        # Resource Management
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "75m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        # Environment Configuration - Layered ConfigMaps
+        # Precedence: Infrastructure → Service-Specific
+        envFrom:
+        - configMapRef:
+            name: design91-infrastructure-config
+        - configMapRef:
+            name: design91-step-manager-config
+
+        
+        # Security Context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+
+      
+      # Pod Scheduling
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - design91-step-manager
+              topologyKey: kubernetes.io/hostname
+      
+      # Restart Policy
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

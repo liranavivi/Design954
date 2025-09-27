@@ -1,0 +1,117 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: design91-pluginloader-processor-ingress
+  namespace: design91-infrastructure
+  labels:
+    app: design91-pluginloader-processor
+    component: processor
+    project: design91
+    processor-type: pluginloader
+spec:
+  podSelector:
+    matchLabels:
+      app: design91-pluginloader-processor
+  policyTypes:
+  - Ingress
+  ingress:
+  # Allow traffic from managers (for processor management)
+  - from:
+    - podSelector:
+        matchLabels:
+          component: manager
+  # Allow traffic from other processors (for inter-processor communication)
+  - from:
+    - podSelector:
+        matchLabels:
+          component: processor
+  # Allow traffic from observability stack
+  - from:
+    - podSelector:
+        matchLabels:
+          component: observability
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: design91-pluginloader-processor-egress
+  namespace: design91-infrastructure
+  labels:
+    app: design91-pluginloader-processor
+    component: processor
+    project: design91
+    processor-type: pluginloader
+spec:
+  podSelector:
+    matchLabels:
+      app: design91-pluginloader-processor
+  policyTypes:
+  - Egress
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow access to RabbitMQ
+  - to:
+    - podSelector:
+        matchLabels:
+          app: design91-rabbitmq
+    ports:
+    - protocol: TCP
+      port: 5672
+    - protocol: TCP
+      port: 15672
+  # Allow access to Kafka
+  - to:
+    - podSelector:
+        matchLabels:
+          app: design91-kafka
+    ports:
+    - protocol: TCP
+      port: 9092
+  # Allow access to Hazelcast
+  - to:
+    - podSelector:
+        matchLabels:
+          app: design91-hazelcast
+    ports:
+    - protocol: TCP
+      port: 5701
+  # Allow access to MongoDB (for schema validation)
+  - to:
+    - podSelector:
+        matchLabels:
+          app: design91-mongodb
+    ports:
+    - protocol: TCP
+      port: 27017
+  # Allow access to managers (for health checks and communication)
+  - to:
+    - podSelector:
+        matchLabels:
+          component: manager
+  # Allow access to other processors
+  - to:
+    - podSelector:
+        matchLabels:
+          component: processor
+  # Allow access to OpenTelemetry collector
+  - to:
+    - podSelector:
+        matchLabels:
+          app: design91-otel-collector
+    ports:
+    - protocol: TCP
+      port: 4317
+    - protocol: TCP
+      port: 4318
+  # Allow HTTPS outbound (for external dependencies)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443

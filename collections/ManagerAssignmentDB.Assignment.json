@@ -1,0 +1,133 @@
+[{
+  "_id": "36ca882f-58e1-4dc3-bf87-74108023aaae",
+  "version": "1.1.1",
+  "name": "AssignmentFileReader",
+  "createdAt": {
+    "$date": "2025-07-27T06:40:07.418Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:40:07.418Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for FileReader",
+  "stepId": "783b5efe-955c-4474-9bf6-4e73032e8903",
+  "entityIds": [
+    "d5a42ff2-eb56-496e-b5f1-b846147d2f53",
+    "b82d0b08-7c5a-40cf-b314-a2915439a9c7"
+  ]
+},
+{
+  "_id": "bc9b29ca-d3d4-4fe9-aaaf-a01992c6edd4",
+  "version": "1.1.1",
+  "name": "AssignmentXmlFileWriter",
+  "createdAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for XmlFileWriter",
+  "stepId": "38d2b4f9-68ed-48d5-bbc5-74b165735584",
+  "entityIds": [
+    "e545751f-69c3-43fc-91eb-b8ffd3f126c9",
+    "fd44fdf2-411a-49be-997d-a0c3a7c98413"
+  ]
+},
+{
+  "_id": "bc9b29ca-d3d4-4fe9-aaaf-a01992c6ede4",
+  "version": "1.0.0",
+  "name": "AssignmentStandardizer",
+  "createdAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for Standardizer",
+  "stepId": "38d2b4f9-68ed-48d5-bbc5-74b165735585",
+  "entityIds": [
+    "d5a42ff2-eb56-496e-b5f1-b846147d2f50",
+    "fd44fdf2-411a-49be-997d-a0c3a7c98414"
+  ]
+},
+{
+  "_id": "bc9b29ca-d3d4-4fe9-aaaf-a01992c6ede5",
+  "version": "1.0.0",
+  "name": "AssignmentEnricher",
+  "createdAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for Enricher",
+  "stepId": "38d2b4f9-68ed-48d5-bbc5-74b165735586",
+  "entityIds": [
+    "d5a42ff2-eb56-496e-b5f1-b846147d2f51",
+    "fd44fdf2-411a-49be-997d-a0c3a7c98416"
+  ]
+},
+{
+  "_id": "bc9b29ca-d3d4-4fe9-aaaf-a01992c6ede7",
+  "version": "1.0.0",
+  "name": "AssignmentAudioConverter",
+  "createdAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for AudioConverter",
+  "stepId": "38d2b4f9-68ed-48d5-bbc5-74b165735587",
+  "entityIds": [
+    "d5a42ff2-eb56-496e-b5f1-b846147d2f52",
+    "fd44fdf2-411a-49be-997d-a0c3a7c98417"
+  ]
+},
+{
+  "_id": "36ca882f-58e1-4dc3-bf87-74108023aaaf",
+  "version": "1.1.1",
+  "name": "AssignmentPreFileReader",
+  "createdAt": {
+    "$date": "2025-07-27T06:40:07.418Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:40:07.418Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for PreFileReader",
+  "stepId": "783b5efe-955c-4474-9bf6-4e73032e8904",
+  "entityIds": [
+    "2f5b59e4-0668-436c-a2bd-1395fd77ffda",
+    "b82d0b08-7c5a-40cf-b314-a2915439a9c8"
+  ]
+},
+{
+  "_id": "bc9b29ca-d3d4-4fe9-aaaf-a01992c6edd5",
+  "version": "1.1.1",
+  "name": "AssignmentMp3FileWriter",
+  "createdAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T13:49:14.637Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Assignment for Mp3FileWriter",
+  "stepId": "38d2b4f9-68ed-48d5-bbc5-74b165735588",
+  "entityIds": [
+    "e545751f-69c3-43fc-91eb-b8ffd3f126c8",
+    "fd44fdf2-411a-49be-997d-a0c3a7c98413"
+  ]
+}]

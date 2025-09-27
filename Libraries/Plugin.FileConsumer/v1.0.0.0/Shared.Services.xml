@@ -1,0 +1,396 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Services</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Services.BaseManagerHttpClient">
+            <summary>
+            Base HTTP client implementation with standardized resilience patterns, logging, and timing
+            Provides common functionality for all manager HTTP clients
+            </summary>
+        </member>
+        <member name="M:Shared.Services.BaseManagerHttpClient.ExecuteHttpRequestAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes an HTTP GET request with standardized resilience patterns, logging, and timing
+            </summary>
+        </member>
+        <member name="M:Shared.Services.BaseManagerHttpClient.ExecuteAndProcessResponseAsync``1(System.String,System.String,System.Nullable{System.Guid},System.Threading.CancellationToken)">
+            <summary>
+            Executes an HTTP request and processes the response to a specific type
+            </summary>
+        </member>
+        <member name="M:Shared.Services.BaseManagerHttpClient.ExecuteEntityCheckAsync(System.String,System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Executes an HTTP request and returns a boolean result (typically for existence checks)
+            </summary>
+        </member>
+        <member name="M:Shared.Services.BaseManagerHttpClient.ProcessResponseAsync``1(System.Net.Http.HttpResponseMessage,System.String,System.String,System.Nullable{System.Guid})">
+            <summary>
+            Standardized response processing with consistent error handling
+            </summary>
+        </member>
+        <member name="M:Shared.Services.BaseManagerHttpClient.CreateResilientPolicy">
+            <summary>
+            Creates the resilient policy with retry and circuit breaker patterns
+            Can be overridden by derived classes for custom resilience requirements
+            </summary>
+        </member>
+        <member name="T:Shared.Services.CacheService">
+            <summary>
+            Hazelcast-specific cache service implementation
+            </summary>
+        </member>
+        <member name="M:Shared.Services.CacheService.ParseCacheKey(System.String)">
+            <summary>
+            Parses a cache key to extract its components for structured logging
+            Supports both old format: {orchestratedFlowId}:{correlationId}:{executionId}:{stepId}:{publishId}
+            and new format: {processorId}:{orchestratedFlowId}:{correlationId}:{executionId}:{stepId}:{publishId}
+            </summary>
+            <param name="cacheKey">The cache key to parse</param>
+            <returns>Tuple containing processorId, orchestratedFlowId, correlationId, executionId, stepId, and publishId</returns>
+        </member>
+        <member name="T:Shared.Services.HttpClientConfiguration">
+            <summary>
+            Configuration options for HTTP client resilience patterns
+            </summary>
+        </member>
+        <member name="F:Shared.Services.HttpClientConfiguration.SectionName">
+            <summary>
+            Configuration section name
+            </summary>
+        </member>
+        <member name="P:Shared.Services.HttpClientConfiguration.MaxRetries">
+            <summary>
+            Maximum number of retry attempts
+            Default: 3
+            </summary>
+        </member>
+        <member name="P:Shared.Services.HttpClientConfiguration.RetryDelayMs">
+            <summary>
+            Base delay in milliseconds for exponential backoff
+            Default: 1000ms (1 second)
+            </summary>
+        </member>
+        <member name="P:Shared.Services.HttpClientConfiguration.CircuitBreakerThreshold">
+            <summary>
+            Number of consecutive failures before circuit breaker opens
+            Default: 3
+            </summary>
+        </member>
+        <member name="P:Shared.Services.HttpClientConfiguration.CircuitBreakerDurationSeconds">
+            <summary>
+            Duration in seconds that circuit breaker stays open
+            Default: 30 seconds
+            </summary>
+        </member>
+        <member name="P:Shared.Services.HttpClientConfiguration.TimeoutSeconds">
+            <summary>
+            HTTP client timeout in seconds
+            Default: 30 seconds
+            </summary>
+        </member>
+        <member name="P:Shared.Services.HttpClientConfiguration.EnableDetailedMetrics">
+            <summary>
+            Whether to include detailed timing metrics in logs
+            Default: true
+            </summary>
+        </member>
+        <member name="T:Shared.Services.HttpClientServiceExtensions">
+            <summary>
+            Extension methods for configuring HTTP clients with standardized resilience patterns
+            </summary>
+        </member>
+        <member name="M:Shared.Services.HttpClientServiceExtensions.AddStandardizedHttpClient``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.String)">
+            <summary>
+            Adds a standardized HTTP client with correlation ID support
+            Note: Resilience patterns are handled by the BaseManagerHttpClient implementation
+            </summary>
+            <typeparam name="TClient">The HTTP client type</typeparam>
+            <typeparam name="TImplementation">The HTTP client implementation type</typeparam>
+            <param name="services">The service collection</param>
+            <param name="configuration">Configuration instance</param>
+            <param name="clientName">Optional client name (defaults to type name)</param>
+            <returns>The service collection for method chaining</returns>
+        </member>
+        <member name="M:Shared.Services.HttpClientServiceExtensions.AddHttpClientCorrelationSupport(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds correlation ID support to HTTP clients
+            </summary>
+            <param name="services">The service collection</param>
+            <returns>The service collection for method chaining</returns>
+        </member>
+        <member name="T:Shared.Services.Interfaces.IBaseManagerHttpClient">
+            <summary>
+            Base interface for standardized HTTP client operations across all managers
+            </summary>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IBaseManagerHttpClient.ExecuteHttpRequestAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes an HTTP GET request with standardized resilience patterns, logging, and timing
+            </summary>
+            <param name="url">The URL to request</param>
+            <param name="operationName">Name of the operation for logging and telemetry</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>HTTP response message</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IBaseManagerHttpClient.ExecuteAndProcessResponseAsync``1(System.String,System.String,System.Nullable{System.Guid},System.Threading.CancellationToken)">
+            <summary>
+            Executes an HTTP request and processes the response to a specific type
+            </summary>
+            <typeparam name="T">Type to deserialize response to</typeparam>
+            <param name="url">The URL to request</param>
+            <param name="operationName">Name of the operation for logging</param>
+            <param name="entityId">Entity ID for logging (optional)</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Deserialized entity or null if not found</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IBaseManagerHttpClient.ExecuteEntityCheckAsync(System.String,System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Executes an HTTP request and returns a boolean result (typically for existence checks)
+            </summary>
+            <param name="url">The URL to request</param>
+            <param name="operationName">Name of the operation for logging</param>
+            <param name="entityId">Entity ID for logging</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Boolean result from the response</returns>
+        </member>
+        <member name="T:Shared.Services.Interfaces.ICacheService">
+            <summary>
+            Interface for cache service operations
+            </summary>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.GetAsync(System.String,System.String)">
+            <summary>
+            Retrieves data from cache
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <returns>Cached data or null if not found</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.SetAsync(System.String,System.String,System.String)">
+            <summary>
+            Stores data in cache
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <param name="value">Data to store</param>
+            <returns>Task representing the operation</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.SetAsync(System.String,System.String,System.String,System.TimeSpan)">
+            <summary>
+            Stores data in cache with time-to-live (TTL)
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <param name="value">Data to store</param>
+            <param name="ttl">Time-to-live for the cache entry</param>
+            <returns>Task representing the operation</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.ExistsAsync(System.String,System.String)">
+            <summary>
+            Checks if a key exists in cache
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <returns>True if key exists, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.RemoveAsync(System.String,System.String)">
+            <summary>
+            Removes data from cache
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <returns>Task representing the operation</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.IsHealthyAsync">
+            <summary>
+            Checks if the cache service is healthy and accessible
+            </summary>
+            <returns>True if healthy, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.GetCacheStatisticsAsync(System.String)">
+            <summary>
+            Gets cache statistics for a specific map
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <returns>Tuple containing entry count and average age in seconds</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.GetProcessorCacheKey(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid)">
+            <summary>
+            Generates a processor-specific cache key for activity data using the pattern:
+            {processorId}:{orchestratedFlowEntityId}:{correlationId}:{executionId}:{stepId}:{publishId}
+            This ensures processor isolation in the shared processor-activity cache map.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.PutIfAbsentAsync(System.String,System.String,System.String)">
+            <summary>
+            Atomically sets a value only if the key doesn't exist (uses map-level TTL configuration)
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <param name="value">Value to set</param>
+            <returns>Previous value if key existed, null if key was absent and value was set</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ICacheService.PutIfAbsentAsync(System.String,System.String,System.String,System.TimeSpan)">
+            <summary>
+            Atomically sets a value only if the key doesn't exist
+            </summary>
+            <param name="mapName">Name of the cache map</param>
+            <param name="key">Cache key</param>
+            <param name="value">Value to set</param>
+            <param name="ttl">Time-to-live for the entry</param>
+            <returns>Previous value if key existed, null if key was absent and value was set</returns>
+        </member>
+        <member name="T:Shared.Services.Interfaces.IManagerMetricsService">
+            <summary>
+            Interface for manager-specific metrics service.
+            Provides comprehensive manager operation metrics for analysis and monitoring.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IManagerMetricsService.RecordRequestProcessed(System.Boolean,System.TimeSpan,System.String,System.String)">
+            <summary>
+            Records request processing completion metrics.
+            </summary>
+            <param name="success">Whether the request was successful</param>
+            <param name="duration">Duration of the request processing</param>
+            <param name="operation">The operation type (e.g., "create", "update", "delete", "get")</param>
+            <param name="entityType">The entity type being operated on (optional)</param>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IManagerMetricsService.RecordEntityOperation(System.String,System.String,System.Int32)">
+            <summary>
+            Records entity operation metrics.
+            </summary>
+            <param name="operation">The operation type (e.g., "create", "update", "delete", "query")</param>
+            <param name="entityType">The entity type being operated on</param>
+            <param name="count">Number of entities affected (default: 1)</param>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IManagerMetricsService.RecordValidation(System.Boolean,System.TimeSpan,System.String)">
+            <summary>
+            Records validation metrics.
+            </summary>
+            <param name="success">Whether the validation was successful</param>
+            <param name="duration">Duration of the validation operation</param>
+            <param name="validationType">The type of validation performed</param>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IManagerMetricsService.RecordHealthStatus(System.Int32)">
+            <summary>
+            Records health status.
+            </summary>
+            <param name="status">Health status (0=Healthy, 1=Degraded, 2=Unhealthy)</param>
+        </member>
+        <member name="M:Shared.Services.Interfaces.IManagerMetricsService.RecordOperation(System.String,System.String,System.TimeSpan,System.Boolean)">
+            <summary>
+            Records a generic operation with timing and success status.
+            </summary>
+            <param name="operation">The operation type</param>
+            <param name="entityType">The entity type being operated on</param>
+            <param name="duration">Duration of the operation</param>
+            <param name="success">Whether the operation was successful</param>
+        </member>
+        <member name="T:Shared.Services.Interfaces.ISchemaValidator">
+            <summary>
+            Interface for JSON schema validation
+            </summary>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ISchemaValidator.ValidateAsync(System.String,System.String)">
+            <summary>
+            Validates JSON data against a JSON schema
+            </summary>
+            <param name="jsonData">JSON data to validate</param>
+            <param name="jsonSchema">JSON schema to validate against</param>
+            <returns>True if valid, false otherwise</returns>
+        </member>
+        <member name="M:Shared.Services.Interfaces.ISchemaValidator.ValidateWithDetailsAsync(System.String,System.String)">
+            <summary>
+            Validates JSON data against a JSON schema and returns detailed validation results
+            </summary>
+            <param name="jsonData">JSON data to validate</param>
+            <param name="jsonSchema">JSON schema to validate against</param>
+            <returns>Validation result with details</returns>
+        </member>
+        <member name="T:Shared.Services.Interfaces.SchemaValidationResult">
+            <summary>
+            Result of schema validation with detailed information
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Interfaces.SchemaValidationResult.IsValid">
+            <summary>
+            Whether the validation passed
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Interfaces.SchemaValidationResult.Errors">
+            <summary>
+            List of validation errors
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Interfaces.SchemaValidationResult.Warnings">
+            <summary>
+            List of validation warnings
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Interfaces.SchemaValidationResult.ErrorPath">
+            <summary>
+            Path where the first error occurred
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Interfaces.SchemaValidationResult.Duration">
+            <summary>
+            Duration of the validation process
+            </summary>
+        </member>
+        <member name="T:Shared.Services.ManagerMetricsService">
+            <summary>
+            Service for exposing manager-specific metrics using OpenTelemetry.
+            Provides comprehensive manager operation metrics for analysis and monitoring.
+            Uses consistent labeling from appsettings configuration (Name and Version).
+            </summary>
+        </member>
+        <member name="M:Shared.Services.ManagerMetricsService.RecordRequestProcessed(System.Boolean,System.TimeSpan,System.String,System.String)">
+            <summary>
+            Records request processing completion metrics.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.ManagerMetricsService.RecordEntityOperation(System.String,System.String,System.Int32)">
+            <summary>
+            Records entity operation metrics.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.ManagerMetricsService.RecordValidation(System.Boolean,System.TimeSpan,System.String)">
+            <summary>
+            Records validation metrics.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.ManagerMetricsService.RecordHealthStatus(System.Int32)">
+            <summary>
+            Records health status.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.ManagerMetricsService.RecordOperation(System.String,System.String,System.TimeSpan,System.Boolean)">
+            <summary>
+            Records a generic operation with timing and success status.
+            </summary>
+        </member>
+        <member name="M:Shared.Services.ManagerMetricsService.CreateManagerTags(System.ValueTuple{System.String,System.Object}[])">
+            <summary>
+            Creates consistent manager tags using configuration values.
+            Uses Name and Version from ManagerConfiguration for consistent labeling.
+            </summary>
+        </member>
+        <member name="T:Shared.Services.SchemaValidator">
+            <summary>
+            JSON schema validator implementation using JsonSchema.Net with full JSON Schema compliance
+            </summary>
+        </member>
+        <member name="M:Shared.Services.SchemaValidator.ValidateWithJsonSchemaNet(System.Text.Json.JsonDocument,Json.Schema.JsonSchema,System.Collections.Generic.List{System.String},Shared.Services.Interfaces.SchemaValidationResult)">
+            <summary>
+            Performs full JSON Schema validation using JsonSchema.Net
+            </summary>
+        </member>
+        <member name="M:Shared.Services.SchemaValidator.ExtractValidationErrors(Json.Schema.EvaluationResults,System.Collections.Generic.List{System.String},Shared.Services.Interfaces.SchemaValidationResult)">
+            <summary>
+            Extracts validation errors from JsonSchema.Net evaluation result
+            </summary>
+        </member>
+    </members>
+</doc>

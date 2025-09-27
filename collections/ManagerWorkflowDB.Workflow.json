@@ -1,0 +1,23 @@
+[{
+  "_id": "27a9519c-106b-4d6d-99af-5b09e56c57f8",
+  "version": "1.1.1",
+  "name": "WorkflowFileProcessing",
+  "createdAt": {
+    "$date": "2025-07-27T06:43:34.589Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:43:34.589Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Workflow for File Processing",
+  "stepIds": [
+    "783b5efe-955c-4474-9bf6-4e73032e8903",
+    "38d2b4f9-68ed-48d5-bbc5-74b165735584",
+    "38d2b4f9-68ed-48d5-bbc5-74b165735585",
+    "38d2b4f9-68ed-48d5-bbc5-74b165735586",
+    "38d2b4f9-68ed-48d5-bbc5-74b165735587",
+    "783b5efe-955c-4474-9bf6-4e73032e8904",
+    "38d2b4f9-68ed-48d5-bbc5-74b165735588"
+  ]
+}]

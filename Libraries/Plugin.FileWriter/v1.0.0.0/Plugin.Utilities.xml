@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.Utilities</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.Utilities.FilePostProcessing">
+            <summary>
+            Plugin utilities for file post-processing operations across all file processors
+            Provides standardized collision handling, logging, and file operations
+            </summary>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.PostProcessFileAsync``1(System.String,``0,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Post-process a file based on configuration using standardized approach
+            </summary>
+            <typeparam name="TConfig">Configuration type that implements IFileProcessingConfiguration</typeparam>
+            <param name="filePath">Path to the file to post-process</param>
+            <param name="config">Configuration containing processing mode and settings</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+            <returns>Task representing the operation</returns>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.GenerateProcessedPath(System.String,System.String)">
+            <summary>
+            Generates a processed file path with collision handling using standardized naming pattern
+            Uses pattern: {originalPath}{processedExtension} with counter for collisions
+            </summary>
+            <param name="filePath">Original file path</param>
+            <param name="processedExtension">Extension to add (e.g., ".processed")</param>
+            <returns>Processed file path with collision handling applied</returns>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.MarkFileAsProcessed(System.String,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Mark file as processed by adding extension using standardized approach with collision handling
+            </summary>
+            <param name="filePath">Path to the file to mark as processed</param>
+            <param name="processedExtension">Extension to add (e.g., ".processed")</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.GenerateBackupPath(System.String,System.String,Plugin.Utilities.IFileProcessingConfiguration)">
+            <summary>
+            Generates a backup file path with collision handling using standardized naming pattern
+            Uses FileWriter naming pattern: {nameWithoutExt}_{timestamp}{extension}
+            </summary>
+            <param name="filePath">Original file path</param>
+            <param name="timestamp">Timestamp string to use in the backup filename</param>
+            <param name="config">Configuration containing backup folder</param>
+            <returns>Backup file path with collision handling applied</returns>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.CopyToBackupWithCollisionHandling(System.String,Plugin.Utilities.IFileProcessingConfiguration,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Copy file to backup folder with collision handling and standardized naming
+            Uses FileWriter naming pattern: {nameWithoutExt}_{timestamp}{extension}
+            </summary>
+            <param name="filePath">Path to the file to copy</param>
+            <param name="config">Configuration containing backup folder and timestamp format</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.GenerateOutputPath(System.String,System.String,System.String)">
+            <summary>
+            Generates an output file path with collision handling using counter-based naming pattern
+            Uses pattern: {nameWithoutExt}_{counter:D3}{extension} with timestamp fallback
+            </summary>
+            <param name="fileName">Original filename</param>
+            <param name="outputDirectory">Output directory path</param>
+            <param name="timestampFormat">Timestamp format for fallback naming</param>
+            <returns>Output file path with collision handling applied</returns>
+        </member>
+        <member name="M:Plugin.Utilities.FilePostProcessing.MoveToBackupWithCollisionHandling(System.String,Plugin.Utilities.IFileProcessingConfiguration,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Move file to backup folder with collision handling and standardized naming
+            Uses FileWriter naming pattern: {nameWithoutExt}_{timestamp}{extension}
+            </summary>
+            <param name="filePath">Path to the file to move</param>
+            <param name="config">Configuration containing backup folder and timestamp format</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="T:Plugin.Utilities.FileProcessingMode">
+            <summary>
+            Defines the different modes for processing files after they have been read
+            Each mode specifies what to do with the original file AFTER successfully reading it
+            Shared across all file processor types for consistency
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.LeaveUnchanged">
+            <summary>
+            Leave the original file unchanged after reading
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.MarkAsProcessed">
+            <summary>
+            Rename file with processed extension (e.g., .processed)
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.Delete">
+            <summary>
+            Delete the original file after reading
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.MoveToBackup">
+            <summary>
+            Move file to backup folder (original file moved)
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.CopyToBackup">
+            <summary>
+            Copy file to backup folder (original file remains)
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.BackupAndMarkProcessed">
+            <summary>
+            Create timestamped backup copy, then mark as processed
+            </summary>
+        </member>
+        <member name="F:Plugin.Utilities.FileProcessingMode.BackupAndDelete">
+            <summary>
+            Create timestamped backup copy, then delete original
+            </summary>
+        </member>
+        <member name="T:Plugin.Utilities.IFileProcessingConfiguration">
+            <summary>
+            Interface for file processing configurations to enable shared post-processing utilities
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.IFileProcessingConfiguration.ProcessingMode">
+            <summary>
+            Processing mode that determines what to do with files after processing
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.IFileProcessingConfiguration.ProcessedExtension">
+            <summary>
+            Extension to add when marking files as processed
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.IFileProcessingConfiguration.BackupFolder">
+            <summary>
+            Backup folder path for backup operations
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.IFileProcessingConfiguration.TimestampFormat">
+            <summary>
+            Timestamp format for backup file naming
+            </summary>
+        </member>
+    </members>
+</doc>

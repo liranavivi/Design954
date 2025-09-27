@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Processor.PluginLoader": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

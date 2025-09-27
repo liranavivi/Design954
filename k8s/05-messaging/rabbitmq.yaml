@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-rabbitmq
+  namespace: design91-infrastructure
+  labels:
+    app: design91-rabbitmq
+    component: message-broker
+    project: design91
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: design91-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: design91-rabbitmq
+        component: message-broker
+        project: design91
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3.12-management
+        ports:
+        - containerPort: 5672
+          name: amqp
+        - containerPort: 15672
+          name: management
+        env:
+        - name: RABBITMQ_DEFAULT_VHOST
+          value: "/"
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
+        livenessProbe:
+          exec:
+            command:
+            - rabbitmq-diagnostics
+            - ping
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 5
+        readinessProbe:
+          tcpSocket:
+            port: 5672
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: design91-rabbitmq-data-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-rabbitmq
+  namespace: design91-infrastructure
+  labels:
+    app: design91-rabbitmq
+    component: message-broker
+    project: design91
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "5672,15672"
+    port-forward.design91.io/description: "RabbitMQ AMQP and Management"
+spec:
+  type: ClusterIP
+  ports:
+  - name: amqp
+    port: 5672
+    targetPort: 5672
+    protocol: TCP
+  - name: management
+    port: 15672
+    targetPort: 15672
+    protocol: TCP
+  selector:
+    app: design91-rabbitmq

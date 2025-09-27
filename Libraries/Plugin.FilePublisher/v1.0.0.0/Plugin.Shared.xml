@@ -1,0 +1,582 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.Shared</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.Shared.Interfaces.IPlugin">
+            <summary>
+            Interface for plugin implementations that can be dynamically loaded and executed
+            by the PluginLoaderProcessor. Plugin must implement this interface to be compatible
+            with the plugin loading system.
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Interfaces.IPlugin.ProcessActivityDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Processes activity data with the same signature as BaseProcessorApplication.ProcessActivityDataAsync
+            This method will be called by the PluginLoaderProcessor to execute the plugin's business logic
+            </summary>
+            <param name="processorId">ID of the processor executing the activity</param>
+            <param name="orchestratedFlowEntityId">ID of the orchestrated flow entity</param>
+            <param name="stepId">ID of the step being executed</param>
+            <param name="executionId">Unique execution ID for this activity instance</param>
+            <param name="publishId">Unique publish ID for this activity instance</param>
+            <param name="entities">Collection of assignment entities to process</param>
+            <param name="inputData">Input data retrieved from cache (validated against InputSchema)</param>
+            <param name="correlationId">Correlation ID for tracking</param>
+            <param name="cancellationToken">Cancellation token for the operation</param>
+            <returns>Collection of processed activity data that will be validated against OutputSchema and saved to cache</returns>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.AudioFileInfo">
+            <summary>
+            Audio file information extracted from file headers
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.Channels">
+            <summary>
+            Number of audio channels (1 = mono, 2 = stereo, etc.)
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.DurationSeconds">
+            <summary>
+            Duration of the audio file in seconds
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.SampleRate">
+            <summary>
+            Sample rate in Hz
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.BitsPerSample">
+            <summary>
+            Bits per sample
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.Format">
+            <summary>
+            Audio format type
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.IsValid">
+            <summary>
+            Whether the analysis was successful
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.AudioFileInfo.ErrorMessage">
+            <summary>
+            Error message if analysis failed
+            </summary>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.AudioFileAnalyzer">
+            <summary>
+            Utility for analyzing audio file headers to extract channel count, duration, and other metadata
+            Supports WAV, AMR, AWB, and FLAC formats
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.AudioFileAnalyzer.AnalyzeAudioFile(System.Byte[],System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Analyzes audio file content and extracts header information including channels and duration
+            </summary>
+            <param name="fileContent">Audio file content as byte array</param>
+            <param name="fileName">Original file name (used to determine format)</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+            <returns>Audio file information including channels, duration, and format details</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.AudioFileAnalyzer.AnalyzeWavContent(System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Analyzes WAV file content using NAudio
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.AudioFileAnalyzer.AnalyzeFlacContent(System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Analyzes FLAC file content by reading header information manually
+            FLAC files have a specific header format that can be parsed
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.AudioFileAnalyzer.AnalyzeAmrContent(System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Analyzes AMR/AWB file content by reading header information manually
+            AMR files have a specific header format that can be parsed
+            </summary>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.FileCacheDataHelper">
+            <summary>
+            Helper utility for working with FileCacheDataObject structures
+            Provides methods to extract file content and metadata from cache data objects
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.ExtractFileContent(System.Object,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Extracts file content as byte array from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing file information</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>File content as byte array, or null if extraction fails</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.ExtractFileName(System.Object,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Extracts file name from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing file information</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>File name, or null if extraction fails</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.ExtractFileMetadata(System.Object,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Extracts file metadata from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing file information</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>File metadata object, or null if extraction fails</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.AnalyzeAudioFromCache(System.Object,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Analyzes audio content from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing audio file</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>Audio file information, or invalid result if analysis fails</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.XorFileContentFromCache(System.Object,System.Byte,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Applies XOR operation to file content from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing file</param>
+            <param name="key">XOR key (single byte)</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR result as byte array, or null if operation fails</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.XorFileContentFromCache(System.Object,System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Applies XOR operation to file content from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing file</param>
+            <param name="key">XOR key (byte array)</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR result as byte array, or null if operation fails</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileCacheDataHelper.XorFileContentFromCache(System.Object,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Applies XOR operation to file content from FileCacheDataObject
+            </summary>
+            <param name="fileCacheDataObject">The cache data object containing file</param>
+            <param name="key">XOR key (string)</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR result as byte array, or null if operation fails</returns>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.FileMetadata">
+            <summary>
+            File metadata extracted from FileCacheDataObject
+            </summary>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.FilePostProcessing">
+            <summary>
+            Plugin utilities for file post-processing operations across all file processors
+            Provides standardized collision handling, logging, and file operations
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.PostProcessFileAsync``1(System.String,``0,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Post-process a file based on configuration using standardized approach
+            </summary>
+            <typeparam name="TConfig">Configuration type that implements IFileProcessingConfiguration</typeparam>
+            <param name="filePath">Path to the file to post-process</param>
+            <param name="config">Configuration containing processing mode and settings</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+            <returns>Task representing the operation</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.GenerateProcessedPath(System.String,System.String)">
+            <summary>
+            Generates a processed file path with collision handling using standardized naming pattern
+            Uses pattern: {originalPath}{processedExtension} with counter for collisions
+            </summary>
+            <param name="filePath">Original file path</param>
+            <param name="processedExtension">Extension to add (e.g., ".processed")</param>
+            <returns>Processed file path with collision handling applied</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.MarkFileAsProcessed(System.String,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Mark file as processed by adding extension using standardized approach with collision handling
+            </summary>
+            <param name="filePath">Path to the file to mark as processed</param>
+            <param name="processedExtension">Extension to add (e.g., ".processed")</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.GenerateUniqueFilePath(System.String,System.String)">
+            <summary>
+            Generates a unique file path with collision handling using precise timestamp
+            If file exists: Uses pattern {nameWithoutExt}_{timestamp_with_milliseconds}{extension}
+            If file doesn't exist: Uses original filename without changes
+            </summary>
+            <param name="fileName">Original filename</param>
+            <param name="targetDirectory">Target directory path</param>
+            <returns>Unique file path with collision handling applied</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.CopyToBackupWithCollisionHandling(System.String,Plugin.Shared.Utilities.IFileProcessingConfiguration,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Copy file to backup folder with collision handling using precise timestamp
+            Uses pattern: {nameWithoutExt}_{timestamp_with_milliseconds}{extension}
+            </summary>
+            <param name="filePath">Path to the file to copy</param>
+            <param name="config">Configuration containing backup folder</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.GenerateOutputPath(System.String,System.String)">
+            <summary>
+            Generates an output file path with collision handling using precise timestamp
+            If file exists: Uses pattern {nameWithoutExt}_{timestamp_with_milliseconds}{extension}
+            If file doesn't exist: Uses original filename without changes
+            </summary>
+            <param name="fileName">Original filename</param>
+            <param name="outputDirectory">Output directory path</param>
+            <returns>Output file path with collision handling applied</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FilePostProcessing.MoveToBackupWithCollisionHandling(System.String,Plugin.Shared.Utilities.IFileProcessingConfiguration,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Move file to backup folder with collision handling using precise timestamp
+            Uses pattern: {nameWithoutExt}_{timestamp_with_milliseconds}{extension}
+            </summary>
+            <param name="filePath">Path to the file to move</param>
+            <param name="config">Configuration containing backup folder</param>
+            <param name="logger">Logger for correlation-aware logging</param>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.FileProcessingMode">
+            <summary>
+            Defines the different modes for processing files after they have been read
+            Each mode specifies what to do with the original file AFTER successfully reading it
+            Shared across all file processor types for consistency
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.LeaveUnchanged">
+            <summary>
+            Leave the original file unchanged after reading
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.MarkAsProcessed">
+            <summary>
+            Rename file with processed extension (e.g., .processed)
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.Delete">
+            <summary>
+            Delete the original file after reading
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.MoveToBackup">
+            <summary>
+            Move file to backup folder (original file moved)
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.CopyToBackup">
+            <summary>
+            Copy file to backup folder (original file remains)
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.BackupAndMarkProcessed">
+            <summary>
+            Create timestamped backup copy, then mark as processed
+            </summary>
+        </member>
+        <member name="F:Plugin.Shared.Utilities.FileProcessingMode.BackupAndDelete">
+            <summary>
+            Create timestamped backup copy, then delete original
+            </summary>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.FileTypeDetector">
+            <summary>
+            Utility class for detecting file types based on extensions and MIME types
+            Provides centralized file type detection logic for use across plugins
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsAudioFile(System.String,System.String)">
+            <summary>
+            Check if file is an audio file based on extension and MIME type
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".mp3")</param>
+            <param name="mimeType">MIME type (e.g., "audio/mpeg")</param>
+            <returns>True if the file is an audio file</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsTextFile(System.String,System.String)">
+            <summary>
+            Check if file is a text file based on extension and MIME type
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".txt")</param>
+            <param name="mimeType">MIME type (e.g., "text/plain")</param>
+            <returns>True if the file is a text file</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsXmlFile(System.String,System.String)">
+            <summary>
+            Check if file is an XML file based on extension and MIME type
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".xml")</param>
+            <param name="mimeType">MIME type (e.g., "text/xml")</param>
+            <returns>True if the file is an XML file</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsXmlFile(System.String,System.String,System.Text.Json.JsonElement)">
+            <summary>
+            Check if file is an XML file including standardized content detection
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".xml")</param>
+            <param name="mimeType">MIME type (e.g., "text/xml")</param>
+            <param name="metadata">File metadata for additional detection</param>
+            <returns>True if the file is an XML file or contains standardized XML content</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsImageFile(System.String,System.String)">
+            <summary>
+            Check if file is an image file based on extension and MIME type
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".jpg")</param>
+            <param name="mimeType">MIME type (e.g., "image/jpeg")</param>
+            <returns>True if the file is an image file</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsVideoFile(System.String,System.String)">
+            <summary>
+            Check if file is a video file based on extension and MIME type
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".mp4")</param>
+            <param name="mimeType">MIME type (e.g., "video/mp4")</param>
+            <returns>True if the file is a video file</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.IsInformationContentFile(System.String,System.String)">
+            <summary>
+            Check if file is an information content file (text or other content types that can contain information about audio)
+            </summary>
+            <param name="fileExtension">File extension (e.g., ".info", ".meta")</param>
+            <param name="mimeType">MIME type (e.g., "text/plain")</param>
+            <returns>True if the file is an information content file</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.GetFileTypeCategory(System.String,System.String)">
+            <summary>
+            Get the general file type category
+            </summary>
+            <param name="fileExtension">File extension</param>
+            <param name="mimeType">MIME type</param>
+            <returns>File type category as string</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.GetSupportedAudioExtensions">
+            <summary>
+            Get all supported audio file extensions
+            </summary>
+            <returns>Array of audio file extensions</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.GetSupportedTextExtensions">
+            <summary>
+            Get all supported text file extensions
+            </summary>
+            <returns>Array of text file extensions</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.GetSupportedXmlExtensions">
+            <summary>
+            Get all supported XML file extensions
+            </summary>
+            <returns>Array of XML file extensions</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.GetSupportedImageExtensions">
+            <summary>
+            Get all supported image file extensions
+            </summary>
+            <returns>Array of image file extensions</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.FileTypeDetector.GetSupportedVideoExtensions">
+            <summary>
+            Get all supported video file extensions
+            </summary>
+            <returns>Array of video file extensions</returns>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.IFileProcessingConfiguration">
+            <summary>
+            Interface for file processing configurations to enable shared post-processing utilities
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.IFileProcessingConfiguration.ProcessingMode">
+            <summary>
+            Processing mode that determines what to do with files after processing
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.IFileProcessingConfiguration.ProcessedExtension">
+            <summary>
+            Extension to add when marking files as processed
+            </summary>
+        </member>
+        <member name="P:Plugin.Shared.Utilities.IFileProcessingConfiguration.BackupFolder">
+            <summary>
+            Backup folder path for backup operations
+            </summary>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.PluginHelper">
+            <summary>
+            Shared utility helper class for plugin operations
+            Provides common functionality for cache data manipulation and validation across all plugins
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.ExtractFileMetadata(System.Text.Json.JsonElement)">
+            <summary>
+            Extract file metadata from cache data object
+            </summary>
+            <param name="cacheDataItem">Cache data item from previous plugin</param>
+            <returns>File metadata object or null if not found</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.ExtractFileContent(System.Text.Json.JsonElement)">
+            <summary>
+            Extract file content from cache data object
+            </summary>
+            <param name="cacheDataItem">Cache data item from previous plugin</param>
+            <returns>File content object or null if not found</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.GetFileNameFromCacheData(System.Text.Json.JsonElement)">
+            <summary>
+            Get file name from cache data for logging purposes
+            </summary>
+            <param name="cacheDataItem">Cache data item</param>
+            <returns>File name or "Unknown" if not found</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.GetFileExtension(System.String)">
+            <summary>
+            Get file extension from file name
+            </summary>
+            <param name="fileName">File name</param>
+            <returns>File extension (including dot) or empty string</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.GetMimeType(System.Text.Json.JsonElement)">
+            <summary>
+            Get MIME type from cache data object
+            </summary>
+            <param name="cacheDataItem">Cache data item</param>
+            <returns>MIME type or empty string if not found</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.GetFileSize(System.Text.Json.JsonElement)">
+            <summary>
+            Get file size from cache data object
+            </summary>
+            <param name="cacheDataItem">Cache data item</param>
+            <returns>File size in bytes or 0 if not found</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.HasValidFileMetadata(System.Text.Json.JsonElement)">
+            <summary>
+            Check if cache data item has valid file metadata
+            </summary>
+            <param name="cacheDataItem">Cache data item</param>
+            <returns>True if valid metadata exists, false otherwise</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.HasValidFileContent(System.Text.Json.JsonElement)">
+            <summary>
+            Check if cache data item has valid file content
+            </summary>
+            <param name="cacheDataItem">Cache data item</param>
+            <returns>True if valid content exists, false otherwise</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.PluginHelper.IsValidCacheDataItem(System.Text.Json.JsonElement)">
+            <summary>
+            Validate cache data item structure
+            </summary>
+            <param name="cacheDataItem">Cache data item</param>
+            <returns>True if structure is valid, false otherwise</returns>
+        </member>
+        <member name="T:Plugin.Shared.Utilities.XorUtility">
+            <summary>
+            Utility for XOR operations on byte data with configurable keys
+            Provides methods for encrypting/decrypting data using XOR cipher
+            </summary>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.XorUtility.XorWithByte(System.Byte[],System.Byte,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Performs XOR operation on data using a single byte key
+            </summary>
+            <param name="data">Data to XOR</param>
+            <param name="key">Single byte XOR key</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR result as byte array</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.XorUtility.XorWithByteArray(System.Byte[],System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Performs XOR operation on data using a byte array key (repeating pattern)
+            </summary>
+            <param name="data">Data to XOR</param>
+            <param name="key">Byte array XOR key (will repeat if shorter than data)</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR result as byte array</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.XorUtility.XorWithString(System.Byte[],System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Performs XOR operation on data using a string key (converted to UTF-8 bytes)
+            </summary>
+            <param name="data">Data to XOR</param>
+            <param name="key">String XOR key (will be converted to UTF-8 bytes)</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR result as byte array</returns>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.XorUtility.XorInPlace(System.Byte[],System.Byte,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Performs in-place XOR operation on data using a single byte key
+            Modifies the original data array
+            </summary>
+            <param name="data">Data to XOR (modified in place)</param>
+            <param name="key">Single byte XOR key</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.XorUtility.XorInPlace(System.Byte[],System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Performs in-place XOR operation on data using a byte array key
+            Modifies the original data array
+            </summary>
+            <param name="data">Data to XOR (modified in place)</param>
+            <param name="key">Byte array XOR key</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+        </member>
+        <member name="M:Plugin.Shared.Utilities.XorUtility.CalculateXorChecksum(System.Byte[],Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Calculates a simple XOR checksum of the data
+            </summary>
+            <param name="data">Data to calculate checksum for</param>
+            <param name="logger">Optional logger for correlation-aware logging</param>
+            <returns>XOR checksum as a single byte</returns>
+        </member>
+        <member name="T:Plugin.Utilities.Models.FileDiscoveryMessage">
+            <summary>
+            Message published to Kafka when a file is discovered for processing
+            Contains all necessary information for individual file processing
+            Moved to Plugin.Utilities for sharing between FilePublisher and FileConsumer
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.FilePath">
+            <summary>
+            Full path to the discovered file
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.ProcessorId">
+            <summary>
+            Processor ID that discovered the file
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.OrchestratedFlowEntityId">
+            <summary>
+            Orchestrated flow entity ID
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.StepId">
+            <summary>
+            Step ID in the workflow
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.ExecutionId">
+            <summary>
+            Unique execution ID for this specific file processing
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.PublishId">
+            <summary>
+            Unique publish ID for this message
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.CorrelationId">
+            <summary>
+            Correlation ID for tracking across the system
+            </summary>
+        </member>
+        <member name="P:Plugin.Utilities.Models.FileDiscoveryMessage.CreatedAt">
+            <summary>
+            When this message was created
+            </summary>
+        </member>
+    </members>
+</doc>

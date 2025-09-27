@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: design91-infrastructure
+  labels:
+    project: design91
+    access-method: "port-forward"
+    created-by: "design91-implementation"
+  annotations:
+    description: "design91 infrastructure services namespace"
+    contact: "design91-team"

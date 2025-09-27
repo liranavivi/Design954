@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../Processors/Processor.Base/Processor.Base.csproj" />
+    <ProjectReference Include="../../Shared/Shared.Models/Shared.Models.csproj" />
+    <ProjectReference Include="../../Shared/Shared.Correlation/Shared.Correlation.csproj" />
+    <ProjectReference Include="..\Plugin.Shared\Plugin.Shared.csproj" />
+  </ItemGroup>
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<AssemblyName>Plugin.AudioConverter</AssemblyName>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<OutputPath>..\..\Libraries\$(AssemblyName)\v$(AssemblyVersion)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<!-- Force copying of all NuGet dependencies -->
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<BaseOutputPath></BaseOutputPath>
+	</PropertyGroup>
+	<Target Name="CopyDependencies" AfterTargets="Build">
+		<ItemGroup>
+			<!-- Get all DLLs except our main assembly -->
+			<DependencyFiles Include="$(OutputPath)*.dll" Exclude="$(OutputPath)$(AssemblyName).dll" />
+		</ItemGroup>
+		<MakeDir Directories="$(OutputPath)Dependencies" />
+		<Copy SourceFiles="@(DependencyFiles)" DestinationFolder="$(OutputPath)Dependencies" SkipUnchangedFiles="true" />
+		<Message Text="Copied @(DependencyFiles-&gt;Count()) dependencies to $(OutputPath)Dependencies" Importance="high" />
+		<Message Text="Dependencies: @(DependencyFiles->'%(Filename)%(Extension)', '; ')" Importance="high" />
+	</Target>
+
+</Project>

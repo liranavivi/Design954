@@ -1,0 +1,27 @@
+[{
+  "_id": "5ac80288-89cc-436c-a7e3-d5b66fd7fd09",
+  "version": "1.1.1",
+  "name": "OrchestratedFlowFileReader",
+  "createdAt": {
+    "$date": "2025-07-27T06:50:09.267Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:50:09.267Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "OrchestratedFlow for FileReader",
+  "workflowId": "27a9519c-106b-4d6d-99af-5b09e56c57f8",
+  "assignmentIds": [
+    "36ca882f-58e1-4dc3-bf87-74108023aaae",
+    "bc9b29ca-d3d4-4fe9-aaaf-a01992c6edd4",
+    "bc9b29ca-d3d4-4fe9-aaaf-a01992c6ede4",
+    "bc9b29ca-d3d4-4fe9-aaaf-a01992c6ede5",
+    "bc9b29ca-d3d4-4fe9-aaaf-a01992c6ede7",
+    "36ca882f-58e1-4dc3-bf87-74108023aaaf",
+    "bc9b29ca-d3d4-4fe9-aaaf-a01992c6edd5"
+  ],
+  "cronExpression": "*/1 * * * * ?",
+  "isScheduleEnabled": true,
+  "isOneTimeExecution": true
+}]

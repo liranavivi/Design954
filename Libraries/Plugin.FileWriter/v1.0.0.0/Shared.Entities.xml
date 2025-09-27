@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Entities</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Entities.AddressEntity">
+            <summary>
+            Represents a address entity in the system.
+            Contains Address definition information including version, name, and JSON Address definition.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.AddressEntity.ConnectionString">
+            <summary>
+            Gets or sets the connection string value.
+            This provides connection information for the address entity.
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.AddressEntity.GetCompositeKey">
+            <summary>
+            Gets the composite key for this address entity.
+            The composite key is formed by connection string.
+            </summary>
+            <returns>A string in the format "ConnectionString" that uniquely identifies this address.</returns>
+        </member>
+        <member name="T:Shared.Entities.AssignmentEntity">
+            <summary>
+            Represents a assignment entity in the system.
+            Contains Assignment information including version, name, step ID, and entity IDs.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.AssignmentEntity.StepId">
+            <summary>
+            Gets or sets the step identifier.
+            This references the step that this assignment is associated with.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.AssignmentEntity.EntityIds">
+            <summary>
+            Gets or sets the list of entity identifiers.
+            This contains the IDs of entities associated with this assignment.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.Base.BaseEntity">
+            <summary>
+            Base entity class that provides common properties and functionality for all entities.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.Id">
+            <summary>
+            Gets or sets the unique identifier for the entity.
+            MongoDB will auto-generate this value when the entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.Version">
+            <summary>
+            Gets or sets the version of the schema.
+            This is used to track different versions of the same schema.
+            Must follow the pattern d.d.d where d is a digit (e.g., 1.0.0, 2.1.3).
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.Name">
+            <summary>
+            Gets or sets the name of the schema.
+            This provides a human-readable identifier for the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the entity was created.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the entity was last updated.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.CreatedBy">
+            <summary>
+            Gets or sets the user who created the entity.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.UpdatedBy">
+            <summary>
+            Gets or sets the user who last updated the entity.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.Description">
+            <summary>
+            Gets or sets the description of the entity.
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Base.BaseEntity.GetCompositeKey">
+            <summary>
+            Gets the composite key for this schema entity.
+            The composite key is formed by combining the version and name.
+            </summary>
+            <returns>A string in the format "Version_Name" that uniquely identifies this schema.</returns>
+        </member>
+        <member name="P:Shared.Entities.Base.BaseEntity.IsNew">
+            <summary>
+            Helper method to check if entity is new (no ID assigned yet).
+            </summary>
+            <returns>True if the entity is new (ID is empty), false otherwise.</returns>
+        </member>
+        <member name="T:Shared.Entities.DeliveryEntity">
+            <summary>
+            Represents a delivery entity in the system.
+            Contains Delivery payload information including version, name, and payload data.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.DeliveryEntity.Payload">
+            <summary>
+            Gets or sets the payload data.
+            This contains the actual delivery payload content.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.DeliveryEntity.SchemaId">
+            <summary>
+            Gets or sets the schema identifier.
+            This links the delivery entity to a specific schema.
+            Note: Required for Delivery entities, optional for Address entities (handled at controller level).
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.Enums.StepEntryCondition">
+            <summary>
+            Defines the entry conditions that determine when a step should be executed.
+            These conditions control the workflow execution logic and step transitions.
+            Direct mapping to ActivityExecutionStatus values for precise control.
+            </summary>
+        </member>
+        <member name="F:Shared.Entities.Enums.StepEntryCondition.PreviousProcessing">
+            <summary>
+            Execute only if the previous step is still processing.
+            Useful for monitoring or parallel processing scenarios.
+            </summary>
+        </member>
+        <member name="F:Shared.Entities.Enums.StepEntryCondition.PreviousCompleted">
+            <summary>
+            Execute only if the previous step completed successfully.
+            This is the standard behavior for most workflow steps.
+            </summary>
+        </member>
+        <member name="F:Shared.Entities.Enums.StepEntryCondition.PreviousFailed">
+            <summary>
+            Execute only if the previous step failed with an error.
+            Useful for error handling, cleanup, or alternative processing paths.
+            </summary>
+        </member>
+        <member name="F:Shared.Entities.Enums.StepEntryCondition.PreviousCancelled">
+            <summary>
+            Execute only if the previous step was cancelled.
+            Useful for cleanup or cancellation handling workflows.
+            </summary>
+        </member>
+        <member name="F:Shared.Entities.Enums.StepEntryCondition.Always">
+            <summary>
+            Always execute this step regardless of previous step results.
+            Useful for initialization, logging, or mandatory processing steps.
+            </summary>
+        </member>
+        <member name="F:Shared.Entities.Enums.StepEntryCondition.Never">
+            <summary>
+            Never execute this step - it is disabled.
+            Useful for temporarily disabling steps without removing them.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.OrchestratedFlowEntity">
+            <summary>
+            Represents a orchestratedflow entity in the system.
+            Contains OrchestratedFlow information including version, name, workflow reference, and assignment references.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.OrchestratedFlowEntity.WorkflowId">
+            <summary>
+            Gets or sets the workflow identifier.
+            This references the WorkflowEntity that this orchestrated flow is based on.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.OrchestratedFlowEntity.AssignmentIds">
+            <summary>
+            Gets or sets the collection of assignment identifiers.
+            This defines the assignments that are part of this orchestrated flow.
+            Can be empty if no assignments are currently associated.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.OrchestratedFlowEntity.CronExpression">
+            <summary>
+            Gets or sets the cron expression for scheduled execution.
+            This defines when the orchestrated flow should be automatically executed.
+            Can be null if no scheduling is required (manual execution only).
+            Example: "0 0 12 * * ?" for daily at noon
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.OrchestratedFlowEntity.IsScheduleEnabled">
+            <summary>
+            Gets or sets whether the scheduled execution is currently enabled.
+            This allows temporarily disabling scheduled execution without removing the cron expression.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.OrchestratedFlowEntity.IsOneTimeExecution">
+            <summary>
+            Gets or sets whether this orchestrated flow should execute only once.
+            When true, the scheduler job will automatically stop after the first execution.
+            The orchestration remains active for manual triggering.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.PluginEntity">
+            <summary>
+            Represents a plugin entity in the system.
+            Contains plugin information including version, name, schema validation settings, assembly details, and execution configuration.
+            Inherits from BaseEntity to provide core entity functionality without delivery-specific properties.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier.
+            This references the schema used for input validation (optional).
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier.
+            This references the schema used for output validation (optional).
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.EnableInputValidation">
+            <summary>
+            Gets or sets whether input validation is enabled for this plugin.
+            When true, input data will be validated against the InputSchema before processing.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.EnableOutputValidation">
+            <summary>
+            Gets or sets whether output validation is enabled for this plugin.
+            When true, output data will be validated against the OutputSchema after processing.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.AssemblyBasePath">
+            <summary>
+            Gets or sets the base path where the plugin assembly is located.
+            This is the directory path containing the plugin assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.AssemblyName">
+            <summary>
+            Gets or sets the name of the plugin assembly file.
+            This is the filename (with extension) of the assembly containing the plugin implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.AssemblyVersion">
+            <summary>
+            Gets or sets the version of the plugin assembly.
+            This represents the version of the compiled assembly file.
+            Must follow the format d.d.d.d where d is a digit (e.g., 1.0.0.0, 2.1.3.4).
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.TypeName">
+            <summary>
+            Gets or sets the fully qualified type name of the plugin class.
+            This is the complete type name including namespace that implements the IPlugin interface.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.ExecutionTimeoutMs">
+            <summary>
+            Gets or sets the execution timeout in milliseconds for this plugin.
+            If the plugin execution exceeds this timeout, it will be cancelled.
+            Default value is 30000ms (30 seconds).
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.PluginEntity.IsStateless">
+            <summary>
+            Gets or sets whether the plugin should be treated as stateless.
+            When true, plugin instances are always created fresh (no caching).
+            When false, plugin instances are cached and reused for better performance.
+            Default value is true for safety and predictability.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.ProcessorEntity">
+            <summary>
+            Represents a processor entity in the system.
+            Contains Processor information including version, name, input schema ID, and output schema ID.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.ProcessorEntity.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier.
+            This references the schema used for input validation.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.ProcessorEntity.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier.
+            This references the schema used for output validation.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.ProcessorEntity.ImplementationHash">
+            <summary>
+            Gets or sets the SHA-256 hash of the processor implementation.
+            Used for runtime integrity validation to ensure version consistency.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.SchemaEntity">
+            <summary>
+            Represents a schema entity in the system.
+            Contains schema definition information including version, name, and JSON schema definition.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.SchemaEntity.Definition">
+            <summary>
+            Gets or sets the JSON schema definition.
+            This contains the actual schema structure and validation rules.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.StepEntity">
+            <summary>
+            Represents a step entity in the system.
+            Contains Step information including version, name, processor reference, and workflow navigation.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.StepEntity.ProcessorId">
+            <summary>
+            Gets or sets the processor identifier.
+            This references the ProcessorEntity that will execute this step.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.StepEntity.NextStepIds">
+            <summary>
+            Gets or sets the collection of next step identifiers.
+            This defines the possible next steps in the workflow after this step completes.
+            Can be empty for terminal steps.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.StepEntity.EntryCondition">
+            <summary>
+            Gets or sets the entry condition that determines when this step should execute.
+            Controls the workflow execution logic and step transitions.
+            </summary>
+        </member>
+        <member name="T:Shared.Entities.Validation.NoEmptyGuidsAttribute">
+            <summary>
+            Validation attribute to ensure a collection of GUIDs does not contain any empty GUIDs (Guid.Empty).
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Validation.NoEmptyGuidsAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the NoEmptyGuidsAttribute class.
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Validation.NoEmptyGuidsAttribute.IsValid(System.Object)">
+            <summary>
+            Determines whether the specified value is valid.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <returns>true if the value is valid; otherwise, false.</returns>
+        </member>
+        <member name="M:Shared.Entities.Validation.NoEmptyGuidsAttribute.FormatErrorMessage(System.String)">
+            <summary>
+            Formats the error message that is displayed when validation fails.
+            </summary>
+            <param name="name">The name of the field that failed validation.</param>
+            <returns>The formatted error message.</returns>
+        </member>
+        <member name="T:Shared.Entities.Validation.NotEmptyCollectionAttribute">
+            <summary>
+            Validation attribute to ensure a collection is not null or empty.
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Validation.NotEmptyCollectionAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the NotEmptyCollectionAttribute class.
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Validation.NotEmptyCollectionAttribute.IsValid(System.Object)">
+            <summary>
+            Determines whether the specified value is valid.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <returns>true if the value is valid; otherwise, false.</returns>
+        </member>
+        <member name="M:Shared.Entities.Validation.NotEmptyCollectionAttribute.FormatErrorMessage(System.String)">
+            <summary>
+            Formats the error message that is displayed when validation fails.
+            </summary>
+            <param name="name">The name of the field that failed validation.</param>
+            <returns>The formatted error message.</returns>
+        </member>
+        <member name="T:Shared.Entities.Validation.NotEmptyGuidAttribute">
+            <summary>
+            Validation attribute to ensure a Guid is not empty (Guid.Empty).
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Validation.NotEmptyGuidAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the NotEmptyGuidAttribute class.
+            </summary>
+        </member>
+        <member name="M:Shared.Entities.Validation.NotEmptyGuidAttribute.IsValid(System.Object)">
+            <summary>
+            Determines whether the specified value is valid.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <returns>true if the value is valid; otherwise, false.</returns>
+        </member>
+        <member name="M:Shared.Entities.Validation.NotEmptyGuidAttribute.FormatErrorMessage(System.String)">
+            <summary>
+            Formats the error message that is displayed when validation fails.
+            </summary>
+            <param name="name">The name of the field that failed validation.</param>
+            <returns>The formatted error message.</returns>
+        </member>
+        <member name="T:Shared.Entities.WorkflowEntity">
+            <summary>
+            Represents a workflow entity in the system.
+            Contains Workflow information including version, name, and step references.
+            </summary>
+        </member>
+        <member name="P:Shared.Entities.WorkflowEntity.StepIds">
+            <summary>
+            Gets or sets the list of step IDs that belong to this workflow.
+            This creates referential integrity relationships with StepEntity records.
+            </summary>
+        </member>
+    </members>
+</doc>

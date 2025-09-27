@@ -1,0 +1,290 @@
+kubectl apply -f k8s/01-namespace/namespace.yaml
+kubectl apply -f k8s/02-storage/persistent-volumes.yaml
+kubectl apply -f k8s/03-configmaps/infrastructure-config.yaml
+kubectl apply -f k8s/04-database/mongodb.yaml
+kubectl apply -f k8s/05-messaging/zookeeper.yaml
+kubectl apply -f k8s/05-messaging/kafka.yaml
+kubectl apply -f k8s/05-messaging/rabbitmq.yaml
+kubectl apply -f k8s/05-messaging/kafka-ui.yaml
+kubectl apply -f k8s/06-cache/hazelcast-config.yaml
+kubectl apply -f k8s/06-cache/hazelcast.yaml
+kubectl apply -f k8s/07-managers/address-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/address-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/address-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/address-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/address-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/processor-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/processor-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/processor-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/processor-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/processor-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/schema-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/schema-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/schema-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/schema-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/schema-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/step-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/step-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/step-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/step-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/step-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/networkpolicy.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/configmap.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/deployment.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/hpa.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/networkpolicy.yaml
+kubectl apply -f k8s/09-observability/prometheus-config.yaml
+kubectl apply -f k8s/09-observability/prometheus.yaml
+kubectl apply -f k8s/09-observability/elasticsearch.yaml
+kubectl apply -f k8s/09-observability/kibana.yaml
+kubectl apply -f k8s/09-observability/otel-collector-config.yaml
+kubectl apply -f k8s/09-observability/otel-collector.yaml
+kubectl apply -f k8s/09-observability/grafana.yaml
+
+
+
+docker build -f Managers/Manager.Address/Dockerfile -t design91/address-manager:latest .
+docker build -f Managers/Manager.Assignment/Dockerfile -t design91/assignment-manager:latest .
+docker build -f Managers/Manager.Delivery/Dockerfile -t design91/delivery-manager:latest .
+docker build -f Managers/Manager.OrchestratedFlow/Dockerfile -t design91/orchestratedflow-manager:latest .
+docker build -f Managers/Manager.Orchestrator/Dockerfile -t design91/orchestrator-manager:latest .
+docker build -f Managers/Manager.Plugin/Dockerfile -t design91/plugin-manager:latest .
+docker build -f Managers/Manager.Processor/Dockerfile -t design91/processor-manager:latest .
+docker build -f Managers/Manager.Schema/Dockerfile -t design91/schema-manager:latest .
+docker build -f Managers/Manager.Step/Dockerfile -t design91/step-manager:latest .
+docker build -f Managers/Manager.Workflow/Dockerfile -t design91/workflow-manager:latest .
+
+kubectl port-forward -n design91-infrastructure service/design91-orchestrator-manager 5100:5100
+kubectl port-forward -n design91-infrastructure service/design91-processor-manager 5110:5110
+kubectl port-forward -n design91-infrastructure service/design91-address-manager 5120:5120
+kubectl port-forward -n design91-infrastructure service/design91-assignment-manager 5130:5130
+kubectl port-forward -n design91-infrastructure service/design91-orchestratedflow-manager 5140:5140
+kubectl port-forward -n design91-infrastructure service/design91-delivery-manager 5150:5150
+kubectl port-forward -n design91-infrastructure service/design91-schema-manager 5160:5160
+kubectl port-forward -n design91-infrastructure service/design91-step-manager 5170:5170
+kubectl port-forward -n design91-infrastructure service/design91-workflow-manager 5180:5180
+kubectl port-forward -n design91-infrastructure service/design91-plugin-manager 5190:5190
+
+
+kubectl port-forward -n design91-infrastructure service/design91-elasticsearch 9200:9200
+kubectl port-forward -n design91-infrastructure service/design91-elasticsearch 9300:9300
+kubectl port-forward -n design91-infrastructure service/design91-kibana 5601:5601
+kubectl port-forward -n design91-infrastructure service/design91-prometheus 9090:9090
+kubectl port-forward -n design91-infrastructure service/design91-grafana 3000:3000
+kubectl port-forward -n design91-infrastructure service/design91-otel-collector 4317:4317
+kubectl port-forward -n design91-infrastructure service/design91-otel-collector 4318:4318
+kubectl port-forward -n design91-infrastructure service/design91-otel-collector 8888:8888
+kubectl port-forward -n design91-infrastructure service/design91-otel-collector 8081:8081
+kubectl port-forward -n design91-infrastructure service/design91-otel-collector 8889:8889
+
+kubectl port-forward -n design91-infrastructure service/design91-hazelcast 5701:5701
+kubectl port-forward -n design91-infrastructure service/design91-hazelcast 8080:8080
+
+kubectl port-forward -n design91-infrastructure service/design91-zookeeper 2181:2181
+kubectl port-forward -n design91-infrastructure service/design91-kafka 9092:9092
+kubectl port-forward -n design91-infrastructure service/design91-rabbitmq 5672:5672
+kubectl port-forward -n design91-infrastructure service/design91-rabbitmq 15672:15672
+kubectl port-forward -n design91-infrastructure service/design91-kafka-ui 8080:8080
+
+kubectl port-forward -n design91-infrastructure service/design91-mongodb 27017:27017
+
+kubectl delete hpa design91-address-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-assignment-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-delivery-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-orchestratedflow-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-orchestrator-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-plugin-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-pluginloader-processor-hpa -n design91-infrastructure
+kubectl delete hpa design91-processor-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-schema-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-step-manager-hpa -n design91-infrastructure
+kubectl delete hpa design91-workflow-manager-hpa -n design91-infrastructure
+kubectl delete deployment design91-address-manager -n design91-infrastructure
+kubectl delete deployment design91-assignment-manager -n design91-infrastructure
+kubectl delete deployment design91-delivery-manager -n design91-infrastructure
+kubectl delete deployment design91-elasticsearch -n design91-infrastructure
+kubectl delete deployment design91-grafana -n design91-infrastructure
+kubectl delete deployment design91-hazelcast -n design91-infrastructure
+kubectl delete deployment design91-kafka -n design91-infrastructure
+kubectl delete deployment design91-kafka-ui -n design91-infrastructure
+kubectl delete deployment design91-kibana -n design91-infrastructure
+kubectl delete deployment design91-mongodb -n design91-infrastructure
+kubectl delete deployment design91-orchestratedflow-manager -n design91-infrastructure
+kubectl delete deployment design91-orchestrator-manager -n design91-infrastructure
+kubectl delete deployment design91-otel-collector -n design91-infrastructure
+kubectl delete deployment design91-plugin-manager -n design91-infrastructure
+kubectl delete deployment design91-pluginloader-processor -n design91-infrastructure
+kubectl delete deployment design91-processor-manager -n design91-infrastructure
+kubectl delete deployment design91-prometheus -n design91-infrastructure
+kubectl delete deployment design91-rabbitmq -n design91-infrastructure
+kubectl delete deployment design91-schema-manager -n design91-infrastructure
+kubectl delete deployment design91-step-manager -n design91-infrastructure
+kubectl delete deployment design91-workflow-manager -n design91-infrastructure
+kubectl delete deployment design91-zookeeper -n design91-infrastructure
+kubectl delete service design91-address-manager -n design91-infrastructure
+kubectl delete service design91-assignment-manager -n design91-infrastructure
+kubectl delete service design91-delivery-manager -n design91-infrastructure
+kubectl delete service design91-elasticsearch -n design91-infrastructure
+kubectl delete service design91-grafana -n design91-infrastructure
+kubectl delete service design91-hazelcast -n design91-infrastructure
+kubectl delete service design91-kafka -n design91-infrastructure
+kubectl delete service design91-kafka-ui -n design91-infrastructure
+kubectl delete service design91-kibana -n design91-infrastructure
+kubectl delete service design91-mongodb -n design91-infrastructure
+kubectl delete service design91-orchestratedflow-manager -n design91-infrastructure
+kubectl delete service design91-orchestrator-manager -n design91-infrastructure
+kubectl delete service design91-otel-collector -n design91-infrastructure
+kubectl delete service design91-plugin-manager -n design91-infrastructure
+kubectl delete service design91-processor-manager -n design91-infrastructure
+kubectl delete service design91-prometheus -n design91-infrastructure
+kubectl delete service design91-rabbitmq -n design91-infrastructure
+kubectl delete service design91-schema-manager -n design91-infrastructure
+kubectl delete service design91-step-manager -n design91-infrastructure
+kubectl delete service design91-workflow-manager -n design91-infrastructure
+kubectl delete service design91-zookeeper -n design91-infrastructure
+kubectl delete configmap design91-address-manager-config -n design91-infrastructure
+kubectl delete configmap design91-assignment-manager-config -n design91-infrastructure
+kubectl delete configmap design91-delivery-manager-config -n design91-infrastructure
+kubectl delete configmap design91-hazelcast-config -n design91-infrastructure
+kubectl delete configmap design91-infrastructure-config -n design91-infrastructure
+kubectl delete configmap design91-orchestratedflow-manager-config -n design91-infrastructure
+kubectl delete configmap design91-orchestrator-manager-config -n design91-infrastructure
+kubectl delete configmap design91-otel-collector-config -n design91-infrastructure
+kubectl delete configmap design91-plugin-manager-config -n design91-infrastructure
+kubectl delete configmap design91-pluginloader-processor-config -n design91-infrastructure
+kubectl delete configmap design91-processor-manager-config -n design91-infrastructure
+kubectl delete configmap design91-prometheus-config -n design91-infrastructure
+kubectl delete configmap design91-schema-manager-config -n design91-infrastructure
+kubectl delete configmap design91-step-manager-config -n design91-infrastructure
+kubectl delete configmap design91-workflow-manager-config -n design91-infrastructure
+kubectl delete pvc design91-elasticsearch-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-grafana-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-kafka-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-mongodb-config-pvc -n design91-infrastructure
+kubectl delete pvc design91-mongodb-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-prometheus-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-rabbitmq-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-zookeeper-data-pvc -n design91-infrastructure
+kubectl delete pvc design91-zookeeper-logs-pvc -n design91-infrastructure
+kubectl delete pv pvc-4699cffe-9b45-4d4c-871e-0d439711097a
+kubectl delete pv pvc-9dbdd395-7f48-4e21-9643-1b78e81265bc
+kubectl delete pv pvc-9f85deca-5aad-4f9e-a8a5-8eca8c64bd80
+kubectl delete pv pvc-ae7bc10c-ddda-44ac-adec-998481050b8e
+kubectl delete pv pvc-b04ec93b-8c9e-4d20-9789-38144e49dd9f
+kubectl delete pv pvc-b2df99ea-d0ef-4442-9c92-6f9d10699c0f
+kubectl delete pv pvc-caea96a1-bfa6-4f9e-b204-badeda225dfb
+kubectl delete pv pvc-ea5d980c-b681-49af-8c3b-59c5590e75d2
+kubectl delete pv pvc-f9985759-9c76-440d-8edf-c223b1fcfedd
+
+kubectl apply -f k8s/01-namespace/namespace.yaml
+kubectl apply -f k8s/02-storage/persistent-volumes.yaml
+kubectl apply -f k8s/03-configmaps/infrastructure-config.yaml
+kubectl apply -f k8s/04-database/mongodb.yaml
+kubectl apply -f k8s/05-messaging/zookeeper.yaml
+kubectl apply -f k8s/05-messaging/kafka.yaml
+kubectl apply -f k8s/05-messaging/rabbitmq.yaml
+kubectl apply -f k8s/05-messaging/kafka-ui.yaml
+kubectl apply -f k8s/06-cache/hazelcast-config.yaml
+kubectl apply -f k8s/06-cache/hazelcast.yaml
+kubectl apply -f k8s/07-managers/address-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/address-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/address-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/address-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/address-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/assignment-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/delivery-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/orchestratedflow-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/orchestrator-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/plugin-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/processor-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/processor-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/processor-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/processor-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/processor-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/schema-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/schema-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/schema-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/schema-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/schema-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/step-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/step-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/step-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/step-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/step-manager/networkpolicy.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/configmap.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/deployment.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/service-internal.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/hpa.yaml
+kubectl apply -f k8s/07-managers/workflow-manager/networkpolicy.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/configmap.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/deployment.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/hpa.yaml
+kubectl apply -f k8s/08-processors/pluginloader-processor/networkpolicy.yaml
+kubectl apply -f k8s/09-observability/prometheus-config.yaml
+kubectl apply -f k8s/09-observability/prometheus.yaml
+kubectl apply -f k8s/09-observability/elasticsearch.yaml
+kubectl apply -f k8s/09-observability/kibana.yaml
+kubectl apply -f k8s/09-observability/otel-collector-config.yaml
+kubectl apply -f k8s/09-observability/otel-collector.yaml
+kubectl apply -f k8s/09-observability/grafana.yaml
+docker tag design90-address-manager:latest design91/address-manager:latest
+docker tag design90-assignment-manager:latest design91/assignment-manager:latest
+docker tag design90-delivery-manager:latest design91/delivery-manager:latest
+docker tag design90-orchestratedflow-manager:latest design91/orchestratedflow-manager:latest
+docker tag design90-orchestrator-manager:latest design91/orchestrator-manager:latest
+docker tag design90-plugin-manager:latest design91/plugin-manager:latest
+docker tag design90-processor-manager:latest design91/processor-manager:latest
+docker tag design90-schema-manager:latest design91/schema-manager:latest
+docker tag design90-step-manager:latest design91/step-manager:latest
+docker tag design90-workflow-manager:latest design91/workflow-manager:latest
+docker tag design90-pluginloader-processor:latest design91/pluginloader-processor:latest
+kubectl rollout restart deployment -n design91-infrastructure

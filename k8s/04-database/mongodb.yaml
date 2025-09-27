@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-mongodb
+  namespace: design91-infrastructure
+  labels:
+    app: design91-mongodb
+    component: database
+    project: design91
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate  # Prevents concurrent pods accessing same PVC
+  selector:
+    matchLabels:
+      app: design91-mongodb
+  template:
+    metadata:
+      labels:
+        app: design91-mongodb
+        component: database
+        project: design91
+    spec:
+      terminationGracePeriodSeconds: 60  # Allow graceful MongoDB shutdown
+      containers:
+      - name: mongodb
+        image: mongo:7.0
+        ports:
+        - containerPort: 27017
+          name: mongodb
+        env:
+        - name: MONGO_INITDB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: design91-infrastructure-config
+              key: MongoDB__DatabaseName
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db
+        - name: mongodb-config
+          mountPath: /data/configdb
+        livenessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 15
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "mongod --shutdown"]
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: design91-mongodb-data-pvc
+      - name: mongodb-config
+        persistentVolumeClaim:
+          claimName: design91-mongodb-config-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-mongodb
+  namespace: design91-infrastructure
+  labels:
+    app: design91-mongodb
+    component: database
+    project: design91
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "27017"
+    port-forward.design91.io/description: "MongoDB database access"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 27017
+    targetPort: 27017
+    protocol: TCP
+    name: mongodb
+  selector:
+    app: design91-mongodb

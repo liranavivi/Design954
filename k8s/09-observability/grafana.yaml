@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: design91-grafana
+  namespace: design91-infrastructure
+  labels:
+    app: design91-grafana
+    component: dashboard
+    project: design91
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: design91-grafana
+  template:
+    metadata:
+      labels:
+        app: design91-grafana
+        component: dashboard
+        project: design91
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:10.1.0
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: GF_SECURITY_ADMIN_USER
+          value: "admin"
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: "admin123"
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        volumeMounts:
+        - name: grafana-data
+          mountPath: /var/lib/grafana
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "75m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+      volumes:
+      - name: grafana-data
+        persistentVolumeClaim:
+          claimName: design91-grafana-data-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-grafana
+  namespace: design91-infrastructure
+  labels:
+    app: design91-grafana
+    component: dashboard
+    project: design91
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "3000"
+    port-forward.design91.io/description: "Grafana monitoring dashboards"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: http
+  selector:
+    app: design91-grafana

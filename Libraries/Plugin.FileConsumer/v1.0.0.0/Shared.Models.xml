@@ -1,0 +1,685 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Models</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Models.ActivityExecutionStatus">
+            <summary>
+            Status of activity execution
+            </summary>
+        </member>
+        <member name="F:Shared.Models.ActivityExecutionStatus.Processing">
+            <summary>
+            Activity is currently being processed
+            </summary>
+        </member>
+        <member name="F:Shared.Models.ActivityExecutionStatus.Completed">
+            <summary>
+            Activity completed successfully
+            </summary>
+        </member>
+        <member name="F:Shared.Models.ActivityExecutionStatus.Failed">
+            <summary>
+            Activity failed with an error
+            </summary>
+        </member>
+        <member name="F:Shared.Models.ActivityExecutionStatus.Cancelled">
+            <summary>
+            Activity was cancelled
+            </summary>
+        </member>
+        <member name="T:Shared.Models.AssignmentModel">
+            <summary>
+            Base model for assignment entities
+            </summary>
+        </member>
+        <member name="P:Shared.Models.AssignmentModel.EntityId">
+            <summary>
+            Entity ID of the assignment
+            </summary>
+        </member>
+        <member name="P:Shared.Models.AssignmentModel.Name">
+            <summary>
+            Name of the entity
+            </summary>
+        </member>
+        <member name="P:Shared.Models.AssignmentModel.Version">
+            <summary>
+            Version of the entity
+            </summary>
+        </member>
+        <member name="P:Shared.Models.AssignmentModel.Payload">
+            <summary>
+            Payload data for the entity
+            </summary>
+        </member>
+        <member name="P:Shared.Models.AssignmentModel.SchemaId">
+            <summary>
+            Schema ID for the entity
+            </summary>
+        </member>
+        <member name="T:Shared.Models.AddressAssignmentModel">
+            <summary>
+            Assignment model for address entities
+            </summary>
+        </member>
+        <member name="P:Shared.Models.AddressAssignmentModel.ConnectionString">
+            <summary>
+            Connection string for the address
+            </summary>
+        </member>
+        <member name="T:Shared.Models.DeliveryAssignmentModel">
+            <summary>
+            Assignment model for delivery entities
+            </summary>
+        </member>
+        <member name="T:Shared.Models.PluginAssignmentModel">
+            <summary>
+            Assignment model for plugin entities
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier.
+            This references the schema used for input validation.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier.
+            This references the schema used for output validation.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.InputSchemaDefinition">
+            <summary>
+            Gets or sets the input schema definition.
+            This contains the actual JSON schema definition for input validation at the processor side.
+            Populated from the schema referenced by InputSchemaId for future validation implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.OutputSchemaDefinition">
+            <summary>
+            Gets or sets the output schema definition.
+            This contains the actual JSON schema definition for output validation at the processor side.
+            Populated from the schema referenced by OutputSchemaId for future validation implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.EnableInputValidation">
+            <summary>
+            Gets or sets whether input validation is enabled for this plugin.
+            When true, input data will be validated against the InputSchema before processing.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.EnableOutputValidation">
+            <summary>
+            Gets or sets whether output validation is enabled for this plugin.
+            When true, output data will be validated against the OutputSchema after processing.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.AssemblyBasePath">
+            <summary>
+            Gets or sets the base path where the plugin assembly is located.
+            This is the directory path containing the plugin assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.AssemblyName">
+            <summary>
+            Gets or sets the name of the plugin assembly file.
+            This is the filename (with extension) of the assembly containing the plugin implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.AssemblyVersion">
+            <summary>
+            Gets or sets the version of the plugin assembly.
+            This represents the version of the compiled assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.TypeName">
+            <summary>
+            Gets or sets the fully qualified type name of the plugin class.
+            This is the complete type name including namespace that implements the IPlugin interface.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.ExecutionTimeoutMs">
+            <summary>
+            Gets or sets the execution timeout in milliseconds for this plugin.
+            If the plugin execution exceeds this timeout, it will be cancelled.
+            Default value is 30000ms (30 seconds).
+            </summary>
+        </member>
+        <member name="P:Shared.Models.PluginAssignmentModel.IsStateless">
+            <summary>
+            Gets or sets whether the plugin should be treated as stateless.
+            When true, plugin instances are always created fresh (no caching).
+            When false, plugin instances are cached and reused for better performance.
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorHealthResponse">
+            <summary>
+            Unified health status response for processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.CorrelationId">
+            <summary>
+            ID of the correlation
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.HealthCheckId">
+            <summary>
+            ID of the healthCheck
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.ProcessorId">
+            <summary>
+            ID of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.Status">
+            <summary>
+            Overall health status
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.Message">
+            <summary>
+            Detailed health message
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.LastUpdated">
+            <summary>
+            Timestamp when health was last updated as Unix time
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.HealthCheckInterval">
+            <summary>
+            Health check interval in seconds from ProcessorHealthMonitor configuration.
+            Indicates how frequently health checks are performed for this processor.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.ExpiresAt">
+            <summary>
+            Timestamp when this health entry expires (optional for internal use)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.ReportingPodId">
+            <summary>
+            ID of the pod that reported this health status (optional for internal use)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.Uptime">
+            <summary>
+            Processor uptime since last restart
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.Metadata">
+            <summary>
+            Processor metadata information
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.PerformanceMetrics">
+            <summary>
+            Performance metrics for the processor (optional)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.HealthChecks">
+            <summary>
+            Detailed health check results
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.IsExpired">
+            <summary>
+            Indicates if this health entry is still valid based on TTL
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthResponse.RetrievedAt">
+            <summary>
+            Timestamp when this response was generated (optional for API responses)
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorsHealthResponse">
+            <summary>
+            Response model for multiple processors health status
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthResponse.OrchestratedFlowId">
+            <summary>
+            The orchestrated flow ID this health check is for
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthResponse.Processors">
+            <summary>
+            Dictionary of processor health statuses with processor ID as key
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthResponse.Summary">
+            <summary>
+            Summary of overall health status
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthResponse.RetrievedAt">
+            <summary>
+            Timestamp when this response was generated
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorsHealthSummary">
+            <summary>
+            Summary of processors health status
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.TotalProcessors">
+            <summary>
+            Total number of processors
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.HealthyProcessors">
+            <summary>
+            Number of healthy processors
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.DegradedProcessors">
+            <summary>
+            Number of degraded processors
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.UnhealthyProcessors">
+            <summary>
+            Number of unhealthy processors
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.NoHealthDataProcessors">
+            <summary>
+            Number of processors with no health data
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.OverallStatus">
+            <summary>
+            Overall health status based on all processors
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorsHealthSummary.ProblematicProcessors">
+            <summary>
+            List of processor IDs that are unhealthy or have no health data
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorStatisticsResponse">
+            <summary>
+            Statistics response for processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.ProcessorId">
+            <summary>
+            ID of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.TotalActivitiesProcessed">
+            <summary>
+            Total number of activities processed
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.SuccessfulActivities">
+            <summary>
+            Number of successful activities
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.FailedActivities">
+            <summary>
+            Number of failed activities
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.AverageExecutionTime">
+            <summary>
+            Average execution time for activities
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.PeriodStart">
+            <summary>
+            Start of the statistics period
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.PeriodEnd">
+            <summary>
+            End of the statistics period
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.CollectedAt">
+            <summary>
+            When these statistics were collected
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorStatisticsResponse.AdditionalMetrics">
+            <summary>
+            Additional metrics
+            </summary>
+        </member>
+        <member name="T:Shared.Models.HealthStatus">
+            <summary>
+            Health status enumeration
+            </summary>
+        </member>
+        <member name="F:Shared.Models.HealthStatus.Healthy">
+            <summary>
+            Service is healthy and operational
+            </summary>
+        </member>
+        <member name="F:Shared.Models.HealthStatus.Degraded">
+            <summary>
+            Service is degraded but still operational
+            </summary>
+        </member>
+        <member name="F:Shared.Models.HealthStatus.Unhealthy">
+            <summary>
+            Service is unhealthy and may not be operational
+            </summary>
+        </member>
+        <member name="T:Shared.Models.HealthCheckResult">
+            <summary>
+            Individual health check result
+            </summary>
+        </member>
+        <member name="P:Shared.Models.HealthCheckResult.Status">
+            <summary>
+            Status of this specific health check
+            </summary>
+        </member>
+        <member name="P:Shared.Models.HealthCheckResult.Description">
+            <summary>
+            Description of the health check
+            </summary>
+        </member>
+        <member name="P:Shared.Models.HealthCheckResult.Data">
+            <summary>
+            Additional data for this health check
+            </summary>
+        </member>
+        <member name="P:Shared.Models.HealthCheckResult.Duration">
+            <summary>
+            Duration of the health check
+            </summary>
+        </member>
+        <member name="P:Shared.Models.HealthCheckResult.Exception">
+            <summary>
+            Exception details if the health check failed
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ManagerConfiguration">
+            <summary>
+            Configuration model for manager application settings
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ManagerConfiguration.Version">
+            <summary>
+            Version of the manager (used in meter naming)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ManagerConfiguration.Name">
+            <summary>
+            Name of the manager (used in meter naming)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ManagerConfiguration.Description">
+            <summary>
+            Description of the manager functionality
+            </summary>
+        </member>
+        <member name="M:Shared.Models.ManagerConfiguration.GetCompositeKey">
+            <summary>
+            Gets the composite key for this manager
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessedActivityData">
+            <summary>
+            Data structure for returning processed activity data from processors
+            Public version of BaseProcessorApplication.ProcessedActivityData for use in consumers
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessedActivityData.Result">
+            <summary>
+            Result message from processing
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessedActivityData.Status">
+            <summary>
+            Status of the processing
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessedActivityData.Data">
+            <summary>
+            Processed data object (will be serialized to JSON)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessedActivityData.ProcessorName">
+            <summary>
+            Name of the processor that handled this activity
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessedActivityData.Version">
+            <summary>
+            Version of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessedActivityData.ExecutionId">
+            <summary>
+            Execution ID for this activity instance
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorHealthCacheEntry">
+            <summary>
+            Represents a processor health entry stored in the distributed cache.
+            Designed for processor-centric health monitoring with last-writer-wins strategy.
+            Multiple pods can report health for the same processor without coordination.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.CorrelationId">
+            <summary>
+            Correlation identifier for tracing health check events across systems.
+            Used to correlate health data in cache with logs in Elasticsearch.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.HealthCheckId">
+            <summary>
+            Unique identifier for this specific health check execution.
+            Used to trace individual health check runs in logs and monitoring systems.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.ProcessorId">
+            <summary>
+            Unique identifier of the processor (not the pod).
+            Multiple pods running the same processor share this ID.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.Status">
+            <summary>
+            Current health status of the processor.
+            Represents the overall processor health, not individual pod health.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.LastUpdated">
+            <summary>
+            Timestamp when this health entry was last updated as Unix time.
+            Used for last-writer-wins conflict resolution.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.HealthCheckInterval">
+            <summary>
+            Health check interval in seconds from ProcessorHealthMonitor configuration.
+            Indicates how frequently health checks are performed for this processor.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.ExpiresAt">
+            <summary>
+            Timestamp when this entry expires and should be considered stale.
+            Prevents stale health data from being used by orchestrators.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.ReportingPodId">
+            <summary>
+            Identifier of the pod that reported this health status.
+            Used for debugging and tracing, not for health decisions.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.HealthChecks">
+            <summary>
+            Detailed health check results
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.Metadata">
+            <summary>
+            Processor metadata information.
+            Contains processor-level information, not pod-specific details.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.PerformanceMetrics">
+            <summary>
+            Performance metrics for the processor.
+            Aggregated metrics that represent processor performance.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.Message">
+            <summary>
+            Overall health message describing the processor status.
+            Human-readable description of health status and any issues.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.Uptime">
+            <summary>
+            Processor uptime since last restart.
+            Represents how long the processor has been running.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.IsExpired">
+            <summary>
+            Indicates if this health entry is still valid based on TTL.
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorHealthCacheEntry.TimeToExpiration">
+            <summary>
+            Time remaining until this health entry expires.
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorMetadata">
+            <summary>
+            Processor metadata information
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorMetadata.Name">
+            <summary>
+            Name of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorMetadata.Version">
+            <summary>
+            Version of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorMetadata.StartTime">
+            <summary>
+            Timestamp when the processor started
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorMetadata.HostName">
+            <summary>
+            Host machine name where the processor is running
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorMetadata.ProcessId">
+            <summary>
+            Process ID of the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorMetadata.Environment">
+            <summary>
+            Environment where the processor is running (Development, Production, etc.)
+            </summary>
+        </member>
+        <member name="T:Shared.Models.ProcessorPerformanceMetrics">
+            <summary>
+            Performance metrics for the processor
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.CpuUsagePercent">
+            <summary>
+            Current CPU usage percentage (0-100)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.MemoryUsageBytes">
+            <summary>
+            Current memory usage in bytes
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.MemoryUsageMB">
+            <summary>
+            Current memory usage in MB for easier reading
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.TotalActivitiesProcessed">
+            <summary>
+            Total number of activities processed since startup
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.SuccessfulActivities">
+            <summary>
+            Number of successful activities processed
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.FailedActivities">
+            <summary>
+            Number of failed activities processed
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.ActivitiesPerMinute">
+            <summary>
+            Activities processed per minute (throughput)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.AverageExecutionTimeMs">
+            <summary>
+            Average activity execution time in milliseconds
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.SuccessRatePercent">
+            <summary>
+            Success rate percentage (0-100)
+            </summary>
+        </member>
+        <member name="P:Shared.Models.ProcessorPerformanceMetrics.CollectedAt">
+            <summary>
+            Timestamp when these metrics were collected
+            </summary>
+        </member>
+        <member name="T:Shared.Services.Models.SchemaValidationConfiguration">
+            <summary>
+            Configuration for schema validation
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Models.SchemaValidationConfiguration.EnableInputValidation">
+            <summary>
+            Enable input schema validation for main processor input data
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Models.SchemaValidationConfiguration.EnableOutputValidation">
+            <summary>
+            Enable output schema validation
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Models.SchemaValidationConfiguration.LogValidationWarnings">
+            <summary>
+            Log validation warnings
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Models.SchemaValidationConfiguration.LogValidationErrors">
+            <summary>
+            Log validation errors
+            </summary>
+        </member>
+        <member name="P:Shared.Services.Models.SchemaValidationConfiguration.IncludeValidationTelemetry">
+            <summary>
+            Include validation telemetry
+            </summary>
+        </member>
+        <member name="T:Processor.Base.Models.ProcessedFileInfo">
+            <summary>
+            File metadata and content information
+            </summary>
+        </member>
+    </members>
+</doc>

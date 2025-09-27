@@ -1,0 +1,51 @@
+[{
+  "_id": "2f5b59e4-0668-436c-a2bd-1395fd77ffda",
+  "version": "1.0.0",
+  "name": "PreFileReaderAddress",
+  "createdAt": {
+    "$date": "2025-07-27T06:22:42.569Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:22:42.569Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Address configuration for CompressedFileReader processor",
+  "payload": "{\"searchPattern\":\"*.{txt,zip,rar,7z,gz,tar}\",\"maxFilesToProcess\":20}",
+  "schemaId": "550e8400-e29b-41d4-a716-446655440001",
+  "connectionString": "/app/input"
+},
+{
+  "_id": "e545751f-69c3-43fc-91eb-b8ffd3f126c9",
+  "version": "1.0.0",
+  "name": "XmlFileWriterAddress",
+  "createdAt": {
+    "$date": "2025-08-07T07:21:50.742Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-07T07:21:50.742Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Xml Address configuration",
+  "payload": "{\"searchPattern\":\"*.{txt,xml,zip,rar,7z,gz,tar}\",\"processingMode\":\"LeaveUnchanged\",\"processedExtension\":\".written\",\"backupFolder\":\"/app/output/backup\",\"minExtractedContentSize\":0,\"maxExtractedContentSize\":9223372036854775807}",
+  "schemaId": "550e8400-e29b-41d4-a716-446655440004",
+  "connectionString": "/app/output/xml_output"
+},
+{
+  "_id": "e545751f-69c3-43fc-91eb-b8ffd3f126c8",
+  "version": "1.0.0",
+  "name": "Mp3FileWriterAddress",
+  "createdAt": {
+    "$date": "2025-08-07T07:21:50.742Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-07T07:21:50.742Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Mp3 Address configuration",
+  "payload": "{\"searchPattern\":\"*.{txt,mp3,zip,rar,7z,gz,tar}\",\"processingMode\":\"LeaveUnchanged\",\"processedExtension\":\".written\",\"backupFolder\":\"/app/output/backup\",\"minExtractedContentSize\":0,\"maxExtractedContentSize\":9223372036854775807}",
+  "schemaId": "550e8400-e29b-41d4-a716-446655440004",
+  "connectionString": "/app/output/mp3_output"
+}]

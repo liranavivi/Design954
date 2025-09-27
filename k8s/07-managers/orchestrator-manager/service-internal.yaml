@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: design91-orchestrator-manager
+  namespace: design91-infrastructure
+  labels:
+    app: design91-orchestrator-manager
+    component: manager
+    project: design91
+    manager-type: orchestrator
+    service-type: internal
+    port-forward: "enabled"
+  annotations:
+    port-forward.design91.io/ports: "5100"
+    port-forward.design91.io/description: "Orchestrator Manager API access"
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5100
+    targetPort: 5100
+    protocol: TCP
+    name: http
+  selector:
+    app: design91-orchestrator-manager
+  sessionAffinity: None
+  
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: design91-orchestrator-manager
+  namespace: design91-infrastructure
+  labels:
+    app: design91-orchestrator-manager
+    component: manager
+    project: design91
+# Endpoints will be automatically populated by Kubernetes based on pod readiness

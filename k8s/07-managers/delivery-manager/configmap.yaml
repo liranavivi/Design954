@@ -1,0 +1,59 @@
+# =============================================================================
+# DELIVERY MANAGER SERVICE-SPECIFIC CONFIGURATION
+# =============================================================================
+# This ConfigMap contains ONLY delivery manager specific settings.
+# 
+# Shared configurations are located in:
+# - Infrastructure: k8s/03-configmaps/infrastructure-config.yaml
+# - Service Registry: k8s/03-configmaps/service-registry-config.yaml
+# 
+# Configuration Precedence (from lowest to highest):
+# 1. Infrastructure ConfigMap (k8s/03-configmaps/infrastructure-config.yaml)
+# 2. Service Registry ConfigMap (k8s/03-configmaps/service-registry-config.yaml)
+# 3. Shared secrets (handled separately)
+# 4. Service-specific ConfigMap (this file)
+# 5. Direct env vars (overrides)
+# =============================================================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: design91-delivery-manager-config
+  namespace: design91-infrastructure
+  labels:
+    app: design91-delivery-manager
+    component: configuration
+    project: design91
+    manager-type: delivery
+    layer: service-specific
+data:
+  # ASP.NET Core Environment (service-specific)
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:5150"
+
+  # MongoDB Configuration (service-specific database name)
+  MongoDB__DatabaseName: "ManagerDeliveryDB"
+  MongoDB__MaxConnectionPoolSize: "100"
+  MongoDB__ConnectTimeout: "30s"
+  MongoDB__ServerSelectionTimeout: "30s"
+  MongoDB__SocketTimeout: "30s"
+
+  # OpenTelemetry Configuration (service-specific)
+  OpenTelemetry__ServiceName: "DeliveryManager"
+  OpenTelemetry__ServiceVersion: "1.0.0"
+  OpenTelemetry__UseConsoleExporter: "true"
+
+  # Manager Configuration (service-specific)
+  ManagerConfiguration__Version: "1.0.0"
+  ManagerConfiguration__Name: "DeliveryManager"
+  ManagerConfiguration__Description: "Manager for delivery entities and operations"
+
+  # Kestrel Configuration (service-specific endpoints)
+  DELIVERY_MANAGER_HTTP_URL: "http://0.0.0.0:5150"
+  DELIVERY_MANAGER_HTTPS_URL: "https://0.0.0.0:5151"
+
+  # Logging Configuration (service-specific)
+  Logging__LogLevel__Default: "Information"
+  Logging__LogLevel__Microsoft.AspNetCore: "Warning"
+  Logging__LogLevel__MassTransit: "Information"
+  Logging__LogLevel__MongoDB: "Information"

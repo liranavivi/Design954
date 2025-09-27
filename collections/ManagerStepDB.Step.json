@@ -1,0 +1,130 @@
+[{
+  "_id": "783b5efe-955c-4474-9bf6-4e73032e8903",
+  "version": "1.1.1",
+  "name": "StepFileReader",
+  "createdAt": {
+    "$date": "2025-07-27T06:35:40.724Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:35:40.724Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for FileReader",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [
+    "38d2b4f9-68ed-48d5-bbc5-74b165735585"
+  ],
+  "entryCondition": "PreviousCompleted"
+},
+{
+  "_id": "38d2b4f9-68ed-48d5-bbc5-74b165735584",
+  "version": "1.1.1",
+  "name": "StepXmlFileWriter",
+  "createdAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for XmlFileWriter",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [],
+  "entryCondition": "PreviousCompleted"
+},
+{
+  "_id": "38d2b4f9-68ed-48d5-bbc5-74b165735585",
+  "version": "1.0.0",
+  "name": "StepStandardizer",
+  "createdAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for Standardizer",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [
+    "38d2b4f9-68ed-48d5-bbc5-74b165735586"
+  ],
+  "entryCondition": "PreviousCompleted"
+},
+{
+  "_id": "38d2b4f9-68ed-48d5-bbc5-74b165735586",
+  "version": "1.0.0",
+  "name": "StepEnricher",
+  "createdAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for Enricher",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [
+    "38d2b4f9-68ed-48d5-bbc5-74b165735587"
+  ],
+  "entryCondition": "PreviousCompleted"
+},
+{
+  "_id": "38d2b4f9-68ed-48d5-bbc5-74b165735587",
+  "version": "1.0.0",
+  "name": "StepAudioConverter",
+  "createdAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for AudioConverter",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [
+    "38d2b4f9-68ed-48d5-bbc5-74b165735584",
+    "38d2b4f9-68ed-48d5-bbc5-74b165735588"
+  ],
+  "entryCondition": "PreviousCompleted"
+},
+{
+  "_id": "783b5efe-955c-4474-9bf6-4e73032e8904",
+  "version": "1.0.0",
+  "name": "StepPreFileReader",
+  "createdAt": {
+    "$date": "2025-07-27T06:35:40.724Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T06:35:40.724Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for PreFileReader",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [
+    "783b5efe-955c-4474-9bf6-4e73032e8903"
+  ],
+  "entryCondition": "PreviousCompleted"
+},
+{
+  "_id": "38d2b4f9-68ed-48d5-bbc5-74b165735588",
+  "version": "1.1.1",
+  "name": "StepMp3FileWriter",
+  "createdAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T12:43:10.184Z"
+  },
+  "createdBy": "Anonymous",
+  "updatedBy": "string",
+  "description": "Step test for Mp3FileWriter",
+  "processorId": "985f4552-308f-4151-9587-b1a8da34ddd6",
+  "nextStepIds": [],
+  "entryCondition": "PreviousCompleted"
+}]

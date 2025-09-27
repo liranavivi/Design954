@@ -1,0 +1,2868 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.MassTransit</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.MassTransit.Commands.CreateAddressCommand">
+            <summary>
+            Command to create a new address entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.Version">
+            <summary>
+            Gets or sets the version of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.Name">
+            <summary>
+            Gets or sets the name of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.Description">
+            <summary>
+            Gets or sets the description of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.ConnectionString">
+            <summary>
+            Gets or sets the connection string value.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.Payload">
+            <summary>
+            Gets or sets the payload.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.SchemaId">
+            <summary>
+            Gets or sets the schema identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAddressCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateAddressCommand">
+            <summary>
+            Command to update an existing address entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the address to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.Version">
+            <summary>
+            Gets or sets the version of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.Name">
+            <summary>
+            Gets or sets the name of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.Description">
+            <summary>
+            Gets or sets the description of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.ConnectionString">
+            <summary>
+            Gets or sets the connection string value.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.Payload">
+            <summary>
+            Gets or sets the payload.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.SchemaId">
+            <summary>
+            Gets or sets the schema identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAddressCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteAddressCommand">
+            <summary>
+            Command to delete a address entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteAddressCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the address to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteAddressCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetAddressQuery">
+            <summary>
+            Query to retrieve a address entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the address to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the address to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetAddressPayloadQuery">
+            <summary>
+            Query to retrieve the payload of a address entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressPayloadQuery.AddressId">
+            <summary>
+            Gets or sets the unique identifier of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressPayloadQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the configuration.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetAddressPayloadQueryResponse">
+            <summary>
+            Response for the GetAddressPayloadQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressPayloadQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressPayloadQueryResponse.Payload">
+            <summary>
+            Gets or sets the payload.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAddressPayloadQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateAssignmentCommand">
+            <summary>
+            Command to create a new assignment entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAssignmentCommand.Version">
+            <summary>
+            Gets or sets the version of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAssignmentCommand.Name">
+            <summary>
+            Gets or sets the name of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAssignmentCommand.Description">
+            <summary>
+            Gets or sets the description of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAssignmentCommand.StepId">
+            <summary>
+            Gets or sets the step identifier of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAssignmentCommand.EntityIds">
+            <summary>
+            Gets or sets the entity identifiers of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateAssignmentCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateAssignmentCommand">
+            <summary>
+            Command to update an existing assignment entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the assignment to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.Version">
+            <summary>
+            Gets or sets the version of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.Name">
+            <summary>
+            Gets or sets the name of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.Description">
+            <summary>
+            Gets or sets the description of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.StepId">
+            <summary>
+            Gets or sets the step identifier of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.EntityIds">
+            <summary>
+            Gets or sets the entity identifiers of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateAssignmentCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteAssignmentCommand">
+            <summary>
+            Command to delete a assignment entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteAssignmentCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the assignment to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteAssignmentCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetAssignmentQuery">
+            <summary>
+            Query to retrieve a assignment entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the assignment to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the assignment to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetAssignmentDetailsQuery">
+            <summary>
+            Query to retrieve the details of a assignment entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentDetailsQuery.AssignmentId">
+            <summary>
+            Gets or sets the unique identifier of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentDetailsQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the details.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetAssignmentDetailsQueryResponse">
+            <summary>
+            Response for the GetAssignmentDetailsQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentDetailsQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentDetailsQueryResponse.StepId">
+            <summary>
+            Gets or sets the step identifier of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentDetailsQueryResponse.EntityIds">
+            <summary>
+            Gets or sets the entity identifiers of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetAssignmentDetailsQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateDeliveryCommand">
+            <summary>
+            Command to create a new delivery entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateDeliveryCommand.Version">
+            <summary>
+            Gets or sets the version of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateDeliveryCommand.Name">
+            <summary>
+            Gets or sets the name of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateDeliveryCommand.Description">
+            <summary>
+            Gets or sets the description of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateDeliveryCommand.Payload">
+            <summary>
+            Gets or sets the payload of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateDeliveryCommand.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateDeliveryCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateDeliveryCommand">
+            <summary>
+            Command to update an existing delivery entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the delivery to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.Version">
+            <summary>
+            Gets or sets the version of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.Name">
+            <summary>
+            Gets or sets the name of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.Description">
+            <summary>
+            Gets or sets the description of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.Payload">
+            <summary>
+            Gets or sets the payload of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateDeliveryCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteDeliveryCommand">
+            <summary>
+            Command to delete a delivery entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteDeliveryCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the delivery to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteDeliveryCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetDeliveryQuery">
+            <summary>
+            Query to retrieve a delivery entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetDeliveryQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the delivery to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetDeliveryQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the delivery to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.ExecuteActivityCommand">
+            <summary>
+            Command to execute an activity in the processor
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.ProcessorId">
+            <summary>
+            ID of the processor that should handle this activity
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.OrchestratedFlowEntityId">
+            <summary>
+            ID of the orchestrated flow entity
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.StepId">
+            <summary>
+            ID of the step being executed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.ExecutionId">
+            <summary>
+            Unique execution ID for this activity instance
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.Entities">
+            <summary>
+            Collection of assignment models to process
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.CorrelationId">
+            <summary>
+            Correlation ID for tracking (defaults to Guid.Empty)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.PublishId">
+            <summary>
+            Unique publish ID generated for each command publication (Guid.Empty for entry points)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.CreatedAt">
+            <summary>
+            Timestamp when the command was created
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.Timeout">
+            <summary>
+            Optional timeout for the activity execution
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.Priority">
+            <summary>
+            Priority of the activity (higher numbers = higher priority)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.ExecuteActivityCommand.Metadata">
+            <summary>
+            Additional metadata for the activity
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetStatisticsCommand">
+            <summary>
+            Command to get statistics for a processor
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStatisticsCommand.ProcessorId">
+            <summary>
+            ID of the processor to get statistics for
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStatisticsCommand.RequestId">
+            <summary>
+            Request ID for tracking
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStatisticsCommand.FromDate">
+            <summary>
+            Start date for statistics period (null for all time)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStatisticsCommand.ToDate">
+            <summary>
+            End date for statistics period (null for current time)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStatisticsCommand.RequestedAt">
+            <summary>
+            Timestamp when the request was made
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStatisticsCommand.IncludeDetailedMetrics">
+            <summary>
+            Include detailed metrics breakdown
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand">
+            <summary>
+            Command to create a new orchestratedflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand.Version">
+            <summary>
+            Gets or sets the version of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand.Name">
+            <summary>
+            Gets or sets the name of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand.Description">
+            <summary>
+            Gets or sets the description of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand.WorkflowId">
+            <summary>
+            Gets or sets the workflow identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand.AssignmentIds">
+            <summary>
+            Gets or sets the assignment identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestratedFlowCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand">
+            <summary>
+            Command to update an existing orchestratedflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the orchestratedflow to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.Version">
+            <summary>
+            Gets or sets the version of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.Name">
+            <summary>
+            Gets or sets the name of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.Description">
+            <summary>
+            Gets or sets the description of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.WorkflowId">
+            <summary>
+            Gets or sets the workflow identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.AssignmentIds">
+            <summary>
+            Gets or sets the assignment identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestratedFlowCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteOrchestratedFlowCommand">
+            <summary>
+            Command to delete a orchestratedflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteOrchestratedFlowCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the orchestratedflow to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteOrchestratedFlowCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetOrchestratedFlowQuery">
+            <summary>
+            Query to retrieve a orchestratedflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestratedFlowQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the orchestratedflow to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestratedFlowQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the orchestratedflow to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateOrchestrationSessionCommand">
+            <summary>
+            Command to create a new orchestrationsession entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestrationSessionCommand.Version">
+            <summary>
+            Gets or sets the version of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestrationSessionCommand.Name">
+            <summary>
+            Gets or sets the name of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestrationSessionCommand.Description">
+            <summary>
+            Gets or sets the description of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestrationSessionCommand.Definition">
+            <summary>
+            Gets or sets the definition of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateOrchestrationSessionCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand">
+            <summary>
+            Command to update an existing orchestrationsession entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the orchestrationsession to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand.Version">
+            <summary>
+            Gets or sets the version of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand.Name">
+            <summary>
+            Gets or sets the name of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand.Description">
+            <summary>
+            Gets or sets the description of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand.Definition">
+            <summary>
+            Gets or sets the definition of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateOrchestrationSessionCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteOrchestrationSessionCommand">
+            <summary>
+            Command to delete a orchestrationsession entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteOrchestrationSessionCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the orchestrationsession to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteOrchestrationSessionCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetOrchestrationSessionQuery">
+            <summary>
+            Query to retrieve a orchestrationsession entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the orchestrationsession to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the orchestrationsession to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQuery">
+            <summary>
+            Query to retrieve the definition of a orchestrationsession entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQuery.OrchestrationSessionId">
+            <summary>
+            Gets or sets the unique identifier of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the definition.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQueryResponse">
+            <summary>
+            Response for the GetOrchestrationSessionDefinitionQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQueryResponse.Definition">
+            <summary>
+            Gets or sets the orchestrationsession definition.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetOrchestrationSessionDefinitionQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreatePluginCommand">
+            <summary>
+            Command to create a new plugin entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.Version">
+            <summary>
+            Gets or sets the version of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.Name">
+            <summary>
+            Gets or sets the name of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.Description">
+            <summary>
+            Gets or sets the description of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.Payload">
+            <summary>
+            Gets or sets the payload of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the plugin.
+            This references the schema used for input validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the plugin.
+            This references the schema used for output validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.EnableInputValidation">
+            <summary>
+            Gets or sets whether input validation is enabled for this plugin.
+            When true, input data will be validated against the InputSchema before processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.EnableOutputValidation">
+            <summary>
+            Gets or sets whether output validation is enabled for this plugin.
+            When true, output data will be validated against the OutputSchema after processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.AssemblyBasePath">
+            <summary>
+            Gets or sets the base path where the plugin assembly is located.
+            This is the directory path containing the plugin assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.AssemblyName">
+            <summary>
+            Gets or sets the name of the plugin assembly file.
+            This is the filename (with extension) of the assembly containing the plugin implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.TypeName">
+            <summary>
+            Gets or sets the fully qualified type name of the plugin class.
+            This is the complete type name including namespace that implements the IPlugin interface.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.ExecutionTimeoutMs">
+            <summary>
+            Gets or sets the execution timeout in milliseconds for this plugin.
+            If the plugin execution exceeds this timeout, it will be cancelled.
+            Default value is 30000ms (30 seconds).
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreatePluginCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdatePluginCommand">
+            <summary>
+            Command to update an existing plugin entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the plugin to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.Version">
+            <summary>
+            Gets or sets the version of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.Name">
+            <summary>
+            Gets or sets the name of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.Description">
+            <summary>
+            Gets or sets the description of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.Payload">
+            <summary>
+            Gets or sets the payload of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the plugin.
+            This references the schema used for input validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the plugin.
+            This references the schema used for output validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.EnableInputValidation">
+            <summary>
+            Gets or sets whether input validation is enabled for this plugin.
+            When true, input data will be validated against the InputSchema before processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.EnableOutputValidation">
+            <summary>
+            Gets or sets whether output validation is enabled for this plugin.
+            When true, output data will be validated against the OutputSchema after processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.AssemblyBasePath">
+            <summary>
+            Gets or sets the base path where the plugin assembly is located.
+            This is the directory path containing the plugin assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.AssemblyName">
+            <summary>
+            Gets or sets the name of the plugin assembly file.
+            This is the filename (with extension) of the assembly containing the plugin implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.TypeName">
+            <summary>
+            Gets or sets the fully qualified type name of the plugin class.
+            This is the complete type name including namespace that implements the IPlugin interface.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.ExecutionTimeoutMs">
+            <summary>
+            Gets or sets the execution timeout in milliseconds for this plugin.
+            If the plugin execution exceeds this timeout, it will be cancelled.
+            Default value is 30000ms (30 seconds).
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdatePluginCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeletePluginCommand">
+            <summary>
+            Command to delete a plugin entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeletePluginCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the plugin to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeletePluginCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetPluginQuery">
+            <summary>
+            Query to retrieve a plugin entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetPluginQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the plugin to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetPluginQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the plugin to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateProcessorCommand">
+            <summary>
+            Command to create a new processor entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.Version">
+            <summary>
+            Gets or sets the version of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.Name">
+            <summary>
+            Gets or sets the name of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.Description">
+            <summary>
+            Gets or sets the description of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.ImplementationHash">
+            <summary>
+            Gets or sets the SHA-256 hash of the processor implementation.
+            Used for runtime integrity validation to ensure version consistency.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateProcessorCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateProcessorCommand">
+            <summary>
+            Command to update an existing processor entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the processor to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.Version">
+            <summary>
+            Gets or sets the version of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.Name">
+            <summary>
+            Gets or sets the name of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.Description">
+            <summary>
+            Gets or sets the description of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateProcessorCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteProcessorCommand">
+            <summary>
+            Command to delete a processor entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteProcessorCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the processor to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteProcessorCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetProcessorQuery">
+            <summary>
+            Query to retrieve a processor entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the processor to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the processor to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetProcessorQueryResponse">
+            <summary>
+            Response for the GetProcessorQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorQueryResponse.Entity">
+            <summary>
+            Gets or sets the processor entity if found.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetProcessorSchemaQuery">
+            <summary>
+            Query to retrieve the schema information of a processor entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorSchemaQuery.ProcessorId">
+            <summary>
+            Gets or sets the unique identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorSchemaQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the schema information.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetProcessorSchemaQueryResponse">
+            <summary>
+            Response for the GetProcessorSchemaQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorSchemaQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorSchemaQueryResponse.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorSchemaQueryResponse.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetProcessorSchemaQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateSchemaCommand">
+            <summary>
+            Command to create a new schema entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateSchemaCommand.Version">
+            <summary>
+            Gets or sets the version of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateSchemaCommand.Name">
+            <summary>
+            Gets or sets the name of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateSchemaCommand.Description">
+            <summary>
+            Gets or sets the description of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateSchemaCommand.Definition">
+            <summary>
+            Gets or sets the definition of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateSchemaCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateSchemaCommand">
+            <summary>
+            Command to update an existing schema entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateSchemaCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the schema to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateSchemaCommand.Version">
+            <summary>
+            Gets or sets the version of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateSchemaCommand.Name">
+            <summary>
+            Gets or sets the name of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateSchemaCommand.Description">
+            <summary>
+            Gets or sets the description of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateSchemaCommand.Definition">
+            <summary>
+            Gets or sets the definition of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateSchemaCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteSchemaCommand">
+            <summary>
+            Command to delete a schema entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteSchemaCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the schema to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteSchemaCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetSchemaQuery">
+            <summary>
+            Query to retrieve a schema entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the schema to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the schema to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetSchemaDefinitionQuery">
+            <summary>
+            Query to retrieve the definition of a schema entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaDefinitionQuery.SchemaId">
+            <summary>
+            Gets or sets the unique identifier of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaDefinitionQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the definition.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetSchemaDefinitionQueryResponse">
+            <summary>
+            Response for the GetSchemaDefinitionQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaDefinitionQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaDefinitionQueryResponse.Definition">
+            <summary>
+            Gets or sets the schema definition.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetSchemaDefinitionQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateStepCommand">
+            <summary>
+            Command to create a new step entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.Version">
+            <summary>
+            Gets or sets the version of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.Name">
+            <summary>
+            Gets or sets the name of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.Description">
+            <summary>
+            Gets or sets the description of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.ProcessorId">
+            <summary>
+            Gets or sets the processor identifier that will execute this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.NextStepIds">
+            <summary>
+            Gets or sets the collection of next step identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.EntryCondition">
+            <summary>
+            Gets or sets the entry condition for this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateStepCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateStepCommand">
+            <summary>
+            Command to update an existing step entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the step to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.Version">
+            <summary>
+            Gets or sets the version of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.Name">
+            <summary>
+            Gets or sets the name of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.Description">
+            <summary>
+            Gets or sets the description of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.ProcessorId">
+            <summary>
+            Gets or sets the processor identifier that will execute this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.NextStepIds">
+            <summary>
+            Gets or sets the collection of next step identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.EntryCondition">
+            <summary>
+            Gets or sets the entry condition for this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateStepCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteStepCommand">
+            <summary>
+            Command to delete a step entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteStepCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the step to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteStepCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetStepQuery">
+            <summary>
+            Query to retrieve a step entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the step to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the step to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetStepDetailsQuery">
+            <summary>
+            Query to retrieve the details of a step entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepDetailsQuery.StepId">
+            <summary>
+            Gets or sets the unique identifier of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepDetailsQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the details.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetStepDetailsQueryResponse">
+            <summary>
+            Response for the GetStepDetailsQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepDetailsQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepDetailsQueryResponse.Entity">
+            <summary>
+            Gets or sets the step entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetStepDetailsQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.CreateWorkflowCommand">
+            <summary>
+            Command to create a new workflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateWorkflowCommand.Version">
+            <summary>
+            Gets or sets the version of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateWorkflowCommand.Name">
+            <summary>
+            Gets or sets the name of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateWorkflowCommand.Description">
+            <summary>
+            Gets or sets the description of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateWorkflowCommand.StepIds">
+            <summary>
+            Gets or sets the list of step IDs that belong to this workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.CreateWorkflowCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the creation.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.UpdateWorkflowCommand">
+            <summary>
+            Command to update an existing workflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateWorkflowCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the workflow to update.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateWorkflowCommand.Version">
+            <summary>
+            Gets or sets the version of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateWorkflowCommand.Name">
+            <summary>
+            Gets or sets the name of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateWorkflowCommand.Description">
+            <summary>
+            Gets or sets the description of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateWorkflowCommand.StepIds">
+            <summary>
+            Gets or sets the list of step IDs that belong to this workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.UpdateWorkflowCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the update.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.DeleteWorkflowCommand">
+            <summary>
+            Command to delete a workflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteWorkflowCommand.Id">
+            <summary>
+            Gets or sets the unique identifier of the workflow to delete.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.DeleteWorkflowCommand.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the deletion.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetWorkflowQuery">
+            <summary>
+            Query to retrieve a workflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowQuery.Id">
+            <summary>
+            Gets or sets the unique identifier of the workflow to retrieve.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowQuery.CompositeKey">
+            <summary>
+            Gets or sets the composite key of the workflow to retrieve.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetWorkflowStepsQuery">
+            <summary>
+            Query to retrieve the step IDs of a workflow entity.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowStepsQuery.WorkflowId">
+            <summary>
+            Gets or sets the unique identifier of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowStepsQuery.RequestedBy">
+            <summary>
+            Gets or sets the user who requested the step IDs.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Commands.GetWorkflowStepsQueryResponse">
+            <summary>
+            Response for the GetWorkflowStepsQuery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowStepsQueryResponse.Success">
+            <summary>
+            Gets or sets a value indicating whether the query was successful.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowStepsQueryResponse.StepIds">
+            <summary>
+            Gets or sets the workflow step IDs.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Commands.GetWorkflowStepsQueryResponse.Message">
+            <summary>
+            Gets or sets the response message.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.CorrelationIdConsumeFilter`1">
+            <summary>
+            MassTransit consume filter that extracts correlation ID from incoming message headers
+            and sets it in the correlation context for the duration of message processing.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.CorrelationIdPublishFilter`1">
+            <summary>
+            MassTransit publish filter that automatically adds correlation ID headers to outgoing messages.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.CorrelationIdSendFilter`1">
+            <summary>
+            MassTransit send filter that automatically adds correlation ID headers to outgoing messages.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.ActivityExecutedEvent">
+            <summary>
+            Event published when an activity is successfully executed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.ProcessorId">
+            <summary>
+            ID of the processor that executed the activity
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.OrchestratedFlowEntityId">
+            <summary>
+            ID of the orchestrated flow entity
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.StepId">
+            <summary>
+            ID of the step that was executed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.ExecutionId">
+            <summary>
+            Execution ID for this activity instance
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.CorrelationId">
+            <summary>
+            Correlation ID for tracking (defaults to Guid.Empty)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.PublishId">
+            <summary>
+            Unique publish ID that was used for this execution (Guid.Empty for entry points)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.ExecutedAt">
+            <summary>
+            Timestamp when the activity was executed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.Duration">
+            <summary>
+            Duration of the activity execution
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.Status">
+            <summary>
+            Status of the execution
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.ResultDataSize">
+            <summary>
+            Size of the result data in bytes
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityExecutedEvent.EntitiesProcessed">
+            <summary>
+            Number of entities processed
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.ActivityFailedEvent">
+            <summary>
+            Event published when an activity execution fails
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.ProcessorId">
+            <summary>
+            ID of the processor that attempted to execute the activity
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.OrchestratedFlowEntityId">
+            <summary>
+            ID of the orchestrated flow entity
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.StepId">
+            <summary>
+            ID of the step that failed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.ExecutionId">
+            <summary>
+            Execution ID for this activity instance
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.CorrelationId">
+            <summary>
+            Optional correlation ID for tracking
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.PublishId">
+            <summary>
+            Unique publish ID that was used for this execution (Guid.Empty for entry points)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.FailedAt">
+            <summary>
+            Timestamp when the activity failed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.Duration">
+            <summary>
+            Duration before the activity failed
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.ErrorMessage">
+            <summary>
+            Error message describing the failure
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.ExceptionType">
+            <summary>
+            Exception type that caused the failure
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.StackTrace">
+            <summary>
+            Stack trace of the exception (if available)
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.EntitiesBeingProcessed">
+            <summary>
+            Number of entities that were being processed when the failure occurred
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ActivityFailedEvent.IsValidationFailure">
+            <summary>
+            Whether this was a validation failure
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.AddressCreatedEvent">
+            <summary>
+            Event published when a address entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.ConnectionString">
+            <summary>
+            Gets or sets the connection string value.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.Payload">
+            <summary>
+            Gets or sets the payload.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.SchemaId">
+            <summary>
+            Gets or sets the schema identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the address was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the address.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.AddressUpdatedEvent">
+            <summary>
+            Event published when a address entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.ConnectionString">
+            <summary>
+            Gets or sets the connection string value.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.Payload">
+            <summary>
+            Gets or sets the configuration dictionary.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.SchemaId">
+            <summary>
+            Gets or sets the schema identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the address was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the address.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.AddressDeletedEvent">
+            <summary>
+            Event published when a address entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted address.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the address was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AddressDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the address.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.AssignmentCreatedEvent">
+            <summary>
+            Event published when a assignment entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.StepId">
+            <summary>
+            Gets or sets the step identifier of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.EntityIds">
+            <summary>
+            Gets or sets the entity identifiers of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the assignment was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the assignment.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.AssignmentUpdatedEvent">
+            <summary>
+            Event published when a assignment entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.StepId">
+            <summary>
+            Gets or sets the step identifier of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.EntityIds">
+            <summary>
+            Gets or sets the entity identifiers of the assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the assignment was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the assignment.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.AssignmentDeletedEvent">
+            <summary>
+            Event published when a assignment entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted assignment.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the assignment was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.AssignmentDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the assignment.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.DeliveryCreatedEvent">
+            <summary>
+            Event published when a delivery entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.Payload">
+            <summary>
+            Gets or sets the payload of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the delivery was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the delivery.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.DeliveryUpdatedEvent">
+            <summary>
+            Event published when a delivery entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.Payload">
+            <summary>
+            Gets or sets the payload of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the delivery was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the delivery.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.DeliveryDeletedEvent">
+            <summary>
+            Event published when a delivery entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted delivery.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the delivery was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.DeliveryDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the delivery.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent">
+            <summary>
+            Event published when a orchestratedflow entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.WorkflowId">
+            <summary>
+            Gets or sets the workflow identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.AssignmentIds">
+            <summary>
+            Gets or sets the assignment identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the orchestratedflow was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the orchestratedflow.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent">
+            <summary>
+            Event published when a orchestratedflow entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.WorkflowId">
+            <summary>
+            Gets or sets the workflow identifier.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.AssignmentIds">
+            <summary>
+            Gets or sets the assignment identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the orchestratedflow was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the orchestratedflow.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.OrchestratedFlowDeletedEvent">
+            <summary>
+            Event published when a orchestratedflow entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted orchestratedflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the orchestratedflow was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestratedFlowDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the orchestratedflow.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent">
+            <summary>
+            Event published when a orchestrationsession entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.Definition">
+            <summary>
+            Gets or sets the definition of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the orchestrationsession was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the orchestrationsession.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent">
+            <summary>
+            Event published when a orchestrationsession entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.Definition">
+            <summary>
+            Gets or sets the definition of the orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the orchestrationsession was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the orchestrationsession.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.OrchestrationSessionDeletedEvent">
+            <summary>
+            Event published when a orchestrationsession entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted orchestrationsession.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the orchestrationsession was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.OrchestrationSessionDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the orchestrationsession.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.PluginCreatedEvent">
+            <summary>
+            Event published when a plugin entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.Payload">
+            <summary>
+            Gets or sets the payload of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the plugin.
+            This references the schema used for input validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the plugin.
+            This references the schema used for output validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.EnableInputValidation">
+            <summary>
+            Gets or sets whether input validation is enabled for this plugin.
+            When true, input data will be validated against the InputSchema before processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.EnableOutputValidation">
+            <summary>
+            Gets or sets whether output validation is enabled for this plugin.
+            When true, output data will be validated against the OutputSchema after processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.AssemblyBasePath">
+            <summary>
+            Gets or sets the base path where the plugin assembly is located.
+            This is the directory path containing the plugin assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.AssemblyName">
+            <summary>
+            Gets or sets the name of the plugin assembly file.
+            This is the filename (with extension) of the assembly containing the plugin implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.AssemblyVersion">
+            <summary>
+            Gets or sets the version of the plugin assembly.
+            This represents the version of the compiled assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.TypeName">
+            <summary>
+            Gets or sets the fully qualified type name of the plugin class.
+            This is the complete type name including namespace that implements the IPlugin interface.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.ExecutionTimeoutMs">
+            <summary>
+            Gets or sets the execution timeout in milliseconds for this plugin.
+            If the plugin execution exceeds this timeout, it will be cancelled.
+            Default value is 30000ms (30 seconds).
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the plugin was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the plugin.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.PluginUpdatedEvent">
+            <summary>
+            Event published when a plugin entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.Payload">
+            <summary>
+            Gets or sets the payload of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.SchemaId">
+            <summary>
+            Gets or sets the schema identifier of the plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the plugin.
+            This references the schema used for input validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the plugin.
+            This references the schema used for output validation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.EnableInputValidation">
+            <summary>
+            Gets or sets whether input validation is enabled for this plugin.
+            When true, input data will be validated against the InputSchema before processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.EnableOutputValidation">
+            <summary>
+            Gets or sets whether output validation is enabled for this plugin.
+            When true, output data will be validated against the OutputSchema after processing.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.AssemblyBasePath">
+            <summary>
+            Gets or sets the base path where the plugin assembly is located.
+            This is the directory path containing the plugin assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.AssemblyName">
+            <summary>
+            Gets or sets the name of the plugin assembly file.
+            This is the filename (with extension) of the assembly containing the plugin implementation.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.AssemblyVersion">
+            <summary>
+            Gets or sets the version of the plugin assembly.
+            This represents the version of the compiled assembly file.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.TypeName">
+            <summary>
+            Gets or sets the fully qualified type name of the plugin class.
+            This is the complete type name including namespace that implements the IPlugin interface.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.ExecutionTimeoutMs">
+            <summary>
+            Gets or sets the execution timeout in milliseconds for this plugin.
+            If the plugin execution exceeds this timeout, it will be cancelled.
+            Default value is 30000ms (30 seconds).
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the plugin was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the plugin.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.PluginDeletedEvent">
+            <summary>
+            Event published when a plugin entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted plugin.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the plugin was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.PluginDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the plugin.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.ProcessorCreatedEvent">
+            <summary>
+            Event published when a processor entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the processor was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the processor.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.ProcessorUpdatedEvent">
+            <summary>
+            Event published when a processor entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.InputSchemaId">
+            <summary>
+            Gets or sets the input schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.OutputSchemaId">
+            <summary>
+            Gets or sets the output schema identifier of the processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the processor was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the processor.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.ProcessorDeletedEvent">
+            <summary>
+            Event published when a processor entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted processor.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the processor was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.ProcessorDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the processor.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.SchemaCreatedEvent">
+            <summary>
+            Event published when a schema entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.Definition">
+            <summary>
+            Gets or sets the definition of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the schema was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the schema.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.SchemaUpdatedEvent">
+            <summary>
+            Event published when a schema entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.Definition">
+            <summary>
+            Gets or sets the definition of the schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the schema was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the schema.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.SchemaDeletedEvent">
+            <summary>
+            Event published when a schema entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted schema.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the schema was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.SchemaDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the schema.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.StepCreatedEvent">
+            <summary>
+            Event published when a step entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.ProcessorId">
+            <summary>
+            Gets or sets the processor identifier that will execute this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.NextStepIds">
+            <summary>
+            Gets or sets the collection of next step identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.EntryCondition">
+            <summary>
+            Gets or sets the entry condition for this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the step was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the step.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.StepUpdatedEvent">
+            <summary>
+            Event published when a step entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.ProcessorId">
+            <summary>
+            Gets or sets the processor identifier that will execute this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.NextStepIds">
+            <summary>
+            Gets or sets the collection of next step identifiers.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.EntryCondition">
+            <summary>
+            Gets or sets the entry condition for this step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the step was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the step.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.StepDeletedEvent">
+            <summary>
+            Event published when a step entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted step.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the step was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.StepDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the step.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.WorkflowCreatedEvent">
+            <summary>
+            Event published when a workflow entity is created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the created workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.Version">
+            <summary>
+            Gets or sets the version of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.Name">
+            <summary>
+            Gets or sets the name of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.Description">
+            <summary>
+            Gets or sets the description of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.StepIds">
+            <summary>
+            Gets or sets the list of step IDs that belong to this workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.CreatedAt">
+            <summary>
+            Gets or sets the timestamp when the workflow was created.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowCreatedEvent.CreatedBy">
+            <summary>
+            Gets or sets the user who created the workflow.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.WorkflowUpdatedEvent">
+            <summary>
+            Event published when a workflow entity is updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the updated workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.Version">
+            <summary>
+            Gets or sets the version of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.Name">
+            <summary>
+            Gets or sets the name of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.Description">
+            <summary>
+            Gets or sets the description of the workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.StepIds">
+            <summary>
+            Gets or sets the list of step IDs that belong to this workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.UpdatedAt">
+            <summary>
+            Gets or sets the timestamp when the workflow was updated.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowUpdatedEvent.UpdatedBy">
+            <summary>
+            Gets or sets the user who updated the workflow.
+            </summary>
+        </member>
+        <member name="T:Shared.MassTransit.Events.WorkflowDeletedEvent">
+            <summary>
+            Event published when a workflow entity is deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowDeletedEvent.Id">
+            <summary>
+            Gets or sets the unique identifier of the deleted workflow.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowDeletedEvent.DeletedAt">
+            <summary>
+            Gets or sets the timestamp when the workflow was deleted.
+            </summary>
+        </member>
+        <member name="P:Shared.MassTransit.Events.WorkflowDeletedEvent.DeletedBy">
+            <summary>
+            Gets or sets the user who deleted the workflow.
+            </summary>
+        </member>
+    </members>
+</doc>

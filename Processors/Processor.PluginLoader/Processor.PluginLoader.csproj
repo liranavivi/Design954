@@ -1,0 +1,304 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Processor.PluginLoader</RootNamespace>
+    <AssemblyName>Processor.PluginLoader</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Authors>Processor Team</Authors>
+    <Description>PluginLoader processor application for the Processor system</Description>
+    <PackageId>Processor.PluginLoader</PackageId>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="SharpCompress" Version="0.40.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plugins\Plugin.Shared\Plugin.Shared.csproj" />
+    <ProjectReference Include="..\Processor.Base\Processor.Base.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.Services\Shared.Services.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.Configuration\Shared.Configuration.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Production.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- SHA-256 Hash Generation for Processor Implementation Integrity -->
+  <!-- Always generates real hash - no fallback mode -->
+
+  <PropertyGroup>
+    <!-- Hash generation configuration -->
+    <ProcessorImplementationFile>PluginLoaderProcessorApplication.cs</ProcessorImplementationFile>
+    <HashOutputFile>$(MSBuildProjectDirectory)\obj\$(Configuration)\$(TargetFramework)\ProcessorImplementationHash.cs</HashOutputFile>
+    <RequireHashGeneration Condition="'$(RequireHashGeneration)' == ''">true</RequireHashGeneration>
+  </PropertyGroup>
+
+  <!-- Exclude any hash file from the project root to avoid duplicates -->
+  <ItemGroup>
+    <Compile Remove="ProcessorImplementationHash.cs" Condition="Exists('ProcessorImplementationHash.cs')" />
+  </ItemGroup>
+
+  <!-- Primary hash generation target - works for all configurations -->
+  <Target Name="GenerateProcessorHash" BeforeTargets="CoreCompile" Condition="'$(PROCESSOR_HASH)' == ''">
+
+    <!-- Platform detection -->
+    <PropertyGroup>
+      <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+      <IsLinux Condition="'$(IsWindows)' != 'true'">true</IsLinux>
+    </PropertyGroup>
+
+    <!-- Validate source file exists -->
+    <Error Text="Processor implementation file not found: $(ProcessorImplementationFile)" Condition="!Exists('$(ProcessorImplementationFile)')" />
+
+    <!-- Windows: Enhanced PowerShell with error handling -->
+    <ItemGroup Condition="'$(IsWindows)' == 'true'">
+      <PowerShellLines Include="$ErrorActionPreference = 'Stop'" />
+      <PowerShellLines Include="try {" />
+      <PowerShellLines Include="  $fileContent = [System.IO.File]::ReadAllText('$(ProcessorImplementationFile)', [System.Text.Encoding]::UTF8)" />
+      <PowerShellLines Include="  if ([string]::IsNullOrEmpty($fileContent)) {" />
+      <PowerShellLines Include="    throw 'File content is empty or null'" />
+      <PowerShellLines Include="  }" />
+      <PowerShellLines Include="  $hasher = [System.Security.Cryptography.SHA256]::Create()" />
+      <PowerShellLines Include="  $hashBytes = $hasher.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($fileContent))" />
+      <PowerShellLines Include="  $hash = [System.BitConverter]::ToString($hashBytes) -replace '-', ''" />
+      <PowerShellLines Include="  Write-Output $hash.ToLower()" />
+      <PowerShellLines Include="  $hasher.Dispose()" />
+      <PowerShellLines Include="} catch {" />
+      <PowerShellLines Include="  Write-Error 'Hash generation failed'" />
+      <PowerShellLines Include="  exit 1" />
+      <PowerShellLines Include="}" />
+    </ItemGroup>
+
+    <WriteLinesToFile File="$(IntermediateOutputPath)GenerateHash.ps1" Overwrite="true" Condition="'$(IsWindows)' == 'true'" Lines="@(PowerShellLines)" />
+
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(IntermediateOutputPath)GenerateHash.ps1&quot;" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="false" Condition="'$(IsWindows)' == 'true'">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ProcessorHash" />
+    </Exec>
+
+    <!-- Linux/Unix: Use sha256sum with error handling -->
+    <Exec Command="if [ -f '$(ProcessorImplementationFile)' ]; then sha256sum '$(ProcessorImplementationFile)' | cut -d' ' -f1; else echo 'File not found: $(ProcessorImplementationFile)' &gt;&amp;2; exit 1; fi" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="false" Condition="'$(IsLinux)' == 'true'">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ProcessorHash" />
+    </Exec>
+
+    <!-- Validate hash was generated successfully -->
+    <Error Text="Hash generation failed - ProcessorHash is empty or invalid" Condition="'$(ProcessorHash)' == '' OR $([System.Text.RegularExpressions.Regex]::IsMatch('$(ProcessorHash)', '^[a-f0-9]{64}$')) == false" />
+
+    <!-- Generate the hash constant class -->
+    <PropertyGroup>
+      <HashClassContent>// Auto-generated during build - DO NOT MODIFY
+// Generated at: $([System.DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ss.fffZ'))
+// Build Configuration: $(Configuration)
+// Target Framework: $(TargetFramework)
+// Source File: $(ProcessorImplementationFile)
+// Hash Algorithm: SHA-256
+using System%3B
+
+namespace $(RootNamespace)%3B
+
+/// &lt;summary&gt;
+/// Auto-generated class containing SHA-256 hash of processor implementation files.
+/// Used for runtime integrity validation to ensure version consistency.
+/// &lt;/summary&gt;
+public static class ProcessorImplementationHash
+{
+    /// &lt;summary&gt;
+    /// SHA-256 hash of the processor implementation file: $(ProcessorImplementationFile)
+    /// &lt;/summary&gt;
+    public static string Hash =&gt; "$(ProcessorHash)"%3B
+
+    /// &lt;summary&gt;
+    /// Processor version from assembly information.
+    /// &lt;/summary&gt;
+    public const string Version = "$(InformationalVersion)"%3B
+
+    /// &lt;summary&gt;
+    /// Processor name from assembly information.
+    /// &lt;/summary&gt;
+    public const string Name = "$(AssemblyName)"%3B
+
+    /// &lt;summary&gt;
+    /// Build configuration used when hash was generated.
+    /// &lt;/summary&gt;
+    public const string BuildConfiguration = "$(Configuration)"%3B
+
+    /// &lt;summary&gt;
+    /// Target framework for this build.
+    /// &lt;/summary&gt;
+    public const string TargetFramework = "$(TargetFramework)"%3B
+
+    /// &lt;summary&gt;
+    /// Timestamp when hash was generated (UTC).
+    /// &lt;/summary&gt;
+    public const string GeneratedAt = "$([System.DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ss.fffZ'))"%3B
+
+    /// &lt;summary&gt;
+    /// Source file that was hashed.
+    /// &lt;/summary&gt;
+    public const string SourceFile = "$(ProcessorImplementationFile)"%3B
+
+    /// &lt;summary&gt;
+    /// Hash algorithm used for generation.
+    /// &lt;/summary&gt;
+    public const string HashAlgorithm = "SHA-256"%3B
+
+    /// &lt;summary&gt;
+    /// Indicates this is a real computed hash (always true in this implementation).
+    /// &lt;/summary&gt;
+    public const bool IsRealHash = true%3B
+
+    /// &lt;summary&gt;
+    /// Platform where hash was generated.
+    /// &lt;/summary&gt;
+    public const string GeneratedOnPlatform = "$([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)"%3B
+}</HashClassContent>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(HashOutputFile)" Lines="$(HashClassContent)" Overwrite="true" />
+
+    <!-- Include the generated file in compilation -->
+    <ItemGroup>
+      <Compile Include="$(HashOutputFile)" />
+    </ItemGroup>
+
+    <Message Text="✅ Generated SHA-256 hash for $(ProcessorImplementationFile): $(ProcessorHash)" Importance="high" />
+    <Message Text="📁 Hash file: $(HashOutputFile)" Importance="normal" />
+    <Message Text="🔧 Build configuration: $(Configuration)" Importance="normal" />
+  </Target>
+
+  <!-- Pre-computed hash target (for external hash provision) -->
+  <Target Name="GenerateProcessorHashFromArg" BeforeTargets="CoreCompile" Condition="'$(PROCESSOR_HASH)' != ''">
+
+    <!-- Validate provided hash format -->
+    <Error Text="Invalid PROCESSOR_HASH format. Expected 64-character lowercase hexadecimal string, got: $(PROCESSOR_HASH)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(PROCESSOR_HASH)', '^[a-f0-9]{64}$')) == false" />
+
+    <PropertyGroup>
+      <ProcessorHash>$(PROCESSOR_HASH)</ProcessorHash>
+    </PropertyGroup>
+
+    <!-- Generate hash class with provided hash -->
+    <PropertyGroup>
+      <HashClassContent>// Auto-generated with provided hash - DO NOT MODIFY
+// Generated at: $([System.DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ss.fffZ'))
+// Build Configuration: $(Configuration)
+// Target Framework: $(TargetFramework)
+// Hash Source: Pre-computed (PROCESSOR_HASH build argument)
+// Hash Algorithm: SHA-256
+using System%3B
+
+namespace $(RootNamespace)%3B
+
+/// &lt;summary&gt;
+/// Auto-generated class containing SHA-256 hash of processor implementation files.
+/// Used for runtime integrity validation to ensure version consistency.
+/// &lt;/summary&gt;
+public static class ProcessorImplementationHash
+{
+    /// &lt;summary&gt;
+    /// SHA-256 hash of the processor implementation (pre-computed)
+    /// &lt;/summary&gt;
+    public static string Hash =&gt; "$(ProcessorHash)"%3B
+
+    /// &lt;summary&gt;
+    /// Processor version from assembly information.
+    /// &lt;/summary&gt;
+    public const string Version = "$(InformationalVersion)"%3B
+
+    /// &lt;summary&gt;
+    /// Processor name from assembly information.
+    /// &lt;/summary&gt;
+    public const string Name = "$(AssemblyName)"%3B
+
+    /// &lt;summary&gt;
+    /// Build configuration used when hash was generated.
+    /// &lt;/summary&gt;
+    public const string BuildConfiguration = "$(Configuration)"%3B
+
+    /// &lt;summary&gt;
+    /// Target framework for this build.
+    /// &lt;/summary&gt;
+    public const string TargetFramework = "$(TargetFramework)"%3B
+
+    /// &lt;summary&gt;
+    /// Timestamp when hash was generated (UTC).
+    /// &lt;/summary&gt;
+    public const string GeneratedAt = "$([System.DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ss.fffZ'))"%3B
+
+    /// &lt;summary&gt;
+    /// Source file that was hashed.
+    /// &lt;/summary&gt;
+    public const string SourceFile = "$(ProcessorImplementationFile)"%3B
+
+    /// &lt;summary&gt;
+    /// Hash algorithm used for generation.
+    /// &lt;/summary&gt;
+    public const string HashAlgorithm = "SHA-256"%3B
+
+    /// &lt;summary&gt;
+    /// Indicates this is a real computed hash (always true in this implementation).
+    /// &lt;/summary&gt;
+    public const bool IsRealHash = true%3B
+
+    /// &lt;summary&gt;
+    /// Platform where hash was generated.
+    /// &lt;/summary&gt;
+    public const string GeneratedOnPlatform = "$([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)"%3B
+}</HashClassContent>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(HashOutputFile)" Lines="$(HashClassContent)" Overwrite="true" />
+
+    <ItemGroup>
+      <Compile Include="$(HashOutputFile)" />
+    </ItemGroup>
+
+    <Message Text="✅ Using provided SHA-256 hash: $(ProcessorHash)" Importance="high" />
+    <Message Text="📁 Hash file: $(HashOutputFile)" Importance="normal" />
+  </Target>
+
+  <!-- Clean up generated files -->
+  <Target Name="CleanGeneratedHash" BeforeTargets="Clean">
+    <ItemGroup>
+      <FilesToDelete Include="$(IntermediateOutputPath)ProcessorImplementationHash.cs" />
+      <FilesToDelete Include="$(IntermediateOutputPath)GenerateHash.ps1" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" ContinueOnError="true" />
+    <Message Text="🧹 Cleaned generated hash files" Importance="normal" />
+  </Target>
+
+  <!-- Validation target to ensure hash generation works -->
+  <Target Name="ValidateHashGeneration" AfterTargets="GenerateProcessorHash;GenerateProcessorHashFromArg">
+    <Message Text="🔍 Hash validation: $(ProcessorHash)" Importance="normal" />
+    <Message Text="📏 Hash length: $([System.String]::new('$(ProcessorHash)').Length)" Importance="normal" />
+
+    <!-- Verify hash is exactly 64 characters and lowercase hex -->
+    <Error Text="Generated hash validation failed. Hash must be 64-character lowercase hexadecimal string." Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(ProcessorHash)', '^[a-f0-9]{64}$')) == false" />
+
+    <Message Text="✅ Hash validation passed" Importance="normal" />
+  </Target>
+
+</Project>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Shared.Exceptions</name>
+    </assembly>
+    <members>
+        <member name="T:Shared.Exceptions.DuplicateKeyException">
+            <summary>
+            Exception thrown when a duplicate key constraint is violated during database operations.
+            This typically occurs when attempting to create an entity with a key that already exists.
+            </summary>
+        </member>
+        <member name="M:Shared.Exceptions.DuplicateKeyException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.DuplicateKeyException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Shared.Exceptions.DuplicateKeyException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.DuplicateKeyException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="T:Shared.Exceptions.EntityNotFoundException">
+            <summary>
+            Exception thrown when an entity is not found during database operations.
+            This typically occurs when attempting to retrieve, update, or delete an entity that does not exist.
+            </summary>
+        </member>
+        <member name="M:Shared.Exceptions.EntityNotFoundException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.EntityNotFoundException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Shared.Exceptions.EntityNotFoundException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.EntityNotFoundException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="T:Shared.Exceptions.ForeignKeyValidationException">
+            <summary>
+            Exception thrown when foreign key validation fails during CREATE or UPDATE operations.
+            This occurs when a referenced entity (e.g., ProtocolEntity) does not exist.
+            </summary>
+        </member>
+        <member name="P:Shared.Exceptions.ForeignKeyValidationException.EntityType">
+            <summary>
+            Gets the type of the entity that failed foreign key validation.
+            </summary>
+        </member>
+        <member name="P:Shared.Exceptions.ForeignKeyValidationException.ForeignKeyProperty">
+            <summary>
+            Gets the name of the foreign key property that failed validation.
+            </summary>
+        </member>
+        <member name="P:Shared.Exceptions.ForeignKeyValidationException.ForeignKeyValue">
+            <summary>
+            Gets the value of the foreign key that was not found.
+            </summary>
+        </member>
+        <member name="P:Shared.Exceptions.ForeignKeyValidationException.ReferencedEntityType">
+            <summary>
+            Gets the type of the referenced entity that was not found.
+            </summary>
+        </member>
+        <member name="M:Shared.Exceptions.ForeignKeyValidationException.#ctor(System.String,System.String,System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.ForeignKeyValidationException"/> class.
+            </summary>
+            <param name="entityType">The type of the entity that failed validation.</param>
+            <param name="foreignKeyProperty">The name of the foreign key property.</param>
+            <param name="foreignKeyValue">The value of the foreign key that was not found.</param>
+            <param name="referencedEntityType">The type of the referenced entity.</param>
+        </member>
+        <member name="M:Shared.Exceptions.ForeignKeyValidationException.#ctor(System.String,System.String,System.Object,System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.ForeignKeyValidationException"/> class with an inner exception.
+            </summary>
+            <param name="entityType">The type of the entity that failed validation.</param>
+            <param name="foreignKeyProperty">The name of the foreign key property.</param>
+            <param name="foreignKeyValue">The value of the foreign key that was not found.</param>
+            <param name="referencedEntityType">The type of the referenced entity.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="M:Shared.Exceptions.ForeignKeyValidationException.GetApiErrorMessage">
+            <summary>
+            Gets a detailed error message suitable for API responses.
+            </summary>
+            <returns>A user-friendly error message for API consumers.</returns>
+        </member>
+        <member name="T:Shared.Exceptions.ValidationException">
+            <summary>
+            Exception thrown when validation fails for entity properties or business rules.
+            This is a general-purpose validation exception for various validation scenarios.
+            </summary>
+        </member>
+        <member name="M:Shared.Exceptions.ValidationException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.ValidationException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Shared.Exceptions.ValidationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Shared.Exceptions.ValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+    </members>
+</doc>

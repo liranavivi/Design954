@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: design91-pluginloader-processor-config
+  namespace: design91-infrastructure
+  labels:
+    app: design91-pluginloader-processor
+    component: processor
+    project: design91
+    processor-type: pluginloader
+data:
+  # Environment Configuration
+  ASPNETCORE_ENVIRONMENT: "Production"
+  
+  # Processor-specific Configuration
+  ProcessorConfiguration__Name: "PluginLoaderProcessor"
+  ProcessorConfiguration__Version: "1.0.0"
+  ProcessorConfiguration__Description: "Dynamic plugin execution processor that loads and executes external plugin assemblies with fresh instances for better isolation and predictability"
+  ProcessorConfiguration__InputSchemaId: "d2da7244-8add-433b-a7b9-1812859d6c01"
+  ProcessorConfiguration__OutputSchemaId: "d2da7244-8add-433b-a7b9-1812859d6c01"
+  
+  # Logging Configuration (processor-specific)
+  Logging__LogLevel__Default: "Information"
+  Logging__LogLevel__Microsoft.AspNetCore: "Warning"
+  Logging__LogLevel__MassTransit: "Debug"
+  Logging__LogLevel__Hazelcast: "Debug"
+  Logging__LogLevel__PluginLoaderProcessorApplication: "Debug"
+  Logging__LogLevel__Processor.PluginLoader.PluginLoaderProcessorApplication: "Debug"
+  Logging__LogLevel__Processor.Base.Services.ProcessorService: "Debug"
+  Logging__LogLevel__Processor.Base.Services.ProcessorHealthMonitor: "Debug"
+  Logging__LogLevel__Processor.Base.Services.ProcessorHealthMetricsService: "Debug"
+  Logging__LogLevel__Processor.Base.Services.ProcessorFlowMetricsService: "Debug"
+  Logging__LogLevel__Processor.PluginLoader.Services.PluginLoaderProcessorMetricsService: "Debug"
+  Logging__LogLevel__Processor.Base.Consumers.ExecuteActivityCommandConsumer: "Debug"
+  Logging__LogLevel__Shared.Services.CacheService: "Debug"
+  
+  # RabbitMQ Configuration (processor-specific)
+  RabbitMQ__VirtualHost: "/"
+  RabbitMQ__RetryLimit: "3"
+  RabbitMQ__RetryInterval: "00:00:30"
+  RabbitMQ__PrefetchCount: "16"
+  RabbitMQ__ConcurrencyLimit: "10"
+  
+  # OpenTelemetry Configuration
+  OpenTelemetry__UseConsoleExporter: "true"
+  OpenTelemetry__ServiceName: "PluginLoaderProcessor"
+  OpenTelemetry__ServiceVersion: "1.0.0"
+
+  # Hazelcast Configuration (processor-specific timeouts and retry settings)
+  # Note: ClusterName and Addresses are inherited from infrastructure-config
+  Hazelcast__ConnectionTimeout: "00:00:30"
+  Hazelcast__ConnectionRetryConfig__InitialBackoffMillis: "1000"
+  Hazelcast__ConnectionRetryConfig__MaxBackoffMillis: "30000"
+  Hazelcast__ConnectionRetryConfig__Multiplier: "2.0"
+  Hazelcast__ConnectionRetryConfig__ClusterConnectTimeoutMillis: "20000"
+  Hazelcast__ConnectionRetryConfig__JitterRatio: "0.2"
+  
+  # Schema Validation Configuration
+  SchemaValidation__EnableInputValidation: "false"
+  SchemaValidation__EnableOutputValidation: "false"
+  SchemaValidation__LogValidationWarnings: "true"
+  SchemaValidation__LogValidationErrors: "true"
+  SchemaValidation__IncludeValidationTelemetry: "true"
+  
+  # Processor Initialization Configuration
+  ProcessorInitialization__RetryEndlessly: "true"
+  ProcessorInitialization__RetryDelay: "00:00:05"
+  ProcessorInitialization__RetryDelayMs: "60000"
+  ProcessorInitialization__UseExponentialBackoff: "true"
+  ProcessorInitialization__InitializationTimeout: "00:02:00"
+  ProcessorInitialization__LogRetryAttempts: "true"
+  
+  # Processor Health Monitor Configuration
+  ProcessorHealthMonitor__Enabled: "true"
+  ProcessorHealthMonitor__HealthCheckInterval: "00:00:30"
+  ProcessorHealthMonitor__IncludePerformanceMetrics: "true"
+  ProcessorHealthMonitor__IncludeDetailedHealthChecks: "true"
+  ProcessorHealthMonitor__MaxRetries: "5"
+  ProcessorHealthMonitor__RetryDelayMs: "2000"
+  ProcessorHealthMonitor__LogHealthChecks: "true"
+  ProcessorHealthMonitor__LogLevel: "Information"
+  ProcessorHealthMonitor__ContinueOnCacheFailure: "true"
+  ProcessorHealthMonitor__UseExponentialBackoff: "true"
+  ProcessorHealthMonitor__PerformanceMetrics__CollectCpuMetrics: "true"
+  ProcessorHealthMonitor__PerformanceMetrics__CollectMemoryMetrics: "true"
+  ProcessorHealthMonitor__PerformanceMetrics__CollectThroughputMetrics: "true"
+  ProcessorHealthMonitor__PerformanceMetrics__ThroughputWindow: "00:05:00"
+  ProcessorHealthMonitor__PerformanceMetrics__CollectGcMetrics: "true"
+  ProcessorHealthMonitor__PerformanceMetrics__CollectThreadPoolMetrics: "false"
+  
+  # Processor Activity Data Cache Configuration
+  ProcessorActivityDataCache__MaxRetries: "3"
+  ProcessorActivityDataCache__RetryDelayMs: "1000"
+  ProcessorActivityDataCache__UseExponentialBackoff: "true"
+  ProcessorActivityDataCache__ContinueOnCacheFailure: "true"
+  ProcessorActivityDataCache__LogCacheOperations: "true"
+  ProcessorActivityDataCache__LogLevel: "Information"
