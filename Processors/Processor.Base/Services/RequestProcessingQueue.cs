@@ -7,16 +7,16 @@ using System.Threading.Channels;
 namespace Processor.Base.Services;
 
 /// <summary>
-/// In-memory queue implementation for activity processing
+/// In-memory queue implementation for request processing
 /// </summary>
-public class ActivityProcessingQueue : IActivityProcessingQueue
+public class RequestProcessingQueue : IRequestProcessingQueue
 {
     private readonly ChannelWriter<ProcessingRequest> _writer;
     private readonly ChannelReader<ProcessingRequest> _reader;
-    private readonly ILogger<ActivityProcessingQueue> _logger;
+    private readonly ILogger<RequestProcessingQueue> _logger;
     private int _queueDepth = 0;
 
-    public ActivityProcessingQueue(ILogger<ActivityProcessingQueue> logger)
+    public RequestProcessingQueue(ILogger<RequestProcessingQueue> logger)
     {
         _logger = logger;
 

@@ -20,12 +20,6 @@
             Layer 1: CorrelationId only (for general application operations)
             </summary>
         </member>
-        <member name="M:Processor.Base.BaseProcessorApplication.ExecuteActivityAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Threading.CancellationToken)">
-            <summary>
-            Main implementation of activity execution that handles common patterns
-            Enhanced with hierarchical logging support - maintains consistent ID ordering
-            </summary>
-        </member>
         <member name="M:Processor.Base.BaseProcessorApplication.ProcessActivityDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.Object,System.Threading.CancellationToken)">
             <summary>
             Abstract method that concrete processor implementations must override
@@ -154,6 +148,11 @@
             <param name="cancellationToken">Cancellation token</param>
             <returns>Task representing the wait operation</returns>
         </member>
+        <member name="M:Processor.Base.BaseProcessorApplication.RegisterProcessorService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Virtual method to register the processor service - can be overridden by derived classes
+            </summary>
+        </member>
         <member name="T:Processor.Base.Consumers.ExecuteActivityCommandConsumer">
             <summary>
             Consumer for ExecuteActivityCommand messages
@@ -163,50 +162,6 @@
             <summary>
             Extract correlation ID from MassTransit context or message
             </summary>
-        </member>
-        <member name="T:Processor.Base.Interfaces.IActivityExecutor">
-            <summary>
-            Interface for the abstract activity execution logic that concrete processors must implement
-            Enhanced with hierarchical logging support - maintains consistent ID ordering
-            </summary>
-        </member>
-        <member name="M:Processor.Base.Interfaces.IActivityExecutor.ExecuteActivityAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,System.Threading.CancellationToken)">
-            <summary>
-            Executes an activity with the provided parameters
-            This method must be implemented by concrete processor applications
-            Enhanced with hierarchical logging support - maintains consistent ID ordering
-            </summary>
-            <param name="orchestratedFlowId">ID of the orchestrated flow entity (Layer 1)</param>
-            <param name="workflowId">ID of the workflow (Layer 2)</param>
-            <param name="correlationId">Correlation ID for tracking (Layer 3)</param>
-            <param name="stepId">ID of the step being executed (Layer 4)</param>
-            <param name="processorId">ID of the processor executing the activity (Layer 5)</param>
-            <param name="publishId">Unique publish ID for this activity instance (Layer 6)</param>
-            <param name="executionId">Unique execution ID for this activity instance (Layer 6)</param>
-            <param name="entities">Collection of base entities to process</param>
-            <param name="inputData">Input data retrieved from cache (raw string that will be deserialized by base class)</param>
-            <param name="cancellationToken">Cancellation token for the operation</param>
-            <returns>Collection of result data that will be validated against OutputSchema and saved to cache</returns>
-        </member>
-        <member name="T:Processor.Base.Interfaces.IActivityProcessingQueue">
-            <summary>
-            Interface for the activity processing queue
-            </summary>
-        </member>
-        <member name="M:Processor.Base.Interfaces.IActivityProcessingQueue.EnqueueAsync(Processor.Base.Models.ProcessingRequest,Shared.Correlation.HierarchicalLoggingContext,System.Threading.CancellationToken)">
-            <summary>
-            Enqueues a processing request for background processing
-            </summary>
-            <param name="request">The processing request to enqueue</param>
-            <param name="context">Hierarchical logging context</param>
-            <param name="cancellationToken">Cancellation token</param>
-            <returns>Task representing the enqueue operation</returns>
-        </member>
-        <member name="M:Processor.Base.Interfaces.IActivityProcessingQueue.GetQueueDepth">
-            <summary>
-            Gets the current queue depth (number of pending requests)
-            </summary>
-            <returns>Number of requests in the queue</returns>
         </member>
         <member name="T:Processor.Base.Interfaces.IPerformanceMetricsService">
             <summary>
@@ -417,10 +372,11 @@
         </member>
         <member name="M:Processor.Base.Interfaces.IProcessorService.ProcessActivityAsync(Processor.Base.Models.ProcessorActivityMessage)">
             <summary>
-            Processes an activity message and returns the collection of responses
+            Processes an activity message and queues response items for background processing
+            Method completes immediately after queuing items for concurrent processing
             </summary>
             <param name="message">The activity message to process</param>
-            <returns>Collection of activity responses</returns>
+            <returns>Task representing the queuing operation</returns>
         </member>
         <member name="M:Processor.Base.Interfaces.IProcessorService.GetHealthStatusAsync">
             <summary>
@@ -484,6 +440,15 @@
             <param name="context">Hierarchical logging context</param>
             <returns>True if valid, false otherwise</returns>
         </member>
+        <member name="M:Processor.Base.Interfaces.IProcessorService.ValidateInputDataAsync(System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,Shared.Correlation.HierarchicalLoggingContext)">
+            <summary>
+            Validates input data using processor-specific validation logic
+            </summary>
+            <param name="entities">Assignment entities for validation context</param>
+            <param name="inputData">Data to validate</param>
+            <param name="context">Hierarchical logging context</param>
+            <returns>Task representing the validation operation</returns>
+        </member>
         <member name="M:Processor.Base.Interfaces.IProcessorService.ValidateOutputDataAsync(System.String,System.String,System.Boolean,Shared.Correlation.HierarchicalLoggingContext)">
             <summary>
             Validates data against the specified output schema
@@ -494,11 +459,76 @@
             <param name="context">Hierarchical logging context</param>
             <returns>True if valid, false otherwise</returns>
         </member>
+        <member name="M:Processor.Base.Interfaces.IProcessorService.ValidateOutputDataAsync(System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,Shared.Correlation.HierarchicalLoggingContext)">
+            <summary>
+            Validates output data using processor-specific validation logic
+            </summary>
+            <param name="entities">Assignment entities for validation context</param>
+            <param name="outputData">Data to validate</param>
+            <param name="context">Hierarchical logging context</param>
+            <returns>Task representing the validation operation</returns>
+        </member>
         <member name="M:Processor.Base.Interfaces.IProcessorService.GetSchemaHealthStatus">
             <summary>
             Gets the current schema health status including schema ID validation
             </summary>
             <returns>A tuple indicating if schemas are healthy and valid, along with error messages</returns>
+        </member>
+        <member name="T:Processor.Base.Interfaces.IRequestProcessingQueue">
+            <summary>
+            Interface for the request processing queue
+            </summary>
+        </member>
+        <member name="M:Processor.Base.Interfaces.IRequestProcessingQueue.EnqueueAsync(Processor.Base.Models.ProcessingRequest,Shared.Correlation.HierarchicalLoggingContext,System.Threading.CancellationToken)">
+            <summary>
+            Enqueues a processing request for background processing
+            </summary>
+            <param name="request">The processing request to enqueue</param>
+            <param name="context">Hierarchical logging context</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Task representing the enqueue operation</returns>
+        </member>
+        <member name="M:Processor.Base.Interfaces.IRequestProcessingQueue.GetQueueDepth">
+            <summary>
+            Gets the current queue depth (number of pending requests)
+            </summary>
+            <returns>Number of requests in the queue</returns>
+        </member>
+        <member name="T:Processor.Base.Interfaces.IResponseProcessingQueue">
+            <summary>
+            Interface for the response processing queue
+            Thread-safe queue for processing individual response items concurrently
+            </summary>
+        </member>
+        <member name="M:Processor.Base.Interfaces.IResponseProcessingQueue.EnqueueAsync(Processor.Base.Models.ProcessedResponseItem,Shared.Correlation.HierarchicalLoggingContext,System.Threading.CancellationToken)">
+            <summary>
+            Enqueues a response processing item for background processing
+            Thread-safe operation using Channel writer
+            </summary>
+            <param name="item">The response processing item to enqueue</param>
+            <param name="context">Hierarchical logging context</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Task representing the enqueue operation</returns>
+        </member>
+        <member name="P:Processor.Base.Interfaces.IResponseProcessingQueue.Reader">
+            <summary>
+            Gets the channel reader for the background service
+            Used by ResponseProcessingService workers to read items
+            </summary>
+        </member>
+        <member name="M:Processor.Base.Interfaces.IResponseProcessingQueue.GetQueueDepth">
+            <summary>
+            Gets the current queue depth (number of pending response items)
+            Thread-safe operation using Interlocked.Read
+            </summary>
+            <returns>Number of response items in the queue</returns>
+        </member>
+        <member name="M:Processor.Base.Interfaces.IResponseProcessingQueue.DecrementQueueDepth">
+            <summary>
+            Decrements the queue depth counter
+            Thread-safe operation using Interlocked.Decrement
+            Called by workers when they finish processing an item
+            </summary>
         </member>
         <member name="T:Processor.Base.Models.ProcessorActivityMessage">
             <summary>
@@ -571,6 +601,11 @@
             ID of the step that was executed
             </summary>
         </member>
+        <member name="P:Processor.Base.Models.ProcessorActivityResponse.PublishId">
+            <summary>
+            Unique publish ID generated for each command publication
+            </summary>
+        </member>
         <member name="P:Processor.Base.Models.ProcessorActivityResponse.ExecutionId">
             <summary>
             Execution ID for this activity instance
@@ -601,45 +636,54 @@
             Duration of the activity execution
             </summary>
         </member>
-        <member name="T:Processor.Base.Models.ActivityExecutionResult">
+        <member name="T:Processor.Base.Models.ProcessedResponseItem">
             <summary>
-            Result returned from ExecuteActivityAsync containing all ProcessedActivityData info plus serialized data
+            Model for queuing individual processed responses for background processing
+            Thread-safe design with proper data isolation
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.Result">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.ProcessedData">
             <summary>
-            Result message from processing
+            Cloned processed activity data to avoid shared mutations between workers
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.Status">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.OriginalMessage">
             <summary>
-            Status of the processing
+            Original message that initiated the processing
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.Duration">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.ProcessingContext">
             <summary>
-            Duration of the processing
+            Hierarchical logging context for this specific response item
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.ProcessorName">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.ProcessingStopwatch">
             <summary>
-            Name of the processor that handled this activity
+            Independent stopwatch for this response item to avoid shared timing issues
+            Each item gets its own stopwatch to ensure thread safety
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.Version">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.QueuedAt">
             <summary>
-            Version of the processor
+            When this item was queued for processing
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.ExecutionId">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.RetryCount">
             <summary>
-            Execution ID
+            Number of retry attempts for this response item
             </summary>
         </member>
-        <member name="P:Processor.Base.Models.ActivityExecutionResult.SerializedData">
+        <member name="P:Processor.Base.Models.ProcessedResponseItem.MaxRetries">
             <summary>
-            JSON serialized string of the Data property only
+            Maximum number of retries allowed for this response item
             </summary>
+        </member>
+        <member name="M:Processor.Base.Models.ProcessedResponseItem.CloneProcessedActivityData(Shared.Models.ProcessedActivityData)">
+            <summary>
+            Creates a thread-safe clone of ProcessedActivityData to prevent shared mutations
+            </summary>
+            <param name="originalData">Original ProcessedActivityData to clone</param>
+            <returns>Cloned ProcessedActivityData instance</returns>
         </member>
         <member name="T:Processor.Base.Models.ProcessingRequest">
             <summary>
@@ -1046,27 +1090,6 @@
             Whether the processor has been initialized (ProcessorId is available)
             </summary>
         </member>
-        <member name="T:Processor.Base.Services.ActivityProcessingQueue">
-            <summary>
-            In-memory queue implementation for activity processing
-            </summary>
-        </member>
-        <member name="P:Processor.Base.Services.ActivityProcessingQueue.Reader">
-            <summary>
-            Gets the channel reader for the background service
-            </summary>
-        </member>
-        <member name="M:Processor.Base.Services.ActivityProcessingQueue.DecrementQueueDepth">
-            <summary>
-            Internal method to decrement queue depth when items are processed
-            Called by the background service
-            </summary>
-        </member>
-        <member name="T:Processor.Base.Services.ActivityProcessingService">
-            <summary>
-            Background service that processes activities from the queue and publishes events
-            </summary>
-        </member>
         <member name="T:Processor.Base.Services.PerformanceMetricsService">
             <summary>
             Service for collecting processor performance metrics
@@ -1116,6 +1139,24 @@
             Core service for managing processor functionality and activity processing
             </summary>
         </member>
+        <member name="M:Processor.Base.Services.ProcessorService.ProcessActivityDataAsync(System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Guid,System.Collections.Generic.List{Shared.Models.AssignmentModel},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Abstract method that concrete processor services must implement for processor-specific logic
+            Replaces the IActivityExecutor.ExecuteActivityAsync call
+            </summary>
+        </member>
+        <member name="M:Processor.Base.Services.ProcessorService.ValidateInputDataAsync(System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,Shared.Correlation.HierarchicalLoggingContext)">
+            <summary>
+            Public implementation of input validation - can be overridden for processor-specific validation
+            Base implementation handles general processor input validation
+            </summary>
+        </member>
+        <member name="M:Processor.Base.Services.ProcessorService.ValidateOutputDataAsync(System.Collections.Generic.List{Shared.Models.AssignmentModel},System.String,Shared.Correlation.HierarchicalLoggingContext)">
+            <summary>
+            Public implementation of output validation - can be overridden for processor-specific validation
+            Base implementation handles general processor output validation
+            </summary>
+        </member>
         <member name="M:Processor.Base.Services.ProcessorService.ValidateSchemaIds(Shared.Entities.ProcessorEntity)">
             <summary>
             Validates that the processor entity's schema IDs match the configured schema IDs
@@ -1150,16 +1191,6 @@
             <param name="context">Hierarchical logging context</param>
             <returns>True if validation passes or is disabled, false if validation fails</returns>
         </member>
-        <member name="M:Processor.Base.Services.ProcessorService.ValidateInputWithErrorHandlingAsync(System.String,System.String,System.Boolean,System.Boolean,System.Nullable{System.Guid},Processor.Base.Models.ProcessorActivityMessage,Shared.Correlation.HierarchicalLoggingContext)">
-            <summary>
-            Validates input data with comprehensive error handling and logging
-            </summary>
-        </member>
-        <member name="M:Processor.Base.Services.ProcessorService.ValidateOutputWithErrorHandlingAsync(System.String,System.String,System.Boolean,System.Boolean,System.Nullable{System.Guid},Processor.Base.Models.ProcessorActivityMessage,Shared.Correlation.HierarchicalLoggingContext)">
-            <summary>
-            Validates output data with comprehensive error handling and logging
-            </summary>
-        </member>
         <member name="M:Processor.Base.Services.ProcessorService.GetImplementationHash">
             <summary>
             Gets the implementation hash for the current processor using reflection
@@ -1178,6 +1209,45 @@
             Gets the health check interval from configuration in seconds
             </summary>
             <returns>Health check interval in seconds, defaults to 30 if not configured</returns>
+        </member>
+        <member name="T:Processor.Base.Services.RequestProcessingQueue">
+            <summary>
+            In-memory queue implementation for request processing
+            </summary>
+        </member>
+        <member name="P:Processor.Base.Services.RequestProcessingQueue.Reader">
+            <summary>
+            Gets the channel reader for the background service
+            </summary>
+        </member>
+        <member name="M:Processor.Base.Services.RequestProcessingQueue.DecrementQueueDepth">
+            <summary>
+            Internal method to decrement queue depth when items are processed
+            Called by the background service
+            </summary>
+        </member>
+        <member name="T:Processor.Base.Services.RequestProcessingService">
+            <summary>
+            Background service that processes requests from the queue and publishes events
+            </summary>
+        </member>
+        <member name="T:Processor.Base.Services.ResponseProcessingQueue">
+            <summary>
+            Thread-safe in-memory queue implementation for response processing
+            Follows the same pattern as RequestProcessingQueue with concurrent worker support
+            </summary>
+        </member>
+        <member name="P:Processor.Base.Services.ResponseProcessingQueue.Reader">
+            <summary>
+            Gets the channel reader for the background service
+            </summary>
+        </member>
+        <member name="T:Processor.Base.Services.ResponseProcessingService">
+            <summary>
+            Background service for processing response items concurrently
+            Follows the same pattern as RequestProcessingService with multiple concurrent workers
+            Thread-safe design with isolated worker processing
+            </summary>
         </member>
         <member name="T:Processor.Base.Utilities.DataValidation">
             <summary>

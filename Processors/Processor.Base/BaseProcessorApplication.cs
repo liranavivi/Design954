@@ -623,9 +623,14 @@ public abstract class BaseProcessorApplication
                 services.AddHazelcastClient(context.Configuration);
 
                 // Add queue handoff pattern services
-                services.AddSingleton<ActivityProcessingQueue>();
-                services.AddSingleton<IActivityProcessingQueue>(provider => provider.GetRequiredService<ActivityProcessingQueue>());
-                services.AddHostedService<ActivityProcessingService>();
+                services.AddSingleton<RequestProcessingQueue>();
+                services.AddSingleton<IRequestProcessingQueue>(provider => provider.GetRequiredService<RequestProcessingQueue>());
+                services.AddHostedService<RequestProcessingService>();
+
+                // Add response processing queue services (concurrent background processing)
+                services.AddSingleton<ResponseProcessingQueue>();
+                services.AddSingleton<IResponseProcessingQueue>(provider => provider.GetRequiredService<ResponseProcessingQueue>());
+                services.AddHostedService<ResponseProcessingService>();
 
                 // Add OpenTelemetry - use ProcessorConfiguration values consistently
                 services.AddOpenTelemetryObservability(context.Configuration, processorConfig.Name, processorConfig.Version);

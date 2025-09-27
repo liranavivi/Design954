@@ -20,7 +20,7 @@ namespace Processor.Base.Consumers;
 public class ExecuteActivityCommandConsumer : IConsumer<ExecuteActivityCommand>
 {
     private readonly IProcessorService _processorService;
-    private readonly IActivityProcessingQueue _processingQueue;
+    private readonly IRequestProcessingQueue _processingQueue;
     private readonly IProcessorFlowMetricsService? _flowMetricsService;
     private readonly IProcessorHealthMetricsService? _healthMetricsService;
     private readonly ILogger<ExecuteActivityCommandConsumer> _logger;
@@ -29,7 +29,7 @@ public class ExecuteActivityCommandConsumer : IConsumer<ExecuteActivityCommand>
 
     public ExecuteActivityCommandConsumer(
         IProcessorService processorService,
-        IActivityProcessingQueue processingQueue,
+        IRequestProcessingQueue processingQueue,
         ILogger<ExecuteActivityCommandConsumer> logger,
         ICorrelationIdContext correlationIdContext,
         IOptions<ProcessorConfiguration> config,

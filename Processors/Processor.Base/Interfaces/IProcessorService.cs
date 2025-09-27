@@ -15,11 +15,12 @@ public interface IProcessorService
     Task<Guid> GetProcessorIdAsync();
 
     /// <summary>
-    /// Processes an activity message and returns the collection of responses
+    /// Processes an activity message and queues response items for background processing
+    /// Method completes immediately after queuing items for concurrent processing
     /// </summary>
     /// <param name="message">The activity message to process</param>
-    /// <returns>Collection of activity responses</returns>
-    Task<IEnumerable<ProcessorActivityResponse>> ProcessActivityAsync(ProcessorActivityMessage message);
+    /// <returns>Task representing the queuing operation</returns>
+    Task ProcessActivityAsync(ProcessorActivityMessage message);
 
     /// <summary>
     /// Gets the current health status of the processor
@@ -85,6 +86,15 @@ public interface IProcessorService
     Task<bool> ValidateInputDataAsync(string data, string schemaDefinition, bool enableValidation, HierarchicalLoggingContext context);
 
     /// <summary>
+    /// Validates input data using processor-specific validation logic
+    /// </summary>
+    /// <param name="entities">Assignment entities for validation context</param>
+    /// <param name="inputData">Data to validate</param>
+    /// <param name="context">Hierarchical logging context</param>
+    /// <returns>Task representing the validation operation</returns>
+    Task ValidateInputDataAsync(List<AssignmentModel> entities, string inputData, HierarchicalLoggingContext context);
+
+    /// <summary>
     /// Validates data against the specified output schema
     /// </summary>
     /// <param name="data">Data to validate</param>
@@ -93,6 +103,15 @@ public interface IProcessorService
     /// <param name="context">Hierarchical logging context</param>
     /// <returns>True if valid, false otherwise</returns>
     Task<bool> ValidateOutputDataAsync(string? data, string schemaDefinition, bool enableValidation, HierarchicalLoggingContext context);
+
+    /// <summary>
+    /// Validates output data using processor-specific validation logic
+    /// </summary>
+    /// <param name="entities">Assignment entities for validation context</param>
+    /// <param name="outputData">Data to validate</param>
+    /// <param name="context">Hierarchical logging context</param>
+    /// <returns>Task representing the validation operation</returns>
+    Task ValidateOutputDataAsync(List<AssignmentModel> entities, string outputData, HierarchicalLoggingContext context);
 
     /// <summary>
     /// Gets the current schema health status including schema ID validation

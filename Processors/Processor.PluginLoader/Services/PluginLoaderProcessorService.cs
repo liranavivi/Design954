@@ -32,13 +32,14 @@ public class PluginLoaderProcessorService : ProcessorService
         IOptions<Shared.Services.Models.SchemaValidationConfiguration> validationConfig,
         IConfiguration configuration,
         ILogger<PluginLoaderProcessorService> logger,
+        IResponseProcessingQueue responseProcessingQueue,
         IPerformanceMetricsService? performanceMetricsService,
         IProcessorHealthMetricsService? healthMetricsService,
         PluginLoaderProcessorApplication pluginLoaderApplication,
         IOptions<ProcessorInitializationConfiguration>? initializationConfig = null,
         IOptions<ProcessorActivityDataCacheConfiguration>? activityCacheConfig = null)
         : base(cacheService, schemaValidator, bus, config, validationConfig, configuration,
-               logger as ILogger<ProcessorService>, performanceMetricsService, healthMetricsService,
+               logger as ILogger<ProcessorService>, responseProcessingQueue, performanceMetricsService, healthMetricsService,
                initializationConfig, activityCacheConfig)
     {
         _pluginLoaderApplication = pluginLoaderApplication;
@@ -63,7 +64,7 @@ public class PluginLoaderProcessorService : ProcessorService
     /// <summary>
     /// Override input validation to handle only PluginAssignmentModel schemas
     /// </summary>
-    protected override async Task ValidateInputDataAsync(
+    public override async Task ValidateInputDataAsync(
         List<AssignmentModel> entities,
         string inputData,
         HierarchicalLoggingContext context)
@@ -76,7 +77,7 @@ public class PluginLoaderProcessorService : ProcessorService
     /// <summary>
     /// Override output validation to handle only PluginAssignmentModel schemas
     /// </summary>
-    protected override async Task ValidateOutputDataAsync(
+    public override async Task ValidateOutputDataAsync(
         List<AssignmentModel> entities,
         string outputData,
         HierarchicalLoggingContext context)

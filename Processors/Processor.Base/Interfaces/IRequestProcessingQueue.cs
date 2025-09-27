@@ -4,9 +4,9 @@ using Shared.Correlation;
 namespace Processor.Base.Interfaces;
 
 /// <summary>
-/// Interface for the activity processing queue
+/// Interface for the request processing queue
 /// </summary>
-public interface IActivityProcessingQueue
+public interface IRequestProcessingQueue
 {
     /// <summary>
     /// Enqueues a processing request for background processing

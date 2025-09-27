@@ -36,6 +36,9 @@ public abstract class ProcessorService : IProcessorService
     private readonly ActivitySource _activitySource;
     private readonly DateTime _startTime;
 
+    // Response processing queue for concurrent background processing
+    protected readonly IResponseProcessingQueue _responseProcessingQueue;
+
     private Guid? _processorId;
     private readonly object _processorIdLock = new();
 
@@ -67,6 +70,7 @@ public abstract class ProcessorService : IProcessorService
         IOptions<Shared.Services.Models.SchemaValidationConfiguration> validationConfig,
         IConfiguration configuration,
         ILogger<ProcessorService> logger,
+        IResponseProcessingQueue responseProcessingQueue,
         IPerformanceMetricsService? performanceMetricsService = null,
         IProcessorHealthMetricsService? healthMetricsService = null,
         IOptions<ProcessorInitializationConfiguration>? initializationConfig = null,
@@ -80,6 +84,7 @@ public abstract class ProcessorService : IProcessorService
         _initializationConfig = initializationConfig?.Value;
         _configuration = configuration;
         _logger = logger;
+        _responseProcessingQueue = responseProcessingQueue;
         _performanceMetricsService = performanceMetricsService;
         _healthMetricsService = healthMetricsService;
         _activityCacheConfig = activityCacheConfig?.Value ?? new ProcessorActivityDataCacheConfiguration();
@@ -102,10 +107,10 @@ public abstract class ProcessorService : IProcessorService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Virtual method for input validation - can be overridden for processor-specific validation
+    /// Public implementation of input validation - can be overridden for processor-specific validation
     /// Base implementation handles general processor input validation
     /// </summary>
-    protected virtual async Task ValidateInputDataAsync(
+    public virtual async Task ValidateInputDataAsync(
         List<AssignmentModel> entities,
         string inputData,
         HierarchicalLoggingContext context)
@@ -119,10 +124,10 @@ public abstract class ProcessorService : IProcessorService
     }
 
     /// <summary>
-    /// Virtual method for output validation - can be overridden for processor-specific validation
+    /// Public implementation of output validation - can be overridden for processor-specific validation
     /// Base implementation handles general processor output validation
     /// </summary>
-    protected virtual async Task ValidateOutputDataAsync(
+    public virtual async Task ValidateOutputDataAsync(
         List<AssignmentModel> entities,
         string outputData,
         HierarchicalLoggingContext context)
@@ -986,7 +991,7 @@ public abstract class ProcessorService : IProcessorService
         return await _schemaValidator.ValidateAsync(data ?? string.Empty, schemaDefinition);
     }
 
-    public async Task<IEnumerable<ProcessorActivityResponse>> ProcessActivityAsync(ProcessorActivityMessage message)
+    public async Task ProcessActivityAsync(ProcessorActivityMessage message)
     {
         using var activity = _activitySource.StartActivityWithCorrelation("ProcessActivity");
         var stopwatch = Stopwatch.StartNew();
@@ -1057,106 +1062,31 @@ public abstract class ProcessorService : IProcessorService
                 message.StepId, message.ProcessorId, message.PublishId, message.ExecutionId,
                 message.Entities, deserializedInputData, CancellationToken.None);
 
-            var responses = new List<ProcessorActivityResponse>();
-
-            // Process each ProcessedActivityData item
+            // Enqueue each ProcessedActivityData item for concurrent background processing
             foreach (var processedData in processedDataCollection)
             {
-                processorContext.ExecutionId = processedData.ExecutionId;
-
-                try
+                var responseItem = new ProcessedResponseItem
                 {
-                    // Handle serialization with proper error handling
-                    string? serializedData = null;
-                    if (processedData.Data != null)
+                    // Thread-safe: Clone the data to avoid shared mutations between workers
+                    ProcessedData = ProcessedResponseItem.CloneProcessedActivityData(processedData),
+                    OriginalMessage = message,
+                    ProcessingContext = new HierarchicalLoggingContext
                     {
-                        try
-                        {
-                            serializedData = JsonSerializer.Serialize(processedData.Data, new JsonSerializerOptions
-                            {
-                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                WriteIndented = true
-                            });
-                        }
-                        catch (Exception serializationEx)
-                        {
-                            _logger.LogErrorWithHierarchy(processorContext, serializationEx,
-                                "Failed to serialize processed data, treating as failed execution");
-                            processedData.Status = ActivityExecutionStatus.Failed;
-                            processedData.Result = $"Serialization failed: {serializationEx.Message}";
-                            serializedData = null;
-                        }
-                    }
-
-                    // 5. Virtual output validation (moved inside foreach, after serialization)
-                    if (!string.IsNullOrWhiteSpace(serializedData))
-                    {
-                        await ValidateOutputDataAsync(message.Entities, serializedData, processorContext);
-                    }
-
-                    // Save to cache if data is not empty (regardless of status)
-                    if (!string.IsNullOrWhiteSpace(serializedData))
-                    {
-                        if (processedData.ExecutionId != Guid.Empty)
-                        {
-                            await SaveCachedDataAsync(message.OrchestratedFlowId, message.CorrelationId,
-                                processedData.ExecutionId, message.StepId, message.PublishId, serializedData, message.ProcessorId);
-                        }
-                        else
-                        {
-                            _logger.LogWarningWithHierarchy(processorContext,
-                                "ExecutionId is empty - skipping cache save. OriginalExecutionId: {OriginalExecutionId}",
-                                message.ExecutionId);
-                        }
-                    }
-                    else
-                    {
-                        _logger.LogInformationWithHierarchy(processorContext,
-                            "Skipping cache save - no data to serialize");
-                    }
-
-                    // Create response for this item
-                    var response = new ProcessorActivityResponse
-                    {
-                        ProcessorId = message.ProcessorId,
                         OrchestratedFlowId = message.OrchestratedFlowId,
-                        StepId = message.StepId,
-                        PublishId = message.PublishId,
-                        ExecutionId = processedData.ExecutionId,
-                        Status = processedData.Status ?? ActivityExecutionStatus.Completed,
+                        WorkflowId = message.WorkflowId,
                         CorrelationId = message.CorrelationId,
-                        ErrorMessage = processedData.Status == ActivityExecutionStatus.Failed ? processedData.Result : null,
-                        Duration = stopwatch.Elapsed,
-                        CompletedAt = DateTime.UtcNow
-                    };
-
-                    responses.Add(response);
-
-                    _logger.LogInformationWithHierarchy(processorContext,
-                        "Successfully processed activity item.");
-                }
-                catch (Exception itemEx)
-                {
-                    _logger.LogErrorWithHierarchy(processorContext, itemEx,
-                        "Error processing result data. Processing will continue.");
-
-                    // Create failed response for this item
-                    var failedResponse = new ProcessorActivityResponse
-                    {
+                        StepId = message.StepId,
                         ProcessorId = message.ProcessorId,
-                        OrchestratedFlowId = message.OrchestratedFlowId,
-                        StepId = message.StepId,
                         PublishId = message.PublishId,
-                        ExecutionId = processedData.ExecutionId,
-                        Status = ActivityExecutionStatus.Failed,
-                        CorrelationId = message.CorrelationId,
-                        ErrorMessage = itemEx.Message,
-                        Duration = stopwatch.Elapsed,
-                        CompletedAt = DateTime.UtcNow
-                    };
+                        ExecutionId = processedData.ExecutionId
+                    },
+                    // Thread-safe: Each item gets its own stopwatch to avoid shared timing issues
+                    ProcessingStopwatch = Stopwatch.StartNew(),
+                    QueuedAt = DateTime.UtcNow
+                };
 
-                    responses.Add(failedResponse);
-                }
+                // Queue for background processing - no waiting, fire and forget
+                await _responseProcessingQueue.EnqueueAsync(responseItem, processorContext);
             }
 
             stopwatch.Stop();
@@ -1168,10 +1098,10 @@ public abstract class ProcessorService : IProcessorService
                     ?.SetTag(ActivityTags.ActivityDuration, stopwatch.ElapsedMilliseconds);
 
             _logger.LogInformationWithHierarchy(processorContext,
-                "Successfully processed activity collection. ItemCount: {ItemCount}, Duration: {Duration}ms",
-                responses.Count, stopwatch.ElapsedMilliseconds);
+                "Successfully queued activity collection for processing. ItemCount: {ItemCount}, Duration: {Duration}ms",
+                processedDataCollection.Count(), stopwatch.ElapsedMilliseconds);
 
-            return responses;
+            // Method completes immediately after queuing - no return value needed
         }
         catch (Exception ex)
         {
@@ -1191,22 +1121,9 @@ public abstract class ProcessorService : IProcessorService
                 "Failed to process activity. Duration: {Duration}ms",
                 stopwatch.ElapsedMilliseconds);
 
-            var processorId = _processorId ?? Guid.Empty;
-            return new[]
-            {
-                new ProcessorActivityResponse
-                {
-                    ProcessorId = processorId,
-                    OrchestratedFlowId = message.OrchestratedFlowId,
-                    StepId = message.StepId,
-                    PublishId = message.PublishId,
-                    ExecutionId = message.ExecutionId,
-                    Status = ActivityExecutionStatus.Failed,
-                    CorrelationId = message.CorrelationId,
-                    ErrorMessage = ex.Message,
-                    Duration = stopwatch.Elapsed
-                }
-            };
+            // Note: Error handling for individual items will be handled by ResponseProcessingService
+            // This exception represents a failure in the main processing pipeline before queuing
+            throw;
         }
     }
 

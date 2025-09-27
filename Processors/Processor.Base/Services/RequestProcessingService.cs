@@ -14,20 +14,20 @@ using System.Diagnostics;
 namespace Processor.Base.Services;
 
 /// <summary>
-/// Background service that processes activities from the queue and publishes events
+/// Background service that processes requests from the queue and publishes events
 /// </summary>
-public class ActivityProcessingService : BackgroundService
+public class RequestProcessingService : BackgroundService
 {
-    private readonly ActivityProcessingQueue _queue;
+    private readonly RequestProcessingQueue _queue;
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<ActivityProcessingService> _logger;
+    private readonly ILogger<RequestProcessingService> _logger;
     private readonly int _workerCount;
     private static readonly ActivitySource ActivitySource = new(ActivitySources.Services);
 
-    public ActivityProcessingService(
-        ActivityProcessingQueue queue,
+    public RequestProcessingService(
+        RequestProcessingQueue queue,
         IServiceProvider serviceProvider,
-        ILogger<ActivityProcessingService> logger,
+        ILogger<RequestProcessingService> logger,
         IOptions<ProcessorConfiguration> config)
     {
         _queue = queue;
@@ -132,67 +132,20 @@ public class ActivityProcessingService : BackgroundService
                 "Processing activity from queue. WorkerId: {WorkerId}, QueueTime: {QueueTime}ms",
                 workerId, (DateTime.UtcNow - request.ReceivedAt).TotalMilliseconds);
 
-            // Process the activity
-            var responses = await processorService.ProcessActivityAsync(request.ActivityMessage);
+            // Process the activity - now queues items for background processing
+            await processorService.ProcessActivityAsync(request.ActivityMessage);
 
             stopwatch.Stop();
 
-            // Publish events for each response
-            foreach (var response in responses)
-            {
-                activity?.SetTag($"ActivityStatus_{response.ExecutionId}", response.Status.ToString());
-
-                // Temporarily enhance processing context with specific response ExecutionId for logging
-                processingContext.ExecutionId = response.ExecutionId;
-
-                _logger.LogInformationWithHierarchy(processingContext,
-                    "Activity item completed from queue. WorkerId: {WorkerId}, OriginalExecutionId: {OriginalExecutionId}, Status: {Status}, Duration: {Duration}ms",
-                    workerId, command.ExecutionId, response.Status, stopwatch.ElapsedMilliseconds);
-
-                if (response.Status == ActivityExecutionStatus.Completed)
-                {
-                    await publishEndpoint.Publish(new ActivityExecutedEvent
-                    {
-                        OrchestratedFlowId = command.OrchestratedFlowId,
-                        WorkflowId = command.WorkflowId, // ✅ Include WorkflowId in event
-                        CorrelationId = correlationId,
-                        StepId = command.StepId,
-                        ProcessorId = command.ProcessorId,
-                        PublishId = command.PublishId,
-                        ExecutionId = response.ExecutionId,
-                        Duration = response.Duration,
-                        Status = response.Status,
-                        EntitiesProcessed = command.Entities.Count,
-                    }, cancellationToken);
-
-                    flowMetricsService?.RecordEventPublished(true, command.OrchestratedFlowId, command.StepId, command.ExecutionId, correlationId);
-                }
-                else
-                {
-                    await publishEndpoint.Publish(new ActivityFailedEvent
-                    {
-                        OrchestratedFlowId = command.OrchestratedFlowId,
-                        WorkflowId = command.WorkflowId, // ✅ Include WorkflowId in failed event
-                        CorrelationId = correlationId,
-                        StepId = command.StepId,
-                        ProcessorId = command.ProcessorId,
-                        PublishId = command.PublishId,
-                        ExecutionId = response.ExecutionId,
-                        Duration = response.Duration,
-                        ErrorMessage = response.ErrorMessage ?? "Unknown error",
-                        EntitiesBeingProcessed = command.Entities.Count,
-                    }, cancellationToken);
-
-                    flowMetricsService?.RecordEventPublished(true, command.OrchestratedFlowId, command.StepId, command.ExecutionId, correlationId);
-                }
-            }
-
             activity?.SetTag(ActivityTags.ActivityDuration, stopwatch.ElapsedMilliseconds)
-                    ?.SetTag("ResponseCount", responses.Count());
+                    ?.SetTag(ActivityTags.ActivityStatus, ActivityExecutionStatus.Completed.ToString());
 
             _logger.LogInformationWithHierarchy(processingContext,
-                "Activity collection completed from queue. WorkerId: {WorkerId}, OriginalExecutionId: {OriginalExecutionId}, ResponseCount: {ResponseCount}, Duration: {Duration}ms",
-                workerId, command.ExecutionId, responses.Count(), stopwatch.ElapsedMilliseconds);
+                "Activity queued for background processing from queue. WorkerId: {WorkerId}, OriginalExecutionId: {OriginalExecutionId}, Duration: {Duration}ms",
+                workerId, command.ExecutionId, stopwatch.ElapsedMilliseconds);
+
+            // Note: Individual response processing, event publishing, and metrics recording
+            // are now handled by ResponseProcessingService background workers
         }
         catch (Exception ex)
         {
